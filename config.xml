@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<widget xmlns="http://www.w3.org/ns/widgets"
+        xmlns:gap="http://phonegap.com/ns/1.0"
+        id="com.superfitapp.superfit" version="0.1.0">
+
+    <name>Superfit</name>
+    <description>We gonna pump YOU up!</description>
+    <author href="http://www.superfitapp.com" email="info@superfitapp.com">The Superfit Team</author>
+
+    <!-- iOS-specific preferences -->
+    <preference name="phonegap-version"             value="2.7.0" />
+    <preference name="orientation"                  value="portrait" />
+    <preference name="target-device"                value="handset" />
+    <preference name="fullscreen"                   value="false" /><!-- hide status bar? -->
+    <preference name="webviewbounce"                value="true" />
+    <preference name="prerendered-icon"             value="true" />
+    <preference name="detect-data-types"            value="false" /><!-- automatically turn things like phone numbers / email addresses into links -->
+    <preference name="exit-on-suspend"              value="true" />
+    <preference name="show-splash-screen-spinner"   value="false" />
+    <preference name="auto-hide-splash-screen"      value="true" />
+
+    <!-- Android-specific preferences -->
+    <preference name="android-minSdkVersion"        value="10" />
+    <preference name="android-installLocation"      value="internalOnly" />
+
+    <!-- default icon; this needs to be in the root. just re-use the 72x72 -->
+    <icon src="icon.png" />
+
+    <!-- iOS icons -->
+    <icon src="icons/ios/icon.png"          gap:platform="ios"    width="57"  height="57" /><!-- phone app icon -->
+	<icon src="icons/ios/icon-72.png"       gap:platform="ios"    width="72"  height="72" /><!-- ipad app icon -->
+	<icon src="icons/ios/icon_at_2x.png"    gap:platform="ios"    width="114" height="114" /><!-- retina phone app icon -->
+	<icon src="icons/ios/icon-72_at_2x.png" gap:platform="ios"    width="144" height="144" /><!-- retina ipad app icon -->
+
+	<!-- Android icons -->
+	<icon src="icons/android/ldpi.png"  gap:platform="android" gap:density="ldpi" /><!-- (120dpi) 36x36 -->
+	<icon src="icons/android/mdpi.png"  gap:platform="android" gap:density="mdpi" /><!-- (160dpi) 48x48 -->
+	<icon src="icons/android/hdpi.png"  gap:platform="android" gap:density="hdpi" /><!-- (240dpi) 72x72 -->
+	<icon src="icons/android/xhdpi.png" gap:platform="android" gap:density="xhdpi" /><!-- (320dpi) 96x96 -->
+
+
+	<!-- iOS splash screens -->
+	<gap:splash src="splash/ios/iphone-portrait.png"    gap:platform="ios"     width="320" height="480" />
+    <gap:splash src="splash/ios/iphone-portrait-2x.png" gap:platform="ios"     width="640" height="960" />
+    <gap:splash src="splash/ios/ipad-portrait.png"      gap:platform="ios"     width="768" height="1024" />
+    <gap:splash src="splash/ios/ipad-portrait-2x.png"   gap:platform="ios"     width="1536" height="2008" />
+
+    <!-- Android splash screens -->
+    <gap:splash src="splash/android/ldpi.png"  gap:platform="android" gap:density="ldpi" />
+	<gap:splash src="splash/android/mdpi.png"  gap:platform="android" gap:density="mdpi" />
+	<gap:splash src="splash/android/hdpi.png"  gap:platform="android" gap:density="hdpi" />
+	<gap:splash src="splash/android/xhdpi.png" gap:platform="android" gap:density="xhdpi" />
+
+	<!-- Features -->
+	<feature name="http://api.phonegap.com/1.0/camera"/>
+	<feature name="http://api.phonegap.com/1.0/file"/>
+	<feature name="http://api.phonegap.com/1.0/network"/>
+	<feature name="http://api.phonegap.com/1.0/device" />
+
+	<!-- Plugins -->
+	<gap:plugin name="GAPlugin" />
+
+	<!-- Access -->
+	<access origin="*" />
+
+</widget>
