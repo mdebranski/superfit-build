@@ -13,3 +13,8 @@ superfit-build
  Required References
   - phonegap.js
   - GAPlugin.js (google analytics)
+
+FTP:
+superfitapp.com/dev
+u: dev@superfitapp.com
+p: sooperF1Tapp
