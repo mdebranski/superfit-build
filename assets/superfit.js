@@ -8249,7 +8249,7 @@ $.widget( "ui.spinner", {
 				}
 
 			}
-			html += '</div></div><div class="close-calendar"><a href="#home">Close Calendar</a></div>';
+			html += '</div></div><div class="close-calendar"><a href="#home" class="pop">Close Calendar</a></div>';
 
 			return html;
 
@@ -8913,7 +8913,7 @@ $.widget( "ui.spinner", {
       return _ref;
     }
 
-    WodEntry.configure('WodEntry', 'id', 'wod_id', 'name', 'score', 'min', 'sec', 'reps', 'weight', 'method', 'type', 'details', 'date', 'warm-up');
+    WodEntry.configure('WodEntry', 'id', 'wod_id', 'name', 'score', 'min', 'sec', 'reps', 'weight', 'method', 'type', 'details', 'date', 'warmup');
 
     WodEntry.extend(Spine.Model.Local);
 
@@ -9581,8 +9581,45 @@ $.widget( "ui.spinner", {
     }
 
     EditWod.prototype.takePhoto = function(e) {
-      e.preventDefault();
-      return this.log("PhoneGap camera integration goes here!");
+      var captureError, captureSuccess, imagePath, options, self;
+
+      if (!window.device.platform) {
+        return;
+      }
+      self = this;
+      imagePath = null;
+      captureSuccess = function(filePath) {
+        return window.resolveLocalFileSystemURI(filePath, (function(file) {
+          var filename;
+
+          filename = Date.now() + ".jpg";
+          return window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, (function(fs) {
+            return file.copyTo(fs.root, filename, (function(newFile) {
+              self.$(".custom-wod-photo").val(newFile.fullPath);
+              return self.$(".custom-wod-img").attr("src", newFile.fullPath);
+            }), captureError);
+          }), captureError);
+        }), captureError);
+      };
+      captureError = function(error) {
+        self.log(error);
+        if (error !== "no image selected") {
+          return setTimeout((function() {
+            return navigator.notification.alert("An error occurred with your photo.  Please try again.");
+          }), 0);
+        }
+      };
+      options = {
+        quality: 75,
+        destinationType: Camera.DestinationType.FILE_URI,
+        sourceType: Camera.PictureSourceType.CAMERA,
+        encodingType: Camera.EncodingType.JPEG,
+        targetWidth: 320,
+        targetHeight: 480,
+        saveToPhotoAlbum: false
+      };
+      navigator.camera.getPicture(captureSuccess, captureError, options);
+      return e.preventDefault();
     };
 
     EditWod.prototype.changeMethod = function() {
@@ -9664,6 +9701,8 @@ $.widget( "ui.spinner", {
       var attributes, data, entry;
 
       data = this.form.serializeObject();
+      this.log("Photo", data.photo);
+      this.log("Form data", data);
       attributes = {
         wod_id: this.wod && this.wod.id,
         name: data.name,
@@ -9675,7 +9714,8 @@ $.widget( "ui.spinner", {
         method: this.wod ? this.wod.scoring_method : data.method,
         type: data.type,
         details: data.details,
-        date: new Date(Superfit.currentDate)
+        date: new Date(Superfit.currentDate),
+        warmup: data.warmup
       };
       if (data.entry_id) {
         entry = WodEntry.find(data.entry_id);
@@ -9702,7 +9742,7 @@ $.widget( "ui.spinner", {
     };
 
     EditWod.prototype.togglestyle = function(e) {
-      return $(e.target).toggleClass("selected");
+      return $(e.target).toggleClass("selected", $(e.target).is(":checked"));
     };
 
     EditWod.prototype.addSet = function(e, reps, weight) {
@@ -10410,7 +10450,7 @@ $.widget( "ui.spinner", {
       $e = window.HAML.escape;
       $c = window.HAML.cleanValue;
       $o = [];
-      $o.push("<div class='set'>\n  <div class='enter-score-label'>\n    <p>Set <span class='set-number'>" + this.set_number + "</span></p>\n    <i class=\"remove-set icon-remove-sign\"></i>\n    <div class='warm-up'>Warm-Up</div>\n  </div>\n  <div class='enter-score'>\n    <div class='input'>\n      <input class='number required' type='number' name='weight' placeholder='ex. 155' value='" + ($e($c(this.weight))) + "'>\n      <span class='small'>Enter Weight (lbs)</span>\n    </div>\n    <div class='times'>\n      <span class='awesome icon-cancel'></span>\n    </div>\n    <div class='reps'>\n      <input class='number required' type='number' name='reps' placeholder='ex. 10' value='" + ($e($c(this.reps))) + "'>\n      <span class='small'>Enter Reps</span>\n    </div>\n  </div>\n</div>");
+      $o.push("<div class='set'>\n  <div class='enter-score-label'>\n    <p>Set <span class='set-number'>" + this.set_number + "</span></p>\n    <i class=\"remove-set icon-remove-sign\"></i>\n    <input class='warm-up' type='checkbox' name='warm-up' placeholder='Warm-up' value='" + ($e($c(this.warmup))) + "'>\n  </div>\n  <div class='enter-score'>\n    <div class='input'>\n      <input class='number required' type='number' name='weight' placeholder='ex. 155' value='" + ($e($c(this.weight))) + "'>\n      <span class='small'>Enter Weight (lbs)</span>\n    </div>\n    <div class='times'>\n      <span class='awesome icon-cancel'></span>\n    </div>\n    <div class='reps'>\n      <input class='number required' type='number' name='reps' placeholder='ex. 10' value='" + ($e($c(this.reps))) + "'>\n      <span class='small'>Enter Reps</span>\n    </div>\n  </div>\n</div>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
@@ -10423,7 +10463,7 @@ $.widget( "ui.spinner", {
       $e = window.HAML.escape;
       $c = window.HAML.cleanValue;
       $o = [];
-      $o.push("<a class='slideup' href='#edit-wod' data-wod-id='" + ($e($c(this.wod.id))) + "'>\n  <div class='label'>\n    <div class='" + (['icon', 'sprite-sf', "" + ($e($c(this.wod.typeSlug())))].sort().join(' ').replace(/^\s+|\s+$/g, '')) + "'></div>\n    <p>" + ($e($c(this.wod.name))) + "</p>\n  </div>\n  <p class='arrow awesome icon-chevron-right'></p>\n</a>");
+      $o.push("<a href='#edit-wod' data-wod-id='" + ($e($c(this.wod.id))) + "'>\n  <div class='label'>\n    <div class='" + (['icon', 'sprite-sf', "" + ($e($c(this.wod.typeSlug())))].sort().join(' ').replace(/^\s+|\s+$/g, '')) + "'></div>\n    <p>" + ($e($c(this.wod.name))) + "</p>\n  </div>\n  <p class='arrow awesome icon-chevron-right'></p>\n</a>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
@@ -10434,7 +10474,7 @@ $.widget( "ui.spinner", {
     return (function() {
       var $o;
       $o = [];
-      $o.push("<div class='page' id='add-wod'>\n  <div class='page-header'>\n    <div class='toolbar'>\n      <div>\n        <a class='awesome goback icon-chevron-left' href='#home'></a>\n      </div>\n      <h1>Select WOD</h1>\n    </div>\n  </div>\n  <div class='search-block'>\n    <form>\n      <input class='search-text' type='text' name='search-text' placeholder='Search All'>\n    </form>\n  </div>\n  <div class='content-main'>\n    <h3 class='no-matches'>No WODs found for this search.</h3>\n    <ul class='wods-search'></ul>\n    <ul class='wods-browse'>\n      <li data-type='benchmark'>\n        <a class='browse' href='#browse-wods'>\n          <div class='label'>\n            <div class='benchmark icon sprite-sf'></div>\n            <p>Benchmark</p>\n          </div>\n          <p class='arrow awesome icon-chevron-right'></p>\n        </a>\n      </li>\n      <li data-type='strength'>\n        <a class='browse' href='#browse-wods'>\n          <div class='label'>\n            <div class='icon sprite-sf strength'></div>\n            <p>Strength</p>\n          </div>\n          <p class='arrow awesome icon-chevron-right'></p>\n        </a>\n      </li>\n      <li data-type='other'>\n        <a class='browse' href='#browse-wods'>\n          <div class='label'>\n            <div class='icon other sprite-sf'></div>\n            <p>Other</p>\n          </div>\n          <p class='arrow awesome icon-chevron-right'></p>\n        </a>\n      </li>\n      <li>\n        <a class='custom' href='#edit-wod'>\n          <div class='label'>\n            <div class='custom icon sprite-sf'></div>\n            <p>Custom</p>\n          </div>\n          <p class='arrow awesome icon-chevron-right'></p>\n        </a>\n      </li>\n      <li>\n        <a href='#'>\n          <div class='label'>\n            <div class='icon mainsite sprite-sf'></div>\n            <p>Main Site</p>\n          </div>\n          <p class='arrow awesome icon-chevron-right'></p>\n        </a>\n      </li>\n    </ul>\n  </div>\n</div>");
+      $o.push("<div class='page' id='add-wod'>\n  <div class='page-header'>\n    <div class='toolbar'>\n      <div>\n        <a class='awesome goback icon-chevron-left' href='#home'></a>\n      </div>\n      <h1>Select Workout</h1>\n    </div>\n  </div>\n  <div class='search-block'>\n    <form>\n      <input class='search-text' type='text' name='search-text' placeholder='Search All'>\n    </form>\n  </div>\n  <div class='content-main'>\n    <h3 class='no-matches'>No WODs found for this search.</h3>\n    <ul class='wods-search'></ul>\n    <ul class='wods-browse'>\n      <li data-type='benchmark'>\n        <a class='browse' href='#browse-wods'>\n          <div class='label'>\n            <div class='benchmark icon sprite-sf'></div>\n            <p>Benchmark</p>\n          </div>\n          <p class='arrow awesome icon-chevron-right'></p>\n        </a>\n      </li>\n      <li data-type='strength'>\n        <a class='browse' href='#browse-wods'>\n          <div class='label'>\n            <div class='icon sprite-sf strength'></div>\n            <p>Strength</p>\n          </div>\n          <p class='arrow awesome icon-chevron-right'></p>\n        </a>\n      </li>\n      <li data-type='other'>\n        <a class='browse' href='#browse-wods'>\n          <div class='label'>\n            <div class='icon other sprite-sf'></div>\n            <p>Other</p>\n          </div>\n          <p class='arrow awesome icon-chevron-right'></p>\n        </a>\n      </li>\n      <li>\n        <a class='custom' href='#edit-wod'>\n          <div class='label'>\n            <div class='custom icon sprite-sf'></div>\n            <p>Custom</p>\n          </div>\n          <p class='arrow awesome icon-chevron-right'></p>\n        </a>\n      </li>\n      <li>\n        <a href='#'>\n          <div class='label'>\n            <div class='icon mainsite sprite-sf'></div>\n            <p>Main Site</p>\n          </div>\n          <p class='arrow awesome icon-chevron-right'></p>\n        </a>\n      </li>\n    </ul>\n  </div>\n</div>");
       return $o.join("\n").replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
@@ -10552,7 +10592,7 @@ $.widget( "ui.spinner", {
     }
     (function() {
       (function() {
-        __out.push('<div id="create-wod" class="page">\n\n    <div class="page-header">\n        <div class=\'toolbar\'>\n            <div>\n                <a class="awesome icon-chevron-left goback" href="#add-wod" style=""></a>\n            </div>\n            <h1>Create WOD</h1>\n        </div>\n    </div> <!-- end: page-header -->\n    <div class="content-main">\n      <div class="content-block">\n          <form>\n          <p>Name Your WOD</p>\n          <input type="text" name="custom-wod-label" placeholder="Today\'s Date" id="custom-wod-label" />\n\n          <p>Enter WOD Details</p>\n          <textarea placeholder="ex. 21 Burpees, 15 Thruster, 9 Toes to Bar" cols="30" rows="5"></textarea>\n          <div class="photo-capture">\n             <p>Too much to type?</p>\n             <a href="#" class="button"><span class="awesome icon-camera-retro"></span> Take a Photo</a>\n          </div>\n          </form>\n          <a href="#enter-wod-score" class="button bottom">Next: Enter Your Score</a>\n      </div>\n    </div>\n\n\n</div>\n');
+        __out.push('<div id="create-wod" class="page">\n\n    <div class="page-header">\n        <div class=\'toolbar\'>\n            <div>\n                <a class="awesome icon-chevron-left goback" href="#add-wod" style=""></a>\n            </div>\n            <h1>Create WOD</h1>\n        </div>\n    </div> <!-- end: page-header -->\n    <div class="content-main">\n      <div class="content-block">\n          <form>\n          <p>Name Your WOD</p>\n          <input type="text" name="custom-wod-label" placeholder="Today\'s Date" id="custom-wod-label" />\n\n          <p>Enter WOD Details</p>\n          <textarea placeholder="ex. 21 Burpees, 15 Thruster, 9 Toes to Bar" cols="30" rows="5"></textarea>\n          <div class="photo-capture">\n             <p>Too much to type?</p>\n             <a href="#" class="button"><span class="awesome icon-camera-retro"></span> Take a Photo</a>\n             <input type="text" class="custom-wod-photo" name="photo" value="" />\n             <img class="custom-wod-img" src="" style="display:none;" />\n          </div>\n          </form>\n          <a href="#enter-wod-score" class="button bottom">Next: Enter Your Score</a>\n      </div>\n    </div>\n\n\n</div>\n');
       
       }).call(this);
       
@@ -10620,20 +10660,20 @@ $.widget( "ui.spinner", {
       $e = window.HAML.escape;
       $c = window.HAML.cleanValue;
       $o = [];
-      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div>\n      <a class='awesome goback icon-chevron-left' href='#home'></a>\n    </div>\n    <h1>" + ($e($c(this.wod.name))) + "</h1>\n  </div>\n</div>");
+      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div>\n      <a class='awesome goback icon-chevron-left' href='#home'></a>\n    </div>\n    <h1>" + ($e($c(this.wod.name))) + "</h1>\n  </div>\n</div>\n<div class='scroll'>");
   if (this.wod.typeSlug() === 'strength') {
-    $o.push("<ul class='filter-navigation'>\n  <li>\n    <a href='#' data-rep-max='" + ($e($c(1))) + "'>1RM</a>\n  </li>\n  <li>\n    <a href='#' data-rep-max='" + ($e($c(3))) + "'>3RM</a>\n  </li>\n  <li>\n    <a href='#' data-rep-max='" + ($e($c(5))) + "'>5RM</a>\n  </li>\n</ul>");
+    $o.push("  <ul class='filter-navigation not-main'>\n    <li>\n      <a href='#' data-rep-max='" + ($e($c(1))) + "'>1RM</a>\n    </li>\n    <li>\n      <a href='#' data-rep-max='" + ($e($c(3))) + "'>3RM</a>\n    </li>\n    <li>\n      <a href='#' data-rep-max='" + ($e($c(5))) + "'>5RM</a>\n    </li>\n  </ul>");
       }
-      $o.push("<div class='content-main'>\n  <div class='content-block'>\n    <form>\n      <div class='enter-score'>");
-  $o.push("        " + $c(JST['superfit/views/_score']({
+      $o.push("  <div class='content-main'>\n    <div class='content-block'>\n      <form>\n        <div class='enter-score'>");
+  $o.push("          " + $c(JST['superfit/views/_score']({
     entry: this.entry,
     repMax: this.repMax
       })));
-      $o.push("      </div>");
+      $o.push("        </div>");
   if (this.wod.typeSlug() !== 'strength') {
-    $o.push("      <div class='score-type'>\n        <input id='rx-type' type='radio' name='type' value='rx' checked='" + ($e($c(this.entry ? ((_ref = this.entry) != null ? _ref.type : void 0) === 'rx' : 'checked'))) + "'>\n          <label class='radio' for='rx-type'>RX</label>\n        <input id='scaled-type' type='radio' name='type' value='scaled' checked='" + ($e($c(((_ref1 = this.entry) != null ? _ref1.type : void 0) === 'scaled'))) + "'>\n          <label class='radio' for='scaled-type'>Scaled</label>\n      </div>");
+    $o.push("        <div class='score-type'>\n          <input id='rx-type' type='radio' name='type' value='rx' checked='" + ($e($c(this.entry ? ((_ref = this.entry) != null ? _ref.type : void 0) === 'rx' : 'checked'))) + "'>\n            <label class='radio' for='rx-type'>RX</label>\n          <input id='scaled-type' type='radio' name='type' value='scaled' checked='" + ($e($c(((_ref1 = this.entry) != null ? _ref1.type : void 0) === 'scaled'))) + "'>\n            <label class='radio' for='scaled-type'>Scaled</label>\n        </div>");
       }
-      $o.push("      <input class='bluer bottom button' type='submit'>\n    </form>\n  </div>\n</div>");
+      $o.push("        <input class='bluer bottom button' type='submit'>\n      </form>\n    </div>\n  </div>\n</div>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
@@ -10671,13 +10711,17 @@ $.widget( "ui.spinner", {
       }
       $o.push("  </div>\n</div>\n<div class='content-main'>\n  <div class='content-block'>");
   if (this.wod && (this.wod.workout_male != null)) {
-    $o.push("    <div class='yellow-block'>\n      <strong>" + ($e($c(this.wod.scoringMethod()))) + "</strong>\n      <br>\n      <srong>" + ($e($c(this.wod.scoring_notes))) + "</srong>\n      <br>\n      <br>\n      <p class='score-details'>" + ($e($c())));
+    $o.push("    <div class='yellow-block'>\n      <p class='score-details'>" + ($e($c())));
     if (this.user.gender === 'male' || (this.user.gender === 'female' && !this.wod.workout_female)) {
       $o.push("        " + $c(Utils.simpleFormat(this.wod.workout_male)));
     }
     if (this.user.gender === 'female') {
       $o.push("        " + $c(Utils.simpleFormat(this.wod.workout_female)));
     }
+    $o.push("      </p>\n      <hr>\n      <p class='score-notes'>");
+    $o.push("        " + $e($c(this.wod.scoringMethod())));
+    $o.push("        <br>");
+    $o.push("        " + $e($c(this.wod.scoring_notes)));
     $o.push("      </p>\n    </div>");
       }
       $o.push("    <fieldset>\n      <form>");
@@ -10691,7 +10735,7 @@ $.widget( "ui.spinner", {
     $o.push("        <label class='custom' for='entry-name'>Name</label>\n        <input class='required' id='entry-name' name='name' type='text' placeholder='Name your WOD' value='" + ($e($c(this.entry ? this.entry.name : moment().format('MMM D, YYYY')))) + "'>\n        <p>Enter Workout Details\n          <textarea name='details' placeholder='What did you do? Burpees? Thrusters? ' cols='30' rows='5'></textarea>\n        </p>");
       }
   if (!this.wod) {
-    $o.push("        <div class='photo-capture'>\n          <p>Too much to type?</p>\n          <a class='button take-photo' href='#'>\n            <span class='icon-camera-alt'></span>\n            Take a Photo\n          </a>\n        </div>");
+    $o.push("        <div class='photo-capture'>\n          <p>Too much to type?</p>\n          <a class='button take-photo' href='#'>\n            <span class='icon-camera-alt'></span>\n            Take a Photo\n          </a>\n          <input class='custom-wod-photo' name='photo' type='hidden'>\n          <img class='custom-wod-img' >\n        </div>");
       }
       $o.push("        <div class='enter-score'>");
   if (!this.wod) {
@@ -10770,24 +10814,24 @@ $.widget( "ui.spinner", {
       $e = window.HAML.escape;
       $c = window.HAML.cleanValue;
       $o = [];
-      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div class='pulldown'>\n      Navigation Pulldown\n    </div>\n    <h1>Dashboard</h1>\n  </div>\n</div>\n<div class='scroll'>\n  <div class='date-navigation'>\n    <ul>\n      <li class='awesome icon-chevron-left prev-day'></li>\n      <li class='date'>\n        <p class='icon-calendar-1'></p>");
+      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div class='pulldown'>\n      Navigation Pulldown\n    </div>\n    <h1>Dashboard</h1>\n    <a class='awesome icon-plus' href='#add-wod'></a>\n  </div>\n</div>\n<div class='scroll'>\n  <div class='date-navigation'>\n    <ul>\n      <li class='awesome icon-chevron-left prev-day'></li>\n      <li class='date'>\n        <p class='icon-calendar-1'></p>");
       $o.push("        " + $e($c(moment(this.currentDate).format('MMM D, YYYY'))));
       $o.push("      </li>");
   if (this.currentDate.getTime() < this.today.getTime()) {
     $o.push("      <li class='awesome icon-chevron-right next-day'></li>");
       }
-      $o.push("    </ul>\n  </div>\n  <div class='content-main home'>\n    <ul>\n      <li class='title'>\n        <h2>Workout Activity</h2>\n        <div class='action'>\n          <a class='awesome icon-plus' href='#add-wod'></a>\n        </div>\n      </li>");
+      $o.push("    </ul>\n  </div>\n  <div class='content-main home'>\n    <ul>\n      <li class='title'>\n        <h2>Workout Activity</h2>\n      </li>");
   if (this.entries.length > 0) {
     _ref = this.entries;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       entry = _ref[_i];
       $o.push("      <li>\n        <a href='#review-wod' data-id='" + ($e($c(entry.id))) + "'>\n          <div class='label'>\n            <div class='" + (['icon', 'sprite-sf', "" + ($e($c(entry.typeSlug())))].sort().join(' ').replace(/^\s+|\s+$/g, '')) + "'></div>\n            <p>" + ($e($c(entry.wodName()))) + "</p>\n            <p>" + ($e($c(entry.scoreString(true)))) + "</p>\n          </div>\n          <p class='arrow awesome icon-chevron-right'></p>\n        </a>\n      </li>");
     }
-    $o.push("      <li>\n        <a class='add-new' href='#add-wod'>\n          <div class='label'>\n            <p>Add Another Workout</p>\n          </div>\n          <p class='arrow awesome icon-plus'></p>\n        </a>\n      </li>");
+    $o.push("      <li>\n        <a class='add-new' href='#add-wod'>\n          <div class='label'>\n            <p>Add Workout</p>\n          </div>\n          <p class='arrow awesome icon-plus'></p>\n        </a>\n      </li>");
   } else {
     $o.push("      <li>\n        You haven't entered any workouts!\n      </li>\n      <li>\n        <a class='add-new' href='#add-wod'>\n          <div class='label'>\n            <p>Add Workout</p>\n          </div>\n          <p class='arrow awesome icon-plus'></p>\n        </a>\n      </li>");
       }
-      $o.push("    </ul>\n  </div>\n  <div class='content-main'>\n    <ul>\n      <li class='title'>\n        <h2>Goals</h2>\n        <div class='action'>\n          <a href='#goals'>\n            <p>View All</p>\n            <p class='arrow awesome icon-chevron-right'></p>\n          </a>\n        </div>\n      </li>\n      <li class='chart-container'>\n        <div class='chart'></div>\n      </li>\n      <li class='goal'>\n        <a href='#'>\n          <div class='label'>\n            <p class='goal-label'>25 Unbroken Pullups <br><span>Last Update: 17 days ago (22 reps)</span></p>\n            <p class='goal-progress'>35%</p>\n          </div>\n          <p class='arrow awesome icon-chevron-right'></p>\n        </a>\n      </li>\n    </ul>\n  </div>\n</div>");
+      $o.push("    </ul>\n  </div>\n  <div class='content-main'>\n    <ul>\n      <li class='title'>\n        <h2>Goals</h2>\n        <div class='action'>\n          <a class='dissolve' href='#goals'>\n            <p>View All</p>\n            <p class='arrow awesome icon-chevron-right'></p>\n          </a>\n        </div>\n      </li>\n      <li class='chart-container'>\n        <div class='chart'></div>\n      </li>\n      <li class='goal'>\n        <a href='#'>\n          <div class='label'>\n            <p class='goal-label'>25 Unbroken Pullups <br><span>Last Update: 17 days ago (22 reps)</span></p>\n            <p class='goal-progress'>35%</p>\n          </div>\n          <p class='arrow awesome icon-chevron-right'></p>\n        </a>\n      </li>\n    </ul>\n  </div>\n</div>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
@@ -10922,7 +10966,7 @@ $.widget( "ui.spinner", {
       $o = [];
       $o.push("<div class='page' id='record-detail'>\n  <div class='page-header'>\n    <div class='toolbar'>\n      <div>\n        <a class='awesome goback icon-chevron-left' href='#records'></a>\n      </div>\n      <h1>" + ($e($c(this.wod.name))) + "</h1>\n    </div>\n  </div>\n  <div class='scroll'>");
   if (this.wod.typeSlug() === 'strength') {
-    $o.push("    <ul class='filter-navigation'>\n      <li>\n        <a class='" + ($e($c(this.repMax === 1 ? 'selected' : ''))) + "' href='#' data-rep-max='" + ($e($c(1))) + "'>1RM</a>\n      </li>\n      <li>\n        <a class='" + ($e($c(this.repMax === 3 ? 'selected' : ''))) + "' href='#' data-rep-max='" + ($e($c(3))) + "'>3RM</a>\n      </li>\n      <li>\n        <a class='" + ($e($c(this.repMax === 5 ? 'selected' : ''))) + "' href='#' data-rep-max='" + ($e($c(5))) + "'>5RM</a>\n      </li>\n    </ul>");
+    $o.push("    <ul class='filter-navigation not-main'>\n      <li>\n        <a class='" + ($e($c(this.repMax === 1 ? 'selected' : ''))) + "' href='#' data-rep-max='" + ($e($c(1))) + "'>1RM</a>\n      </li>\n      <li>\n        <a class='" + ($e($c(this.repMax === 3 ? 'selected' : ''))) + "' href='#' data-rep-max='" + ($e($c(3))) + "'>3RM</a>\n      </li>\n      <li>\n        <a class='" + ($e($c(this.repMax === 5 ? 'selected' : ''))) + "' href='#' data-rep-max='" + ($e($c(5))) + "'>5RM</a>\n      </li>\n    </ul>");
       }
       $o.push("    <div class='content-main'>\n      <div class='content-block'>\n        <div class='yellow-block'>\n          <div class='review-score'>\n            <div class='score'>");
   if (this.wod.typeSlug() === 'strength') {
@@ -10981,12 +11025,12 @@ $.widget( "ui.spinner", {
       $e = window.HAML.escape;
       $c = window.HAML.cleanValue;
       $o = [];
-      $o.push("<div class='page' id='review-wod'>\n  <div class='page-header'>\n    <div class='toolbar'>\n      <div>\n        <a class='awesome goback icon-chevron-left' href='#'></a>\n      </div>\n      <h1>" + ($e($c(this.entry.wodName()))) + "</h1>\n    </div>\n  </div>\n  <div class='content-main'>\n    <div class='content-block'>\n      <div class='yellow-block'>\n        <div class='review-score'>\n          <div class='score'>" + ($e($c(this.entry.scoreString()))) + "\n            <span class='score-level'>" + ($e($c(this.entry.type))) + "</span>\n            <span class='pr'>pr</span>\n          </div>\n          <p class='score-details'>" + ($e($c(this.entry.details))) + "</p>\n        </div>\n      </div>\n      <a class='bottom button fade' href='#home'>Jump To Dashboard</a>\n    </div>\n  </div>");
+      $o.push("<div class='page' id='review-wod'>\n  <div class='page-header'>\n    <div class='toolbar'>\n      <div>\n        <a class='awesome goback icon-chevron-left' href='#'></a>\n      </div>\n      <h1>" + ($e($c(this.entry.wodName()))) + "</h1>\n    </div>\n  </div>\n  <div class='content-main'>\n    <div class='content-block'>\n      <div class='yellow-block'>\n        <div class='review-score'>\n          <div class='score'>" + ($e($c(this.entry.scoreString()))) + "\n            <span class='score-level'>" + ($e($c(this.entry.type))) + "</span>\n            <span class='pr'>pr</span>\n          </div>\n          <p class='score-details'>" + ($e($c(this.entry.details))) + "</p>\n          <p class='score-details'>" + ($e($c(this.entry.warmup))) + "</p>\n        </div>\n      </div>\n      <a class='bottom button fade' href='#home'>Jump To Dashboard</a>\n    </div>\n  </div>");
   $o.push("  " + $c(JST['superfit/views/_history']({
     wod: this.wod,
     pastEntries: this.pastEntries
       })));
-      $o.push("  <div class='footer'>\n    <a class='bottom button dissolve lighter' data-id='" + ($e($c(this.entry.id))) + "' href='#edit-wod'>Edit Workout</a>\n    <a class='bottom button delete pop red' data-id='" + ($e($c(this.entry.id))) + "' href='#home'>Delete Workout</a>\n  </div>\n</div>");
+      $o.push("  <div class='footer'>\n    <a class='bottom button lighter slideup' data-id='" + ($e($c(this.entry.id))) + "' href='#edit-wod'>Edit Workout</a>\n    <a class='bottom button delete pop red' data-id='" + ($e($c(this.entry.id))) + "' href='#home'>Delete Workout</a>\n  </div>\n</div>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
