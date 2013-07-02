@@ -8913,7 +8913,7 @@ $.widget( "ui.spinner", {
       return _ref;
     }
 
-    WodEntry.configure('WodEntry', 'id', 'wod_id', 'name', 'score', 'min', 'sec', 'reps', 'weight', 'method', 'type', 'details', 'date', 'warmup');
+    WodEntry.configure('WodEntry', 'id', 'wod_id', 'name', 'score', 'min', 'sec', 'reps', 'weight', 'method', 'type', 'details', 'date', 'warm_up');
 
     WodEntry.extend(Spine.Model.Local);
 
@@ -9581,13 +9581,12 @@ $.widget( "ui.spinner", {
     }
 
     EditWod.prototype.takePhoto = function(e) {
-      var captureError, captureSuccess, imagePath, options, self;
+      var captureError, captureSuccess, options, self;
 
       if (!window.device.platform) {
         return;
       }
       self = this;
-      imagePath = null;
       captureSuccess = function(filePath) {
         return window.resolveLocalFileSystemURI(filePath, (function(file) {
           var filename;
@@ -9645,6 +9644,17 @@ $.widget( "ui.spinner", {
 
     EditWod.prototype.initValidation = function() {
       return this.form.validate({
+        errorPlacement: function(error, element) {
+          return error.appendTo(element.closest('.ui-spinner'));
+        },
+        highlight: function(element) {
+          $(element).removeClass('success').addClass('form-error');
+          return $(element).closest('.enter-score').removeClass('success').addClass('error');
+        },
+        unhighlight: function(element) {
+          $(element).removeClass('form-error').addClass('success');
+          return $(element).closest('.enter-score').removeClass('error').addClass('success');
+        },
         submitHandler: this.submit
       });
     };
@@ -9715,7 +9725,7 @@ $.widget( "ui.spinner", {
         type: data.type,
         details: data.details,
         date: new Date(Superfit.currentDate),
-        warmup: data.warmup
+        warm_up: data.warm_up
       };
       if (data.entry_id) {
         entry = WodEntry.find(data.entry_id);
@@ -10450,7 +10460,7 @@ $.widget( "ui.spinner", {
       $e = window.HAML.escape;
       $c = window.HAML.cleanValue;
       $o = [];
-      $o.push("<div class='set'>\n  <div class='enter-score-label'>\n    <p>Set <span class='set-number'>" + this.set_number + "</span></p>\n    <i class=\"remove-set icon-remove-sign\"></i>\n    <input class='warm-up' type='checkbox' name='warm-up' placeholder='Warm-up' value='" + ($e($c(this.warmup))) + "'>\n  </div>\n  <div class='enter-score'>\n    <div class='input'>\n      <input class='number required' type='number' name='weight' placeholder='ex. 155' value='" + ($e($c(this.weight))) + "'>\n      <span class='small'>Enter Weight (lbs)</span>\n    </div>\n    <div class='times'>\n      <span class='awesome icon-cancel'></span>\n    </div>\n    <div class='reps'>\n      <input class='number required' type='number' name='reps' placeholder='ex. 10' value='" + ($e($c(this.reps))) + "'>\n      <span class='small'>Enter Reps</span>\n    </div>\n  </div>\n</div>");
+      $o.push("<div class='set'>\n  <div class='enter-score-label'>\n    <p>Set <span class='set-number'>" + this.set_number + "</span></p>\n    <i class=\"remove-set icon-remove-sign\"></i>\n    <input class='warm-up' type='checkbox' name='warm_up' placeholder='Warm-up' value='" + ($e($c(this.warm_up))) + "'>\n  </div>\n  <div class='enter-score'>\n    <div class='input'>\n      <input class='number required' type='number' name='weight' placeholder='ex. 155' value='" + ($e($c(this.weight))) + "'>\n      <span class='small'>Enter Weight (lbs)</span>\n    </div>\n    <div class='times'>\n      <span class='awesome icon-cancel'></span>\n    </div>\n    <div class='reps'>\n      <input class='number required' type='number' name='reps' placeholder='ex. 10' value='" + ($e($c(this.reps))) + "'>\n      <span class='small'>Enter Reps</span>\n    </div>\n  </div>\n</div>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
@@ -10622,14 +10632,14 @@ $.widget( "ui.spinner", {
       $e = window.HAML.escape;
       $c = window.HAML.cleanValue;
       $o = [];
-      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div>\n      <a class='awesome goback icon-chevron-left' href='#'></a>\n    </div>\n    <h1>Edit Profile</h1>\n  </div>\n</div>\n<div class='content-main edit-profile scroll'>\n  <form>\n    <ul>\n      <li>\n        <div class='label'>\n          <p>Name</p>\n        </div>\n        <div class='action'>\n          <input class='required' type='text' name='name' placeholder='Full Name' value='" + ($e($c(this.user.name))) + "'>\n        </div>\n      </li>\n      <li>\n        <a href='#edit-profile-gym'>\n          <div class='label'>\n            <p>My Gym</p>\n          </div>\n          <div class='action'>\n            <p>");
+      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div>\n      <a class='awesome goback icon-chevron-left' href='#'></a>\n    </div>\n    <h1>Edit Profile</h1>\n  </div>\n</div>\n<div class='content-main edit-profile scroll'>\n  <form>\n    <ul>\n      <li>\n        <div class='label'>\n          <p>Name</p>\n        </div>\n        <div class='action'>\n          <input class='required' type='text' name='name' placeholder='Full Name' value='" + ($e($c(this.user.name))) + "'>\n        </div>\n      </li>\n      <li>\n        <div class='label'>\n          <p>Zip Code</p>\n        </div>\n        <div class='action'>\n          <input type='number' name='zipcode' placeholder='Zip Code' value='" + ($e($c(this.user.zipcode))) + "'>\n        </div>\n      </li>\n      <li>\n        <div class='label'>\n          <p>Email</p>\n        </div>\n        <div class='action'>\n          <input type='text' name='email' placeholder='Email Address' value='" + ($e($c(this.user.email))) + "'>\n        </div>\n      </li>\n      <li>\n        <div class='label'>\n          <p>Birth Date</p>\n        </div>\n        <div class='action'>\n          <input class='date' type='date' name='birthdate' placeholder='Your age' value='" + ($e($c(this.user.birthdate))) + "'>\n        </div>\n      </li>\n      <li class='radio'>\n        <div class='label'>\n          <p>Gender</p>\n        </div>\n        <div class='action'>\n          <fieldset>\n            <input id='female' type='radio' name='gender' value='female' checked='" + ($e($c(this.user.gender === 'female'))) + "'>\n              <label class='radio' for='female'>Female</label>\n            <input id='male' type='radio' name='gender' value='male' checked='" + ($e($c(this.user.gender === 'male'))) + "'>\n              <label class='radio' for='male'>Male</label>\n          </fieldset>\n        </div>\n      </li>\n      <li>\n        <a href='#edit-profile-gym'>\n          <div class='label'>\n            <p>My Gym</p>\n          </div>\n          <div class='action'>\n            <p>");
   if (this.user.gym) {
     $o.push("              " + $e($c(this.user.gym)));
       }
   if (!this.user.gym) {
     $o.push("              Find My Gym");
       }
-      $o.push("            </p>\n            <p class='arrow awesome icon-chevron-right'></p>\n          </div>\n        </a>\n      </li>\n      <li>\n        <div class='label'>\n          <p>Zip Code</p>\n        </div>\n        <div class='action'>\n          <input type='number' name='zipcode' placeholder='Zip Code' value='" + ($e($c(this.user.zipcode))) + "'>\n        </div>\n      </li>\n      <li>\n        <div class='label'>\n          <p>Email</p>\n        </div>\n        <div class='action'>\n          <input type='text' name='email' placeholder='Email Address' value='" + ($e($c(this.user.email))) + "'>\n        </div>\n      </li>\n      <li class='radio'>\n        <div class='label'>\n          <p>Gender</p>\n        </div>\n        <div class='action'>\n          <fieldset>\n            <input id='female' type='radio' name='gender' value='female' checked='" + ($e($c(this.user.gender === 'female'))) + "'>\n              <label class='radio' for='female'>Female</label>\n            <input id='male' type='radio' name='gender' value='male' checked='" + ($e($c(this.user.gender === 'male'))) + "'>\n              <label class='radio' for='male'>Male</label>\n          </fieldset>\n        </div>\n      </li>\n      <li>\n        <div class='label'>\n          <p>Birth Date</p>\n        </div>\n        <div class='action'>\n          <input class='date' type='date' name='birthdate' placeholder='Your age' value='" + ($e($c(this.user.birthdate))) + "'>\n        </div>\n      </li>\n    </ul>\n    <div class='content-block divider'>\n      <input class='bottom button dissolve lighter' type='submit' value='Save Profile'>\n    </div>\n  </form>\n</div>");
+      $o.push("            </p>\n            <p class='arrow awesome icon-chevron-right'></p>\n          </div>\n        </a>\n      </li>\n    </ul>\n    <div class='content-block divider'>\n      <input class='bottom button dissolve lighter' type='submit' value='Save Profile'>\n    </div>\n  </form>\n</div>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
@@ -10831,7 +10841,7 @@ $.widget( "ui.spinner", {
   } else {
     $o.push("      <li>\n        You haven't entered any workouts!\n      </li>\n      <li>\n        <a class='add-new' href='#add-wod'>\n          <div class='label'>\n            <p>Add Workout</p>\n          </div>\n          <p class='arrow awesome icon-plus'></p>\n        </a>\n      </li>");
       }
-      $o.push("    </ul>\n  </div>\n  <div class='content-main'>\n    <ul>\n      <li class='title'>\n        <h2>Goals</h2>\n        <div class='action'>\n          <a class='dissolve' href='#goals'>\n            <p>View All</p>\n            <p class='arrow awesome icon-chevron-right'></p>\n          </a>\n        </div>\n      </li>\n      <li class='chart-container'>\n        <div class='chart'></div>\n      </li>\n      <li class='goal'>\n        <a href='#'>\n          <div class='label'>\n            <p class='goal-label'>25 Unbroken Pullups <br><span>Last Update: 17 days ago (22 reps)</span></p>\n            <p class='goal-progress'>35%</p>\n          </div>\n          <p class='arrow awesome icon-chevron-right'></p>\n        </a>\n      </li>\n    </ul>\n  </div>\n</div>");
+      $o.push("    </ul>\n  </div>\n  <div class='content-main goals'>\n    <ul>\n      <li class='title'>\n        <h2>Goals</h2>\n        <div class='action'>\n          <a class='dissolve' href='#goals'>\n            <p>View All</p>\n            <p class='arrow awesome icon-chevron-right'></p>\n          </a>\n        </div>\n      </li>\n      <li class='chart-container'>\n        <div class='chart'></div>\n      </li>\n      <li class='goal'>\n        <a href='#'>\n          <div class='label'>\n            <p class='goal-label'>25 Unbroken Pullups <br><span>Last Update: 17 days ago (22 reps)</span></p>\n            <p class='goal-progress'>35%</p>\n          </div>\n          <p class='arrow awesome icon-chevron-right'></p>\n        </a>\n      </li>\n    </ul>\n  </div>\n</div>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
@@ -10903,7 +10913,7 @@ $.widget( "ui.spinner", {
     return (function() {
       var $o;
       $o = [];
-      $o.push("<div id='navigation'>\n  <div class='navigation'>\n    <div>\n      <a class='dissolve' href='#home'>\n        <p class='dashboard icon sprite-sf'></p>\n        Dashboard\n      </a>\n    </div>\n    <div>\n      <a class='dissolve' href='#goals'>\n        <p class='goals icon sprite-sf'></p>\n        Goals\n      </a>\n    </div>\n    <div>\n      <a class='dissolve' href='#records'>\n        <p class='icon records sprite-sf'></p>\n        Records\n      </a>\n    </div>\n    <div>\n      <a class='dissolve' href='#profile'>\n        <p class='icon me sprite-sf'></p>\n        Profile\n      </a>\n    </div>\n  </div>\n</div>");
+      $o.push("<div id='navigation'>\n  <div class='navigation'>\n    <div>\n      <a class='dissolve' href='#home'>\n        <p class='dashboard icon sprite-sf'></p>\n        Dashboard\n      </a>\n    </div>\n    <div>\n      <a class='dissolve' href='#records'>\n        <p class='icon records sprite-sf'></p>\n        Records\n      </a>\n    </div>\n    <div>\n      <a class='dissolve' href='#profile'>\n        <p class='icon me sprite-sf'></p>\n        Profile\n      </a>\n    </div>\n  </div>\n</div>");
       return $o.join("\n").replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;

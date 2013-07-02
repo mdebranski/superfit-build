@@ -5,7 +5,7 @@
         id="com.superfitapp.superfit" version="0.1.0">
 
     <name>Superfit</name>
-    <description>We gonna pump YOU up!</description>
+    <description>Smarter Workout Tracking</description>
     <author href="http://www.superfitapp.com" email="info@superfitapp.com">The Superfit Team</author>
 
     <!-- iOS-specific preferences -->
@@ -29,9 +29,9 @@
 
     <!-- iOS icons -->
     <icon src="icons/ios/icon.png"          gap:platform="ios"    width="57"  height="57" /><!-- phone app icon -->
-	<icon src="icons/ios/icon-72.png"       gap:platform="ios"    width="72"  height="72" /><!-- ipad app icon -->
+	<!-- <icon src="icons/ios/icon-72.png"       gap:platform="ios"    width="72"  height="72" />ipad app icon -->
 	<icon src="icons/ios/icon_at_2x.png"    gap:platform="ios"    width="114" height="114" /><!-- retina phone app icon -->
-	<icon src="icons/ios/icon-72_at_2x.png" gap:platform="ios"    width="144" height="144" /><!-- retina ipad app icon -->
+	<!-- <icon src="icons/ios/icon-72_at_2x.png" gap:platform="ios"    width="144" height="144" />retina ipad app icon -->
 
 	<!-- Android icons -->
 	<icon src="icons/android/ldpi.png"  gap:platform="android" gap:density="ldpi" /><!-- (120dpi) 36x36 -->
@@ -41,9 +41,9 @@
 
 
 	<!-- iOS splash screens -->
-	<gap:splash src="splash/ios/iphone-portrait.png"    gap:platform="ios"     width="320" height="480" />
+	<!-- <gap:splash src="splash/ios/iphone-portrait.png"    gap:platform="ios"     width="320" height="480" /> -->
     <gap:splash src="splash/ios/iphone-portrait-2x.png" gap:platform="ios"     width="640" height="960" />
-    <gap:splash src="splash/ios/ipad-portrait.png"      gap:platform="ios"     width="768" height="1024" />
+    <!-- <gap:splash src="splash/ios/ipad-portrait.png"      gap:platform="ios"     width="768" height="1024" /> -->
     <gap:splash src="splash/ios/ipad-portrait-2x.png"   gap:platform="ios"     width="1536" height="2008" />
 
     <!-- Android splash screens -->
