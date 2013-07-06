@@ -10606,7 +10606,7 @@ $.widget( "ui.spinner", {
       $e = window.HAML.escape;
       $c = window.HAML.cleanValue;
       $o = [];
-      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div>\n      <a class='awesome goback icon-chevron-left' href='#home'></a>\n    </div>\n    <h1>" + ($e($c(this.wod.name))) + "</h1>\n  </div>\n</div>\n<div class='scroll'>");
+      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div>\n      <a class='awesome goback icon-chevron-left' href='#records'></a>\n    </div>\n    <h1>" + ($e($c(this.wod.name))) + "</h1>\n  </div>\n</div>\n<div class='scroll'>");
   if (this.wod.typeSlug() === 'strength') {
     $o.push("  <ul class='filter-navigation not-main'>\n    <li>\n      <a class='" + ($e($c(this.repMax === 1 ? 'selected' : ''))) + "' href='#' data-rep-max='" + ($e($c(1))) + "'>1RM</a>\n    </li>\n    <li>\n      <a class='" + ($e($c(this.repMax === 3 ? 'selected' : ''))) + "' href='#' data-rep-max='" + ($e($c(3))) + "'>3RM</a>\n    </li>\n    <li>\n      <a class='" + ($e($c(this.repMax === 5 ? 'selected' : ''))) + "' href='#' data-rep-max='" + ($e($c(5))) + "'>5RM</a>\n    </li>\n  </ul>");
       }
@@ -10655,41 +10655,41 @@ $.widget( "ui.spinner", {
   } else {
     $o.push("    <h1>Custom</h1>");
       }
-      $o.push("  </div>\n</div>");
+      $o.push("  </div>\n</div>\n<div class='scroll'>");
   if (this.wod && (this.wod.workout_male != null)) {
-    $o.push("<div class='content-main'>\n  <div class='content-block'>\n    <div class='yellow-block'>\n      <p class='score-details'>" + ($e($c())));
+    $o.push("  <div class='content-main'>\n    <div class='content-block'>\n      <div class='yellow-block'>\n        <p class='score-details'>" + ($e($c())));
     if (this.user.gender === 'male' || (this.user.gender === 'female' && !this.wod.workout_female)) {
-      $o.push("        " + $c(Utils.simpleFormat(this.wod.workout_male)));
+      $o.push("          " + $c(Utils.simpleFormat(this.wod.workout_male)));
     }
     if (this.user.gender === 'female') {
-      $o.push("        " + $c(Utils.simpleFormat(this.wod.workout_female)));
+      $o.push("          " + $c(Utils.simpleFormat(this.wod.workout_female)));
     }
-    $o.push("      </p>\n      <hr>\n      <p class='score-notes'>");
-    $o.push("        " + $e($c(this.wod.scoringMethod())));
-    $o.push("        <br>");
-    $o.push("        " + $e($c(this.wod.scoring_notes)));
-    $o.push("      </p>\n    </div>\n  </div>\n</div>");
+    $o.push("        </p>\n        <hr>\n        <p class='score-notes'>");
+    $o.push("          " + $e($c(this.wod.scoringMethod())));
+    $o.push("          <br>");
+    $o.push("          " + $e($c(this.wod.scoring_notes)));
+    $o.push("        </p>\n      </div>\n    </div>\n  </div>");
       }
-      $o.push("<fieldset>\n  <form>\n    <div class='content-main'>\n      <div class='content-block'>");
+      $o.push("  <fieldset>\n    <form>\n      <div class='content-main'>\n        <div class='content-block'>");
   if (this.wod) {
-    $o.push("        <input type='hidden' name='wod_id' value='" + ($e($c(this.wod.id))) + "'>");
+    $o.push("          <input type='hidden' name='wod_id' value='" + ($e($c(this.wod.id))) + "'>");
       }
   if (this.entry) {
-    $o.push("        <input type='hidden' name='entry_id' value='" + ($e($c(this.entry.id))) + "'>");
+    $o.push("          <input type='hidden' name='entry_id' value='" + ($e($c(this.entry.id))) + "'>");
       }
   if (!this.wod) {
-    $o.push("        <label class='custom' for='entry-name'>Name</label>\n        <input class='required' id='entry-name' name='name' type='text' placeholder='Name your WOD' value='" + ($e($c(this.entry ? this.entry.name : moment().format('MMM D, YYYY')))) + "'>\n        <p>Enter Workout Details</p>\n        <div class='customwod-tabs photo'>\n          <ul class='tab-nav'>\n            <li>\n              <a class='button photo-capture' href='#'>Photo Capture</a>\n            </li>\n            <li>\n              <a class='button text-entry' href='#'>Type It In</a>\n            </li>\n          </ul>\n          <div id='photo-capture'>\n            <a class='take-photo' href='#'>\n              <span class='icon-camera-alt'></span>\n              <br>\n              <span>Take a Photo</span>\n            </a>\n            <input class='custom-wod-photo' name='photo' type='hidden'>\n            <img class='custom-wod-img'>\n          </div>\n          <div id='text-entry'>\n            <textarea name='details' placeholder='What did you do? Burpees? Thrusters? ' cols='30' rows='5'></textarea>\n          </div>\n        </div>");
+    $o.push("          <label class='custom' for='entry-name'>Name</label>\n          <input class='required' id='entry-name' name='name' type='text' placeholder='Name your WOD' value='" + ($e($c(this.entry ? this.entry.name : moment().format('MMM D, YYYY')))) + "'>\n          <p>Enter Workout Details</p>\n          <div class='customwod-tabs photo'>\n            <ul class='tab-nav'>\n              <li>\n                <a class='button photo-capture' href='#'>Photo Capture</a>\n              </li>\n              <li>\n                <a class='button text-entry' href='#'>Type It In</a>\n              </li>\n            </ul>\n            <div id='photo-capture'>\n              <a class='take-photo' href='#'>\n                <input class='custom-wod-photo' name='photo' type='hidden'>\n                <img class='custom-wod-img'>\n                <initial-capture>\n                  <span class='icon-camera-alt'></span>\n                  <br>\n                  <span>Take a Photo</span>\n                </initial-capture>\n              </a>\n              <a class='replace take-photo'></a>\n            </div>\n            <div id='text-entry'>\n              <textarea name='details' placeholder='What did you do? Burpees? Thrusters? ' cols='30' rows='5'></textarea>\n            </div>\n          </div>");
       }
-      $o.push("      </div>\n    </div>\n    <div class='content-main'>\n      <div class='content-block'>\n        <div class='enter-score'>");
+      $o.push("        </div>\n      </div>\n      <div class='content-main'>\n        <div class='content-block'>\n          <div class='enter-score'>");
   if (!this.wod) {
-    $o.push("          <div class='type'>\n            <p>Scoring Method</p>\n            <select class='required' name='method'>\n              <option value='for_time' selected='" + ($e($c(((_ref = this.entry) != null ? _ref.method : void 0) === 'for_time'))) + "'>Time</option>\n              <option value='rounds' selected='" + ($e($c(((_ref1 = this.entry) != null ? _ref1.method : void 0) === 'rounds'))) + "'>Rounds</option>\n              <option value='weight' selected='" + ($e($c(((_ref2 = this.entry) != null ? _ref2.method : void 0) === 'weight'))) + "'>Weight (lbs)</option>\n              <option value='max_reps' selected='" + ($e($c(((_ref3 = this.entry) != null ? _ref3.method : void 0) === 'max_reps'))) + "'>Reps</option>\n              <option value='pass_fail' selected='" + ($e($c(((_ref4 = this.entry) != null ? _ref4.method : void 0) === 'pass_fail'))) + "'>Pass / Fail</option>\n            </select>\n          </div>");
+    $o.push("            <div class='type'>\n              <p>Scoring Method</p>\n              <select class='required' name='method'>\n                <option value='for_time' selected='" + ($e($c(((_ref = this.entry) != null ? _ref.method : void 0) === 'for_time'))) + "'>Time</option>\n                <option value='rounds' selected='" + ($e($c(((_ref1 = this.entry) != null ? _ref1.method : void 0) === 'rounds'))) + "'>Rounds</option>\n                <option value='weight' selected='" + ($e($c(((_ref2 = this.entry) != null ? _ref2.method : void 0) === 'weight'))) + "'>Weight (lbs)</option>\n                <option value='max_reps' selected='" + ($e($c(((_ref3 = this.entry) != null ? _ref3.method : void 0) === 'max_reps'))) + "'>Reps</option>\n                <option value='pass_fail' selected='" + ($e($c(((_ref4 = this.entry) != null ? _ref4.method : void 0) === 'pass_fail'))) + "'>Pass / Fail</option>\n              </select>\n            </div>");
       }
-  $o.push("          " + $c(JST['superfit/views/_score']({
+  $o.push("            " + $c(JST['superfit/views/_score']({
     entry: this.entry
       })));
-      $o.push("        </div>\n        <div>\n          <input id='rx-type' type='radio' name='type' value='rx' checked='" + ($e($c(this.entry ? ((_ref5 = this.entry) != null ? _ref5.type : void 0) === 'rx' : 'checked'))) + "'>\n            <label class='radio' for='rx-type'>RX</label>\n          <input id='scaled-type' type='radio' name='type' value='scaled' checked='" + ($e($c(((_ref6 = this.entry) != null ? _ref6.type : void 0) === 'scaled'))) + "'>\n            <label class='radio' for='scaled-type'>Scaled</label>\n        </div>\n        <p>Workout Notes</p>\n        <textarea name='details' placeholder='Add details that affected your performance. ' cols='30' rows='5'>");
-      $o.push("        " + $e($c((_ref7 = this.entry) != null ? _ref7.details : void 0)));
-      $o.push("        </textarea>\n        <input class='bluer bottom button' type='submit'>\n      </div>\n    </div>\n  </form>\n</fieldset>");
+      $o.push("          </div>\n          <div>\n            <input id='rx-type' type='radio' name='type' value='rx' checked='" + ($e($c(this.entry ? ((_ref5 = this.entry) != null ? _ref5.type : void 0) === 'rx' : 'checked'))) + "'>\n              <label class='radio' for='rx-type'>RX</label>\n            <input id='scaled-type' type='radio' name='type' value='scaled' checked='" + ($e($c(((_ref6 = this.entry) != null ? _ref6.type : void 0) === 'scaled'))) + "'>\n              <label class='radio' for='scaled-type'>Scaled</label>\n          </div>\n          <p>Workout Notes</p>\n          <textarea name='details' cols='30' rows='5'>");
+      $o.push("          " + $e($c((_ref7 = this.entry) != null ? _ref7.details : void 0)));
+      $o.push("          </textarea>\n          <input class='bluer bottom button' type='submit'>\n        </div>\n      </div>\n    </form>\n  </fieldset>\n</div>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "").replace(/[\s\n]*\u0091/mg, '').replace(/\u0092[\s\n]*/mg, '');
     }).call(window.HAML.context(context));
   });;
@@ -10924,7 +10924,7 @@ $.widget( "ui.spinner", {
     wod: this.wod,
     pastEntries: this.pastEntries
       })));
-      $o.push("    <div class='footer'>\n      <a class='bottom button fade' href='#records'>Back to All Records</a>\n      <a class='bottom button dissolve lighter'>Add New Record</a>\n    </div>\n  </div>\n</div>");
+      $o.push("    <div class='footer'>\n      <a class='bottom button fade' href='#records'>Back to All Records</a>\n    </div>\n  </div>\n</div>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;

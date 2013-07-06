@@ -49,8 +49,8 @@ tile-pg-header@2x.png: tile-pg-header@2x-59fd4c5ffcd26cc8e42b194dad97462f.png
 tile-pg-header@2x/index.png: tile-pg-header@2x-59fd4c5ffcd26cc8e42b194dad97462f.png
 tile-ticks.png: tile-ticks-44e90c673462786237826c78b6f34f36.png
 tile-ticks/index.png: tile-ticks-44e90c673462786237826c78b6f34f36.png
-superfit.js: superfit-cbef369860a64c937f3facba6121a274.js
-superfit/index.js: superfit-cbef369860a64c937f3facba6121a274.js
+superfit.js: superfit-62ac3273c0327817a46ca8c5f865c0b2.js
+superfit/index.js: superfit-62ac3273c0327817a46ca8c5f865c0b2.js
 font/FontAwesome.otf: font/FontAwesome-468f83b63df32064983141584a19ff17.otf
 font/FontAwesome/index.otf: font/FontAwesome-468f83b63df32064983141584a19ff17.otf
 font/Gibson/1219DC_0.eot: font/Gibson/1219DC_0-7434080356fcdc69bff0558671df9eca.eot
