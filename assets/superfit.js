@@ -7771,7 +7771,7 @@ $.widget( "ui.spinner", {
         return this.__proto__.constructor.name;
       },
       defaultTemplateName: function() {
-        return this.className().toLowerCase();
+        return _.str.underscored(this.className());
       },
       view: function(name) {
         var view, viewPath;
@@ -8447,8 +8447,6 @@ $.widget( "ui.spinner", {
 
     Superfit.extend(Spine.Events);
 
-    Superfit.prototype.templateName = 'superfit';
-
     Superfit.prototype.elements = {
       '.page#get-started-step3': 'start',
       '.page#home': 'home',
@@ -9068,17 +9066,11 @@ $.widget( "ui.spinner", {
 
 }).call(this);
 (function() {
-  var _ref,
-    __hasProp = {}.hasOwnProperty,
+  var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   Superfit.AddWod = (function(_super) {
     __extends(AddWod, _super);
-
-    function AddWod() {
-      _ref = AddWod.__super__.constructor.apply(this, arguments);
-      return _ref;
-    }
 
     AddWod.prototype.elements = {
       '.wods-search': 'wodsSearch',
@@ -9093,6 +9085,11 @@ $.widget( "ui.spinner", {
       'tap .wods-browse li a.custom': 'addCustomWod',
       'tap .wods-browse li a.browse': 'browseWods'
     };
+
+    function AddWod() {
+      AddWod.__super__.constructor.apply(this, arguments);
+      this.render();
+    }
 
     AddWod.prototype.addCustomWod = function() {
       return Wod.trigger('new', null);
@@ -9133,6 +9130,7 @@ $.widget( "ui.spinner", {
     function BrowseWods() {
       this.updateWods = __bind(this.updateWods, this);      BrowseWods.__super__.constructor.apply(this, arguments);
       Wod.bind('browse', this.updateWods);
+      this.render();
     }
 
     BrowseWods.prototype.updateWods = function(type) {
@@ -9289,8 +9287,6 @@ $.widget( "ui.spinner", {
   Superfit.EditProfile = (function(_super) {
     __extends(EditProfile, _super);
 
-    EditProfile.prototype.templateName = 'edit_profile';
-
     EditProfile.prototype.elements = {
       'form': 'form'
     };
@@ -9324,7 +9320,7 @@ $.widget( "ui.spinner", {
       this.log("Form data", data);
       user = User.first();
       user.updateAttributes(data);
-      return jQT.goTo('#profile', jQT.settings.defaultTransition);
+      return jQT.goTo('#edit-profile', jQT.settings.defaultTransition);
     };
 
     return EditProfile;
@@ -9339,8 +9335,6 @@ $.widget( "ui.spinner", {
 
   Superfit.EditProfileGym = (function(_super) {
     __extends(EditProfileGym, _super);
-
-    EditProfileGym.prototype.templateName = 'edit_profile_gym';
 
     EditProfileGym.prototype.elements = {
       '.gyms': 'gymsEl',
@@ -9441,8 +9435,6 @@ $.widget( "ui.spinner", {
 
   Superfit.EditRecord = (function(_super) {
     __extends(EditRecord, _super);
-
-    EditRecord.prototype.templateName = 'edit_record';
 
     EditRecord.prototype.elements = {
       'form': 'form',
@@ -9813,8 +9805,6 @@ $.widget( "ui.spinner", {
   Superfit.GoalDetail = (function(_super) {
     __extends(GoalDetail, _super);
 
-    GoalDetail.prototype.templateName = 'goal_detail';
-
     function GoalDetail() {
       GoalDetail.__super__.constructor.apply(this, arguments);
       this.render();
@@ -10037,8 +10027,6 @@ $.widget( "ui.spinner", {
   Superfit.RecordDetail = (function(_super) {
     __extends(RecordDetail, _super);
 
-    RecordDetail.prototype.templateName = 'record_detail';
-
     RecordDetail.prototype.events = {
       'tap .filter-navigation a': 'navigate'
     };
@@ -10207,8 +10195,6 @@ $.widget( "ui.spinner", {
 
   Superfit.ReviewWod = (function(_super) {
     __extends(ReviewWod, _super);
-
-    ReviewWod.prototype.templateName = 'review_wod';
 
     ReviewWod.prototype.events = {
       'tap .delete': 'deleteWod',
@@ -10447,7 +10433,7 @@ $.widget( "ui.spinner", {
       $e = window.HAML.escape;
       $c = window.HAML.cleanValue;
       $o = [];
-      $o.push("<div class='score-container'>\n  <p class='score-label'>Enter Score</p>\n  <div class='for_time score'>\n    <input class='required' type='number' name='min' placeholder='Min' value='" + ($e($c((_ref = this.entry) != null ? _ref.min : void 0))) + "'>\n    <input class='required' type='number' name='sec' placeholder='Sec' value='" + ($e($c((_ref1 = this.entry) != null ? _ref1.sec : void 0))) + "'>\n  </div>\n  <div class='rounds score'>\n    <input class='required' type='number' name='score' placeholder='Enter Rounds' value='" + ($e($c((_ref2 = this.entry) != null ? _ref2.score : void 0))) + "'>\n  </div>\n  <div class='score weight'>\n    <input class='required' type='number' name='score' placeholder='Enter Weight (lbs)' value='" + ($e($c((_ref3 = this.entry) != null ? _ref3.score : void 0))) + "'>\n  </div>\n  <div class='max_reps score'>\n    <input class='required' type='number' name='score' placeholder='Enter Reps' value='" + ($e($c((_ref4 = this.entry) != null ? _ref4.score : void 0))) + "'>\n  </div>\n  <div class='pass_fail score'>\n    <input id='score-pass' type='radio' name='score' value='pass' checked='" + ($e($c(this.entry ? this.entry.score === 'pass' : 'checked'))) + "'>\n      <label class='radio' for='score-pass'>Pass</label>\n    <input id='score-fail' type='radio' name='score' value='fail' checked='" + ($e($c(((_ref5 = this.entry) != null ? _ref5.score : void 0) === 'fail'))) + "'>\n      <label class='radio' for='score-fail'>Fail</label>\n  </div>\n  <div class='score weight_reps'>\n    <input class='required' type='number' name='max_" + ($e($c(this.repMax))) + "' placeholder='Enter Weight (lbs)' value='" + ($e($c((_ref6 = this.entry) != null ? _ref6.score : void 0))) + "'>\n  </div>\n</div>");
+      $o.push("<div class='score-container'>\n  <h2 class='score-label'>Enter Score</h2>\n  <div class='for_time score'>\n    <input class='required' type='number' name='min' placeholder='Min' value='" + ($e($c((_ref = this.entry) != null ? _ref.min : void 0))) + "'>\n    <input class='required' type='number' name='sec' placeholder='Sec' value='" + ($e($c((_ref1 = this.entry) != null ? _ref1.sec : void 0))) + "'>\n  </div>\n  <div class='rounds score'>\n    <input class='required' type='number' name='score' placeholder='Enter Rounds' value='" + ($e($c((_ref2 = this.entry) != null ? _ref2.score : void 0))) + "'>\n  </div>\n  <div class='score weight'>\n    <input class='required' type='number' name='score' placeholder='Enter Weight (lbs)' value='" + ($e($c((_ref3 = this.entry) != null ? _ref3.score : void 0))) + "'>\n  </div>\n  <div class='max_reps score'>\n    <input class='required' type='number' name='score' placeholder='Enter Reps' value='" + ($e($c((_ref4 = this.entry) != null ? _ref4.score : void 0))) + "'>\n  </div>\n  <div class='pass_fail score'>\n    <input id='score-pass' type='radio' name='score' value='pass' checked='" + ($e($c(this.entry ? this.entry.score === 'pass' : 'checked'))) + "'>\n      <label class='radio' for='score-pass'>Pass</label>\n    <input id='score-fail' type='radio' name='score' value='fail' checked='" + ($e($c(((_ref5 = this.entry) != null ? _ref5.score : void 0) === 'fail'))) + "'>\n      <label class='radio' for='score-fail'>Fail</label>\n  </div>\n  <div class='score weight_reps'>\n    <input class='required' type='number' name='max_" + ($e($c(this.repMax))) + "' placeholder='Enter Weight (lbs)' value='" + ($e($c((_ref6 = this.entry) != null ? _ref6.score : void 0))) + "'>\n  </div>\n</div>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
@@ -10484,7 +10470,7 @@ $.widget( "ui.spinner", {
     return (function() {
       var $o;
       $o = [];
-      $o.push("<div class='page' id='add-wod'>\n  <div class='page-header'>\n    <div class='toolbar'>\n      <div>\n        <a class='awesome goback icon-chevron-left' href='#home'></a>\n      </div>\n      <h1>Select Workout</h1>\n    </div>\n  </div>\n  <div class='search-block'>\n    <form>\n      <input class='search-text' type='text' name='search-text' placeholder='Search All'>\n    </form>\n  </div>\n  <div class='content-main'>\n    <h3 class='no-matches'>No WODs found for this search.</h3>\n    <ul class='wods-search'></ul>\n    <ul class='wods-browse'>\n      <li data-type='benchmark'>\n        <a class='browse' href='#browse-wods'>\n          <div class='label'>\n            <div class='benchmark icon sprite-sf'></div>\n            <p>Benchmark</p>\n          </div>\n          <p class='arrow awesome icon-chevron-right'></p>\n        </a>\n      </li>\n      <li data-type='strength'>\n        <a class='browse' href='#browse-wods'>\n          <div class='label'>\n            <div class='icon sprite-sf strength'></div>\n            <p>Strength</p>\n          </div>\n          <p class='arrow awesome icon-chevron-right'></p>\n        </a>\n      </li>\n      <li data-type='other'>\n        <a class='browse' href='#browse-wods'>\n          <div class='label'>\n            <div class='icon other sprite-sf'></div>\n            <p>Other</p>\n          </div>\n          <p class='arrow awesome icon-chevron-right'></p>\n        </a>\n      </li>\n      <li>\n        <a class='custom' href='#edit-wod'>\n          <div class='label'>\n            <div class='custom icon sprite-sf'></div>\n            <p>Custom</p>\n          </div>\n          <p class='arrow awesome icon-chevron-right'></p>\n        </a>\n      </li>\n      <li>\n        <a href='#'>\n          <div class='label'>\n            <div class='icon mainsite sprite-sf'></div>\n            <p>Main Site</p>\n          </div>\n          <p class='arrow awesome icon-chevron-right'></p>\n        </a>\n      </li>\n    </ul>\n  </div>\n</div>");
+      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div>\n      <a class='awesome goback icon-chevron-left' href='#home'></a>\n    </div>\n    <h1>Select Workout</h1>\n  </div>\n</div>\n<div class='search-block'>\n  <form>\n    <input class='search-text' type='text' name='search-text' placeholder='Search All'>\n  </form>\n</div>\n<div class='content-main'>\n  <h3 class='no-matches'>No WODs found for this search.</h3>\n  <ul class='wods-search'></ul>\n  <ul class='wods-browse'>\n    <li>\n      <a class='custom' href='#edit-wod'>\n        <div class='label'>\n          <div class='custom icon sprite-sf'></div>\n          <p>Custom</p>\n        </div>\n        <p class='arrow awesome icon-chevron-right'></p>\n      </a>\n    </li>\n    <li data-type='benchmark'>\n      <a class='browse' href='#browse-wods'>\n        <div class='label'>\n          <div class='benchmark icon sprite-sf'></div>\n          <p>Benchmark</p>\n        </div>\n        <p class='arrow awesome icon-chevron-right'></p>\n      </a>\n    </li>\n    <li data-type='strength'>\n      <a class='browse' href='#browse-wods'>\n        <div class='label'>\n          <div class='icon sprite-sf strength'></div>\n          <p>Strength</p>\n        </div>\n        <p class='arrow awesome icon-chevron-right'></p>\n      </a>\n    </li>\n    <li data-type='other'>\n      <a class='browse' href='#browse-wods'>\n        <div class='label'>\n          <div class='icon other sprite-sf'></div>\n          <p>Other</p>\n        </div>\n        <p class='arrow awesome icon-chevron-right'></p>\n      </a>\n    </li>\n  </ul>\n</div>");
       return $o.join("\n").replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
@@ -10495,7 +10481,7 @@ $.widget( "ui.spinner", {
     return (function() {
       var $o;
       $o = [];
-      $o.push("<div class='page' id='browse-wods'>\n  <div class='page-header'>\n    <div class='toolbar'>\n      <div>\n        <a class='awesome goback icon-chevron-left' href='#add-wod'></a>\n      </div>\n      <h1>Select WOD</h1>\n    </div>\n  </div>\n  <div class='search-block'>\n    <form>\n      <input class='search-text' type='text' name='search-text' placeholder='Search WODs'>\n    </form>\n  </div>\n  <div class='content-main'>\n    <h3 class='no-matches'>No WODs found for this search.</h3>\n    <ul class='wods-search'></ul>\n    <ul class='wods-browse'></ul>\n  </div>\n</div>");
+      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div>\n      <a class='awesome goback icon-chevron-left' href='#add-wod'></a>\n    </div>\n    <h1>Select WOD</h1>\n  </div>\n</div>\n<div class='scroll'>\n  <div class='search-block'>\n    <form>\n      <input class='search-text' type='text' name='search-text' placeholder='Search WODs'>\n    </form>\n  </div>\n  <div class='content-main'>\n    <h3 class='no-matches'>No WODs found for this search.</h3>\n    <ul class='wods-search'></ul>\n    <ul class='wods-browse'></ul>\n  </div>\n</div>");
       return $o.join("\n").replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
@@ -10563,56 +10549,6 @@ $.widget( "ui.spinner", {
 }).call(this);
 (function() {
   this.JST || (this.JST = {});
-  this.JST["superfit/views/create_wod"] = function(__obj) {
-    if (!__obj) __obj = {};
-    var __out = [], __capture = function(callback) {
-      var out = __out, result;
-      __out = [];
-      callback.call(this);
-      result = __out.join('');
-      __out = out;
-      return __safe(result);
-    }, __sanitize = function(value) {
-      if (value && value.ecoSafe) {
-        return value;
-      } else if (typeof value !== 'undefined' && value != null) {
-        return __escape(value);
-      } else {
-        return '';
-      }
-    }, __safe, __objSafe = __obj.safe, __escape = __obj.escape;
-    __safe = __obj.safe = function(value) {
-      if (value && value.ecoSafe) {
-        return value;
-      } else {
-        if (!(typeof value !== 'undefined' && value != null)) value = '';
-        var result = new String(value);
-        result.ecoSafe = true;
-        return result;
-      }
-    };
-    if (!__escape) {
-      __escape = __obj.escape = function(value) {
-        return ('' + value)
-          .replace(/&/g, '&amp;')
-          .replace(/</g, '&lt;')
-          .replace(/>/g, '&gt;')
-          .replace(/"/g, '&quot;');
-      };
-    }
-    (function() {
-      (function() {
-        __out.push('<div id="create-wod" class="page">\n\n    <div class="page-header">\n        <div class=\'toolbar\'>\n            <div>\n                <a class="awesome icon-chevron-left goback" href="#add-wod" style=""></a>\n            </div>\n            <h1>Create WOD</h1>\n        </div>\n    </div> <!-- end: page-header -->\n    <div class="content-main">\n      <div class="content-block">\n          <form>\n          <p>Name Your WOD</p>\n          <input type="text" name="custom-wod-label" placeholder="Today\'s Date" id="custom-wod-label" />\n\n          <p>Enter WOD Details</p>\n          <textarea placeholder="ex. 21 Burpees, 15 Thruster, 9 Toes to Bar" cols="30" rows="5"></textarea>\n          <div class="photo-capture">\n             <p>Too much to type?</p>\n             <a href="#" class="button"><span class="awesome icon-camera-retro"></span> Take a Photo</a>\n             <input type="text" class="custom-wod-photo" name="photo" value="" />\n             <img class="custom-wod-img" src="" style="display:none;" />\n          </div>\n          </form>\n          <a href="#enter-wod-score" class="button bottom">Next: Enter Your Score</a>\n      </div>\n    </div>\n\n\n</div>\n');
-      
-      }).call(this);
-      
-    }).call(__obj);
-    __obj.safe = __objSafe, __obj.escape = __escape;
-    return __out.join('');
-  };
-}).call(this);
-(function() {
-  this.JST || (this.JST = {});
   this.JST["superfit/views/edit_goal"] = (function(context) {
     return (function() {
       var $c, $e, $o, _ref, _ref1, _ref2, _ref3;
@@ -10632,14 +10568,14 @@ $.widget( "ui.spinner", {
       $e = window.HAML.escape;
       $c = window.HAML.cleanValue;
       $o = [];
-      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div>\n      <a class='awesome goback icon-chevron-left' href='#'></a>\n    </div>\n    <h1>Edit Profile</h1>\n  </div>\n</div>\n<div class='content-main edit-profile scroll'>\n  <form>\n    <ul>\n      <li>\n        <div class='label'>\n          <p>Name</p>\n        </div>\n        <div class='action'>\n          <input class='required' type='text' name='name' placeholder='Full Name' value='" + ($e($c(this.user.name))) + "'>\n        </div>\n      </li>\n      <li>\n        <div class='label'>\n          <p>Zip Code</p>\n        </div>\n        <div class='action'>\n          <input type='number' name='zipcode' placeholder='Zip Code' value='" + ($e($c(this.user.zipcode))) + "'>\n        </div>\n      </li>\n      <li>\n        <div class='label'>\n          <p>Email</p>\n        </div>\n        <div class='action'>\n          <input type='text' name='email' placeholder='Email Address' value='" + ($e($c(this.user.email))) + "'>\n        </div>\n      </li>\n      <li>\n        <div class='label'>\n          <p>Birth Date</p>\n        </div>\n        <div class='action'>\n          <input class='date' type='date' name='birthdate' placeholder='Your age' value='" + ($e($c(this.user.birthdate))) + "'>\n        </div>\n      </li>\n      <li class='radio'>\n        <div class='label'>\n          <p>Gender</p>\n        </div>\n        <div class='action'>\n          <fieldset>\n            <input id='female' type='radio' name='gender' value='female' checked='" + ($e($c(this.user.gender === 'female'))) + "'>\n              <label class='radio' for='female'>Female</label>\n            <input id='male' type='radio' name='gender' value='male' checked='" + ($e($c(this.user.gender === 'male'))) + "'>\n              <label class='radio' for='male'>Male</label>\n          </fieldset>\n        </div>\n      </li>\n      <li>\n        <a href='#edit-profile-gym'>\n          <div class='label'>\n            <p>My Gym</p>\n          </div>\n          <div class='action'>\n            <p>");
+      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div class='pulldown'>\n      Navigation Pulldown\n    </div>\n    <h1>Profile</h1>\n  </div>\n</div>\n<form>\n  <div class='content-main edit-profile scroll'>\n    <ul>\n      <li>\n        <p>Name</p>\n        <input class='profile-data' type='text' name='name' placeholder='Enter Full Name' value='" + ($e($c(this.user.name))) + "'>\n      </li>\n      <li>\n        <p>Zip Code</p>\n        <input class='profile-data' type='number' name='zipcode' placeholder='Enter Zip Code' value='" + ($e($c(this.user.zipcode))) + "'>\n      </li>\n      <li>\n        <p>Email</p>\n        <input class='profile-data' type='text' name='email' placeholder='Enter Email' value='" + ($e($c(this.user.email))) + "'>\n      </li>\n      <li class='radio'>\n        <p>Gender</p>\n        <fieldset class='profile-data'>\n          <input id='female' type='radio' name='gender' value='female' checked='" + ($e($c(this.user.gender === 'female'))) + "'>\n            <label class='radio' for='female'>Female</label>\n          <input id='male' type='radio' name='gender' value='male' checked='" + ($e($c(this.user.gender === 'male'))) + "'>\n            <label class='radio' for='male'>Male</label>\n        </fieldset>\n      </li>\n      <li>\n        <a href='#edit-profile-gym'>\n          <p>My Gym</p>\n          <p class='profile-data'>");
   if (this.user.gym) {
-    $o.push("              " + $e($c(this.user.gym)));
+    $o.push("            " + $e($c(this.user.gym)));
       }
   if (!this.user.gym) {
-    $o.push("              Find My Gym");
+    $o.push("            <span class='placeholder'>Find My Gym</span>\n            <span class='icon-chevron-right'></span>");
       }
-      $o.push("            </p>\n            <p class='arrow awesome icon-chevron-right'></p>\n          </div>\n        </a>\n      </li>\n    </ul>\n    <div class='content-block divider'>\n      <input class='bottom button dissolve lighter' type='submit' value='Save Profile'>\n    </div>\n  </form>\n</div>");
+      $o.push("          </p>\n        </a>\n      </li>\n    </ul>\n  </div>\n  <div class='footer'>\n    <input class='bottom button dissolve lighter' type='submit' value='Save Profile'>\n  </div>\n</form>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
@@ -10672,18 +10608,18 @@ $.widget( "ui.spinner", {
       $o = [];
       $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div>\n      <a class='awesome goback icon-chevron-left' href='#home'></a>\n    </div>\n    <h1>" + ($e($c(this.wod.name))) + "</h1>\n  </div>\n</div>\n<div class='scroll'>");
   if (this.wod.typeSlug() === 'strength') {
-    $o.push("  <ul class='filter-navigation not-main'>\n    <li>\n      <a href='#' data-rep-max='" + ($e($c(1))) + "'>1RM</a>\n    </li>\n    <li>\n      <a href='#' data-rep-max='" + ($e($c(3))) + "'>3RM</a>\n    </li>\n    <li>\n      <a href='#' data-rep-max='" + ($e($c(5))) + "'>5RM</a>\n    </li>\n  </ul>");
+    $o.push("  <ul class='filter-navigation not-main'>\n    <li>\n      <a class='" + ($e($c(this.repMax === 1 ? 'selected' : ''))) + "' href='#' data-rep-max='" + ($e($c(1))) + "'>1RM</a>\n    </li>\n    <li>\n      <a class='" + ($e($c(this.repMax === 3 ? 'selected' : ''))) + "' href='#' data-rep-max='" + ($e($c(3))) + "'>3RM</a>\n    </li>\n    <li>\n      <a class='" + ($e($c(this.repMax === 5 ? 'selected' : ''))) + "' href='#' data-rep-max='" + ($e($c(5))) + "'>5RM</a>\n    </li>\n  </ul>");
       }
-      $o.push("  <div class='content-main'>\n    <div class='content-block'>\n      <form>\n        <div class='enter-score'>");
+      $o.push("  <form>\n    <div class='content-main'>\n      <div class='content-block'>\n        <div class='enter-score'>");
   $o.push("          " + $c(JST['superfit/views/_score']({
     entry: this.entry,
     repMax: this.repMax
       })));
       $o.push("        </div>");
   if (this.wod.typeSlug() !== 'strength') {
-    $o.push("        <div class='score-type'>\n          <input id='rx-type' type='radio' name='type' value='rx' checked='" + ($e($c(this.entry ? ((_ref = this.entry) != null ? _ref.type : void 0) === 'rx' : 'checked'))) + "'>\n            <label class='radio' for='rx-type'>RX</label>\n          <input id='scaled-type' type='radio' name='type' value='scaled' checked='" + ($e($c(((_ref1 = this.entry) != null ? _ref1.type : void 0) === 'scaled'))) + "'>\n            <label class='radio' for='scaled-type'>Scaled</label>\n        </div>");
+    $o.push("        <div class='score-type'>\n          <input id='rx-type' type='radio' name='type' value='rx' checked='" + ($e($c(this.entry ? ((_ref = this.entry) != null ? _ref.type : void 0) === 'rx' : 'checked'))) + "'>\n            <label class='radio' for='rx-type'>RX</label>\n          <input id='scaled-type' type='radio' name='type' value='scaled' checked='" + ($e($c(((_ref1 = this.entry) != null ? _ref1.type : void 0) === 'scaled'))) + "'>\n            <label class='radio' for='scaled-type'>Scaled</label>\n        </div>\n        <br>");
       }
-      $o.push("        <input class='bluer bottom button' type='submit'>\n      </form>\n    </div>\n  </div>\n</div>");
+      $o.push("        <input class='bluer bottom button' type='submit'>\n      </div>\n    </div>\n  </form>\n</div>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
@@ -10719,9 +10655,9 @@ $.widget( "ui.spinner", {
   } else {
     $o.push("    <h1>Custom</h1>");
       }
-      $o.push("  </div>\n</div>\n<div class='content-main'>\n  <div class='content-block'>");
+      $o.push("  </div>\n</div>");
   if (this.wod && (this.wod.workout_male != null)) {
-    $o.push("    <div class='yellow-block'>\n      <p class='score-details'>" + ($e($c())));
+    $o.push("<div class='content-main'>\n  <div class='content-block'>\n    <div class='yellow-block'>\n      <p class='score-details'>" + ($e($c())));
     if (this.user.gender === 'male' || (this.user.gender === 'female' && !this.wod.workout_female)) {
       $o.push("        " + $c(Utils.simpleFormat(this.wod.workout_male)));
     }
@@ -10732,9 +10668,9 @@ $.widget( "ui.spinner", {
     $o.push("        " + $e($c(this.wod.scoringMethod())));
     $o.push("        <br>");
     $o.push("        " + $e($c(this.wod.scoring_notes)));
-    $o.push("      </p>\n    </div>");
+    $o.push("      </p>\n    </div>\n  </div>\n</div>");
       }
-      $o.push("    <fieldset>\n      <form>");
+      $o.push("<fieldset>\n  <form>\n    <div class='content-main'>\n      <div class='content-block'>");
   if (this.wod) {
     $o.push("        <input type='hidden' name='wod_id' value='" + ($e($c(this.wod.id))) + "'>");
       }
@@ -10742,12 +10678,9 @@ $.widget( "ui.spinner", {
     $o.push("        <input type='hidden' name='entry_id' value='" + ($e($c(this.entry.id))) + "'>");
       }
   if (!this.wod) {
-    $o.push("        <label class='custom' for='entry-name'>Name</label>\n        <input class='required' id='entry-name' name='name' type='text' placeholder='Name your WOD' value='" + ($e($c(this.entry ? this.entry.name : moment().format('MMM D, YYYY')))) + "'>\n        <p>Enter Workout Details\n          <textarea name='details' placeholder='What did you do? Burpees? Thrusters? ' cols='30' rows='5'></textarea>\n        </p>");
+    $o.push("        <label class='custom' for='entry-name'>Name</label>\n        <input class='required' id='entry-name' name='name' type='text' placeholder='Name your WOD' value='" + ($e($c(this.entry ? this.entry.name : moment().format('MMM D, YYYY')))) + "'>\n        <p>Enter Workout Details</p>\n        <div class='customwod-tabs photo'>\n          <ul class='tab-nav'>\n            <li>\n              <a class='button photo-capture' href='#'>Photo Capture</a>\n            </li>\n            <li>\n              <a class='button text-entry' href='#'>Type It In</a>\n            </li>\n          </ul>\n          <div id='photo-capture'>\n            <a class='take-photo' href='#'>\n              <span class='icon-camera-alt'></span>\n              <br>\n              <span>Take a Photo</span>\n            </a>\n            <input class='custom-wod-photo' name='photo' type='hidden'>\n            <img class='custom-wod-img'>\n          </div>\n          <div id='text-entry'>\n            <textarea name='details' placeholder='What did you do? Burpees? Thrusters? ' cols='30' rows='5'></textarea>\n          </div>\n        </div>");
       }
-  if (!this.wod) {
-    $o.push("        <div class='photo-capture'>\n          <p>Too much to type?</p>\n          <a class='button take-photo' href='#'>\n            <span class='icon-camera-alt'></span>\n            Take a Photo\n          </a>\n          <input class='custom-wod-photo' name='photo' type='hidden'>\n          <img class='custom-wod-img' >\n        </div>");
-      }
-      $o.push("        <div class='enter-score'>");
+      $o.push("      </div>\n    </div>\n    <div class='content-main'>\n      <div class='content-block'>\n        <div class='enter-score'>");
   if (!this.wod) {
     $o.push("          <div class='type'>\n            <p>Scoring Method</p>\n            <select class='required' name='method'>\n              <option value='for_time' selected='" + ($e($c(((_ref = this.entry) != null ? _ref.method : void 0) === 'for_time'))) + "'>Time</option>\n              <option value='rounds' selected='" + ($e($c(((_ref1 = this.entry) != null ? _ref1.method : void 0) === 'rounds'))) + "'>Rounds</option>\n              <option value='weight' selected='" + ($e($c(((_ref2 = this.entry) != null ? _ref2.method : void 0) === 'weight'))) + "'>Weight (lbs)</option>\n              <option value='max_reps' selected='" + ($e($c(((_ref3 = this.entry) != null ? _ref3.method : void 0) === 'max_reps'))) + "'>Reps</option>\n              <option value='pass_fail' selected='" + ($e($c(((_ref4 = this.entry) != null ? _ref4.method : void 0) === 'pass_fail'))) + "'>Pass / Fail</option>\n            </select>\n          </div>");
       }
@@ -10756,7 +10689,7 @@ $.widget( "ui.spinner", {
       })));
       $o.push("        </div>\n        <div>\n          <input id='rx-type' type='radio' name='type' value='rx' checked='" + ($e($c(this.entry ? ((_ref5 = this.entry) != null ? _ref5.type : void 0) === 'rx' : 'checked'))) + "'>\n            <label class='radio' for='rx-type'>RX</label>\n          <input id='scaled-type' type='radio' name='type' value='scaled' checked='" + ($e($c(((_ref6 = this.entry) != null ? _ref6.type : void 0) === 'scaled'))) + "'>\n            <label class='radio' for='scaled-type'>Scaled</label>\n        </div>\n        <p>Workout Notes</p>\n        <textarea name='details' placeholder='Add details that affected your performance. ' cols='30' rows='5'>");
       $o.push("        " + $e($c((_ref7 = this.entry) != null ? _ref7.details : void 0)));
-      $o.push("        </textarea>\n        <input class='bluer bottom button' type='submit'>\n      </form>\n    </fieldset>\n  </div>\n</div>");
+      $o.push("        </textarea>\n        <input class='bluer bottom button' type='submit'>\n      </div>\n    </div>\n  </form>\n</fieldset>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "").replace(/[\s\n]*\u0091/mg, '').replace(/\u0092[\s\n]*/mg, '');
     }).call(window.HAML.context(context));
   });;
@@ -10841,7 +10774,7 @@ $.widget( "ui.spinner", {
   } else {
     $o.push("      <li>\n        You haven't entered any workouts!\n      </li>\n      <li>\n        <a class='add-new' href='#add-wod'>\n          <div class='label'>\n            <p>Add Workout</p>\n          </div>\n          <p class='arrow awesome icon-plus'></p>\n        </a>\n      </li>");
       }
-      $o.push("    </ul>\n  </div>\n  <div class='content-main goals'>\n    <ul>\n      <li class='title'>\n        <h2>Goals</h2>\n        <div class='action'>\n          <a class='dissolve' href='#goals'>\n            <p>View All</p>\n            <p class='arrow awesome icon-chevron-right'></p>\n          </a>\n        </div>\n      </li>\n      <li class='chart-container'>\n        <div class='chart'></div>\n      </li>\n      <li class='goal'>\n        <a href='#'>\n          <div class='label'>\n            <p class='goal-label'>25 Unbroken Pullups <br><span>Last Update: 17 days ago (22 reps)</span></p>\n            <p class='goal-progress'>35%</p>\n          </div>\n          <p class='arrow awesome icon-chevron-right'></p>\n        </a>\n      </li>\n    </ul>\n  </div>\n</div>");
+      $o.push("    </ul>\n  </div>\n  <div class='content-main'>\n    <ul>\n      <li class='title'>\n        <h2>Goals</h2>\n        <div class='action'>\n          <a class='dissolve' href='#goals'>\n            <p>View All</p>\n            <p class='arrow awesome icon-chevron-right'></p>\n          </a>\n        </div>\n      </li>\n      <li class='chart-container'>\n        <div class='chart'></div>\n      </li>\n      <li class='goal'>\n        <a href='#'>\n          <div class='label'>\n            <p class='goal-label'>25 Unbroken Pullups <br><span>Last Update: 17 days ago (22 reps)</span></p>\n            <p class='goal-progress'>35%</p>\n          </div>\n          <p class='arrow awesome icon-chevron-right'></p>\n        </a>\n      </li>\n    </ul>\n  </div>\n</div>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
@@ -10913,7 +10846,7 @@ $.widget( "ui.spinner", {
     return (function() {
       var $o;
       $o = [];
-      $o.push("<div id='navigation'>\n  <div class='navigation'>\n    <div>\n      <a class='dissolve' href='#home'>\n        <p class='dashboard icon sprite-sf'></p>\n        Dashboard\n      </a>\n    </div>\n    <div>\n      <a class='dissolve' href='#records'>\n        <p class='icon records sprite-sf'></p>\n        Records\n      </a>\n    </div>\n    <div>\n      <a class='dissolve' href='#profile'>\n        <p class='icon me sprite-sf'></p>\n        Profile\n      </a>\n    </div>\n  </div>\n</div>");
+      $o.push("<div id='navigation'>\n  <div class='navigation'>\n    <div>\n      <a class='dissolve' href='#home'>\n        <p class='dashboard icon sprite-sf'></p>\n        Dashboard\n      </a>\n    </div>\n    <div>\n      <a class='dissolve' href='#goals'>\n        <p class='goals icon sprite-sf'></p>\n        Goals\n      </a>\n    </div>\n    <div>\n      <a class='dissolve' href='#records'>\n        <p class='icon records sprite-sf'></p>\n        Records\n      </a>\n    </div>\n    <div>\n      <a class='dissolve' href='#edit-profile'>\n        <p class='icon me sprite-sf'></p>\n        Profile\n      </a>\n    </div>\n  </div>\n</div>");
       return $o.join("\n").replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
@@ -10986,12 +10919,12 @@ $.widget( "ui.spinner", {
     $o.push("              " + $e($c(this.wod.recordString())));
     $o.push("              <span class='score-level'>" + ($e($c(this.wod.personal_record.type))) + "</span>\n              <p class='score-details'>Current Personal Record</p>");
       }
-      $o.push("            </div>\n          </div>\n        </div>\n        <a class='bottom button fade' href='#home'>Jump To Dashboard</a>\n      </div>\n    </div>");
+      $o.push("            </div>\n          </div>\n        </div>\n      </div>\n    </div>");
   $o.push("    " + $c(JST['superfit/views/_history']({
     wod: this.wod,
     pastEntries: this.pastEntries
       })));
-      $o.push("    <div class='footer'>\n      <a class='bottom button dissolve lighter'>Add New Record</a>\n    </div>\n  </div>\n</div>");
+      $o.push("    <div class='footer'>\n      <a class='bottom button fade' href='#records'>Back to All Records</a>\n      <a class='bottom button dissolve lighter'>Add New Record</a>\n    </div>\n  </div>\n</div>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
@@ -11035,7 +10968,7 @@ $.widget( "ui.spinner", {
       $e = window.HAML.escape;
       $c = window.HAML.cleanValue;
       $o = [];
-      $o.push("<div class='page' id='review-wod'>\n  <div class='page-header'>\n    <div class='toolbar'>\n      <div>\n        <a class='awesome goback icon-chevron-left' href='#'></a>\n      </div>\n      <h1>" + ($e($c(this.entry.wodName()))) + "</h1>\n    </div>\n  </div>\n  <div class='content-main'>\n    <div class='content-block'>\n      <div class='yellow-block'>\n        <div class='review-score'>\n          <div class='score'>" + ($e($c(this.entry.scoreString()))) + "\n            <span class='score-level'>" + ($e($c(this.entry.type))) + "</span>\n            <span class='pr'>pr</span>\n          </div>\n          <p class='score-details'>" + ($e($c(this.entry.details))) + "</p>\n          <p class='score-details'>" + ($e($c(this.entry.warmup))) + "</p>\n        </div>\n      </div>\n      <a class='bottom button fade' href='#home'>Jump To Dashboard</a>\n    </div>\n  </div>");
+      $o.push("<div class='page' id='review-wod'>\n  <div class='page-header'>\n    <div class='toolbar'>\n      <div>\n        <a class='awesome goback icon-chevron-left' href='#'></a>\n      </div>\n      <h1>" + ($e($c(this.entry.wodName()))) + "</h1>\n    </div>\n  </div>\n  <div class='content-main'>\n    <div class='content-block'>\n      <div class='yellow-block'>\n        <div class='review-score'>\n          <div class='score'>" + ($e($c(this.entry.scoreString()))) + "\n            <span class='score-level'>" + ($e($c(this.entry.type))) + "</span>\n          </div>\n          <div class='score-tags'>\n            <span class='pr'>Personal Record</span>\n          </div>\n          <p class='score-details'>" + ($e($c(this.entry.details))) + "</p>\n          <p class='score-details'>" + ($e($c(this.entry.warmup))) + "</p>\n        </div>\n      </div>\n      <a class='bottom button fade' href='#home'>Jump To Dashboard</a>\n    </div>\n  </div>");
   $o.push("  " + $c(JST['superfit/views/_history']({
     wod: this.wod,
     pastEntries: this.pastEntries
@@ -11058,12 +10991,7 @@ $.widget( "ui.spinner", {
     $o.push("  " + $c(JST['superfit/views/get_started_step2']()));
     $o.push("  " + $c(JST['superfit/views/get_started_step3']()));
       }
-      $o.push("  <div class='page' id='home'></div>");
-      $o.push("  " + $c(JST['superfit/views/calendar']()));
-      $o.push("  " + $c(JST['superfit/views/add_wod']()));
-      $o.push("  " + $c(JST['superfit/views/browse_wods']()));
-      $o.push("  " + $c(JST['superfit/views/create_wod']()));
-      $o.push("  <div class='page' id='records'></div>\n  <div class='page' id='record-detail'></div>\n  <div class='page' id='edit-record'></div>\n  <div class='page' id='edit-wod'></div>\n  <div class='page' id='review-wod'></div>\n  <div class='in page slideupSelector' id='goals'></div>\n  <div class='page' id='edit-goal'></div>\n  <div class='page' id='edit-profile'></div>\n  <div class='page' id='edit-profile-gym'></div>\n  <div class='in page slideupSelector' id='profile'></div>\n  <div class='page' id='goal-detail'></div>\n</div>");
+      $o.push("  <div class='page' id='home'></div>\n  <div class='page' id='calendar'></div>\n  <div class='page' id='add-wod'></div>\n  <div class='page' id='browse-wods'></div>\n  <div class='page' id='records'></div>\n  <div class='page' id='record-detail'></div>\n  <div class='page' id='edit-record'></div>\n  <div class='page' id='edit-wod'></div>\n  <div class='page' id='review-wod'></div>\n  <div class='in page slideupSelector' id='goals'></div>\n  <div class='page' id='edit-goal'></div>\n  <div class='page' id='edit-profile'></div>\n  <div class='page' id='edit-profile-gym'></div>\n  <div class='in page slideupSelector' id='profile'></div>\n  <div class='page' id='goal-detail'></div>\n</div>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
