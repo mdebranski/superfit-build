@@ -6743,3 +6743,7 @@ body {
   border: 1px solid #e7e7e7;
   border-top: 0;
 }
+/* line 846, ../../app/assets/stylesheets/superfit.scss */
+#jqt > * .customwod-tabs .take-photo .custom-wod-img {
+  width: 280px;
+}

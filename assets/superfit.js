@@ -9571,8 +9571,7 @@ $.validator.prototype.elements = function() {
       'change input[type=number]': 'notNegative',
       'spinstop input[type=number]': 'notNegative',
       'tap .take-photo': 'takePhoto',
-      'tap .warm-up': 'togglestyle',
-      'tap .tab-nav .tab-btn': 'togglePhoto'
+      'tap .warm-up': 'togglestyle'
     };
 
     function EditWod() {
@@ -9763,14 +9762,6 @@ $.validator.prototype.elements = function() {
 
     EditWod.prototype.togglestyle = function(e) {
       return $(e.target).toggleClass("selected", $(e.target).is(":checked"));
-    };
-
-    EditWod.prototype.togglePhoto = function(e) {
-      if (this.tabs.hasClass('photo')) {
-        return this.tabs.removeClass('photo').addClass('text');
-      } else if (this.tabs.hasClass('text')) {
-        return this.tabs.removeClass('text').addClass('photo');
-      }
     };
 
     EditWod.prototype.addSet = function(e, reps, weight) {
