@@ -9561,8 +9561,7 @@ $.validator.prototype.elements = function() {
     EditWod.prototype.elements = {
       'form': 'form',
       '.sets': 'sets',
-      '.customwod-tabs': 'tabs',
-      '#photo-capture': 'capture'
+      '.customwod-tabs': 'tabs'
     };
 
     EditWod.prototype.events = {
@@ -9631,12 +9630,7 @@ $.validator.prototype.elements = function() {
         saveToPhotoAlbum: false
       };
       navigator.camera.getPicture(captureSuccess, captureError, options);
-      e.preventDefault();
-      if (this.capture.hasClass('initial')) {
-        return this.capture.removeClass('initial').addClass('post');
-      } else if (this.capture.hasClass('post')) {
-        return this.capture.removeClass('post').addClass('initial');
-      }
+      return e.preventDefault();
     };
 
     EditWod.prototype.changeMethod = function() {
@@ -10717,7 +10711,7 @@ $.validator.prototype.elements = function() {
     $o.push("      <input type='hidden' name='entry_id' value='" + ($e($c(this.entry.id))) + "'>");
       }
   if (!this.wod) {
-    $o.push("      <div class='content-main'>\n        <div class='content-block'>\n          <label class='custom' for='entry-name'>Name</label>\n          <input class='required' id='entry-name' name='name' type='text' placeholder='Name your WOD' value='" + ($e($c(this.entry ? this.entry.name : moment().format('MMM D, YYYY')))) + "'>\n          <p>Enter Workout Details</p>\n          <div class='customwod-tabs photo'>\n            <ul class='tab-nav'>\n              <li>\n                <a class='photo-capture tab-btn' href='#'>Photo Capture</a>\n              </li>\n              <li>\n                <a class='tab-btn text-entry' href='#'>Type It In</a>\n              </li>\n            </ul>\n            <div class='initial' id='photo-capture'>\n              <a class='take-photo' href='#'>\n                <div class='initial-capture'>\n                  <span class='icon-camera-alt'></span>\n                  <br>\n                  <span>Take a Photo</span>\n                </div>\n                <div class='post-capture'>\n                  <input class='custom-wod-photo' name='photo' type='hidden'>\n                  <img class='custom-wod-img'>\n                  <div>\n                    <div class='icon-camera-alt'></div>\n                    <span>Take a Photo</span>\n                  </div>\n                </div>\n              </a>\n            </div>\n            <div id='text-entry'>\n              <textarea name='details' placeholder='What did you do? Burpees? Thrusters? ' cols='30' rows='5'></textarea>\n            </div>\n          </div>\n        </div>\n      </div>");
+    $o.push("      <div class='content-main'>\n        <div class='content-block'>\n          <label class='custom' for='entry-name'>Name</label>\n          <input class='required' id='entry-name' name='name' type='text' placeholder='Name your WOD' value='" + ($e($c(this.entry ? this.entry.name : moment().format('MMM D, YYYY')))) + "'>\n          <p>Enter Workout Details</p>\n          <div class='customwod-tabs photo'>\n            <ul class='tab-nav'>\n              <li>\n                <a class='photo-capture tab-btn' href='#'>Photo Capture</a>\n              </li>\n              <li>\n                <a class='tab-btn text-entry' href='#'>Type It In</a>\n              </li>\n            </ul>\n            <div id='photo-capture'>\n              <a class='take-photo' href='#'>\n                <div class='initial-capture'>\n                  <span class='icon-camera-alt'></span>\n                  <br>\n                  <span>Take a Photo</span>\n                  <input class='custom-wod-photo' name='photo' type='hidden'>\n                  <img class='custom-wod-img'>\n                </div>\n                <div class='post-capture'></div>\n              </a>\n            </div>\n            <div id='text-entry'>\n              <textarea name='details' placeholder='What did you do? Burpees? Thrusters? ' cols='30' rows='5'></textarea>\n            </div>\n          </div>\n        </div>\n      </div>");
       }
       $o.push("      <div class='content-main'>\n        <div class='content-block'>\n          <div class='enter-score'>");
   if (!this.wod) {
