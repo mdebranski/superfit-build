@@ -42,7 +42,7 @@
 
 	<!-- iOS splash screens -->
 	<gap:splash src="splash/ios/iphone-portrait.png"    gap:platform="ios"     width="320" height="480" />
-    <gap:splash src="splash/ios/iphone-portrait-2x.png" gap:platform="ios"     width="640" height="960" />
+    <gap:splash src="splash/ios/iphone-portrait-2x.png" gap:platform="ios"     width="640" height="1136" />
     <!-- <gap:splash src="splash/ios/ipad-portrait.png"      gap:platform="ios"     width="768" height="1024" /> -->
     <!-- <gap:splash src="splash/ios/ipad-portrait-2x.png"   gap:platform="ios"     width="1536" height="2008" /> -->
 

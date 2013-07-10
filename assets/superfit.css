@@ -5376,27 +5376,26 @@ div.ui-spinner {
 }
 /* line 54, ../../app/assets/stylesheets/forms.scss */
 #jqt > * form select {
-  border: 1px solid #cccccc;
-  box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.35);
+  border: 1px solid #e7e7e7;
+  box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.05);
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   -ms-border-radius: 2px;
   -o-border-radius: 2px;
   border-radius: 2px;
-  line-height: 63px;
-  height: 63px;
+  line-height: 54px;
+  height: 54px;
   padding: 0 0 0 10px;
   width: 98%;
-  border: 0;
   font-size: 14px;
   overflow: visible;
   color: #464646;
-  background: #f4f4f4 url("../assets/gfx-down-arrow.png") no-repeat 0 0;
+  background: #f1f1f1 url("../assets/gfx-down-arrow.png") no-repeat 0 0;
   background-position: right;
   position: relative;
   top: -1px;
 }
-/* line 72, ../../app/assets/stylesheets/forms.scss */
+/* line 71, ../../app/assets/stylesheets/forms.scss */
 #jqt > * form input[type=search] {
   -webkit-box-shadow: inset 0px 0px 0px 0px rgba(0, 0, 0, 0.45);
   -moz-box-shadow: inset 0px 0px 0px 0px rgba(0, 0, 0, 0.45);
@@ -5404,7 +5403,7 @@ div.ui-spinner {
   background: #f7f7f7;
   -webkit-appearance: none;
 }
-/* line 77, ../../app/assets/stylesheets/forms.scss */
+/* line 76, ../../app/assets/stylesheets/forms.scss */
 #jqt > * form input[type=submit] {
   -webkit-box-shadow: 0;
   -moz-box-shadow: 0;
@@ -5413,13 +5412,13 @@ div.ui-spinner {
   margin: 0;
   width: 100%;
 }
-/* line 84, ../../app/assets/stylesheets/forms.scss */
+/* line 83, ../../app/assets/stylesheets/forms.scss */
 #jqt > * form input[type=number]::-webkit-inner-spin-button,
 #jqt > * form input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-/* line 88, ../../app/assets/stylesheets/forms.scss */
+/* line 87, ../../app/assets/stylesheets/forms.scss */
 #jqt > * form .button {
   line-height: 54px;
   height: 54px;
@@ -6631,13 +6630,17 @@ body {
   border-bottom: 0px solid #bfd2e1;
   padding: 9px 0;
 }
-/* line 784, ../../app/assets/stylesheets/superfit.scss */
+/* line 783, ../../app/assets/stylesheets/superfit.scss */
+#jqt > * .customwod-tabs {
+  margin-bottom: 9px;
+}
+/* line 785, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs ul.tab-nav {
   width: 100%;
   overflow: hidden;
   margin-left: 0;
 }
-/* line 788, ../../app/assets/stylesheets/superfit.scss */
+/* line 789, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs ul.tab-nav li {
   float: left;
   width: 50%;
@@ -6646,54 +6649,83 @@ body {
   padding: 0;
   margin: 0;
 }
-/* line 790, ../../app/assets/stylesheets/superfit.scss */
-#jqt > * .customwod-tabs ul.tab-nav .button.text-entry {
+/* line 791, ../../app/assets/stylesheets/superfit.scss */
+#jqt > * .customwod-tabs ul.tab-nav .text-entry {
   -webkit-border-radius: 0px 2px 2px 0px;
   -moz-border-radius: 0px 2px 2px 0px;
   -ms-border-radius: 0px 2px 2px 0px;
   -o-border-radius: 0px 2px 2px 0px;
   border-radius: 0px 2px 2px 0px;
+  margin-bottom: 0;
+  border: 1px solid mercury;
 }
-/* line 791, ../../app/assets/stylesheets/superfit.scss */
-#jqt > * .customwod-tabs ul.tab-nav .button.photo-capture {
+/* line 792, ../../app/assets/stylesheets/superfit.scss */
+#jqt > * .customwod-tabs ul.tab-nav .photo-capture {
   -webkit-border-radius: 2px 0px 0px 2px;
   -moz-border-radius: 2px 0px 0px 2px;
   -ms-border-radius: 2px 0px 0px 2px;
   -o-border-radius: 2px 0px 0px 2px;
   border-radius: 2px 0px 0px 2px;
+  margin-bottom: 0;
+  border: 1px solid mercury;
 }
 /* line 794, ../../app/assets/stylesheets/superfit.scss */
-#jqt > * .customwod-tabs.photo .button.text-entry {
+#jqt > * .customwod-tabs #text-entry {
+  background: #f1f1f1;
+  height: 90px;
+  padding: 9px;
+}
+/* line 799, ../../app/assets/stylesheets/superfit.scss */
+#jqt > * .customwod-tabs #text-entry textarea {
+  width: 97%;
+  height: 63px;
+}
+/* line 803, ../../app/assets/stylesheets/superfit.scss */
+#jqt > * .customwod-tabs.photo .text-entry {
+  background: #f6f6f6;
+  color: #999999;
+}
+/* line 804, ../../app/assets/stylesheets/superfit.scss */
+#jqt > * .customwod-tabs.photo .photo-capture {
   background: #f1f1f1;
   color: #666666;
+  border: 1px solid #e7e7e7;
+  border-bottom: 0;
 }
-/* line 795, ../../app/assets/stylesheets/superfit.scss */
-#jqt > * .customwod-tabs.photo .button.photo-capture {
-  background: #1abc9c;
-}
-/* line 796, ../../app/assets/stylesheets/superfit.scss */
+/* line 810, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs.photo #text-entry {
   display: none;
 }
-/* line 800, ../../app/assets/stylesheets/superfit.scss */
-#jqt > * .customwod-tabs.text .button.text-entry {
+/* line 814, ../../app/assets/stylesheets/superfit.scss */
+#jqt > * .customwod-tabs.text .text-entry {
   background: #f1f1f1;
   color: #666666;
+  border: 1px solid #e7e7e7;
+  border-bottom: 0;
 }
-/* line 801, ../../app/assets/stylesheets/superfit.scss */
-#jqt > * .customwod-tabs.text .button.photo-capture {
-  background: #1abc9c;
+/* line 820, ../../app/assets/stylesheets/superfit.scss */
+#jqt > * .customwod-tabs.text .photo-capture {
+  background: #f6f6f6;
+  color: #999999;
 }
-/* line 802, ../../app/assets/stylesheets/superfit.scss */
+/* line 821, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs.text #photo-capture {
   display: none;
 }
-/* line 804, ../../app/assets/stylesheets/superfit.scss */
+/* line 826, ../../app/assets/stylesheets/superfit.scss */
+#jqt > * .customwod-tabs #photo-capture.initial .post-capture {
+  display: none;
+}
+/* line 829, ../../app/assets/stylesheets/superfit.scss */
+#jqt > * .customwod-tabs #photo-capture.post .initial-capture {
+  display: none;
+}
+/* line 832, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs .icon-camera-alt {
   font-size: 54px;
   opacity: .75;
 }
-/* line 806, ../../app/assets/stylesheets/superfit.scss */
+/* line 833, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs .take-photo {
   line-height: 27px;
   font-size: 14px;
@@ -6709,4 +6741,5 @@ body {
   -o-border-radius: 0px 0px 2px 2px;
   border-radius: 0px 0px 2px 2px;
   border: 1px solid #e7e7e7;
+  border-top: 0;
 }
