@@ -5327,22 +5327,6 @@ div.ui-spinner {
   background: #ffddd9;
   color: #c0392b;
 }
-/* line 26, ../../app/assets/stylesheets/forms.scss */
-#jqt > * form input[type=radio] {
-  background: #f7f7f7;
-  border: 0;
-  width: 18px;
-  height: 18px;
-  margin-right: 5px;
-  -webkit-box-shadow: inset 0px 0px 0px 0px rgba(0, 0, 0, 0.45);
-  -moz-box-shadow: inset 0px 0px 0px 0px rgba(0, 0, 0, 0.45);
-  box-shadow: inset 0px 0px 0px 0px rgba(0, 0, 0, 0.45);
-  -webkit-border-radius: 24px;
-  -moz-border-radius: 24px;
-  -ms-border-radius: 24px;
-  -o-border-radius: 24px;
-  border-radius: 24px;
-}
 /* line 35, ../../app/assets/stylesheets/forms.scss */
 #jqt > * form input[type=radio]:checked {
   background: #000000;
@@ -5436,27 +5420,25 @@ div.ui-spinner {
   color: #333;
   text-align: center;
   vertical-align: middle;
-  background-color: #f5f5f5;
-  border: 1px solid #ccc;
-  border-color: #e6e6e6 #e6e6e6 #bfbfbf;
-  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-  border-bottom-color: #b3b3b3;
+  background-color: white;
+  border: 1px solid #e7e7e7;
   text-shadow: none;
   line-height: 45px;
   height: 45px;
-  margin-top: 9px;
-  margin-bottom: 9px;
+  margin-top: 18px;
+  margin-bottom: 18px;
   width: 49%;
 }
-/* line 115, ../../app/assets/stylesheets/forms.scss */
+/* line 112, ../../app/assets/stylesheets/forms.scss */
 #jqt > * form input[type=radio].left + label {
   -webkit-border-radius: 2px 0px 0px 2px;
   -moz-border-radius: 2px 0px 0px 2px;
   -ms-border-radius: 2px 0px 0px 2px;
   -o-border-radius: 2px 0px 0px 2px;
   border-radius: 2px 0px 0px 2px;
+  margin-left: 0;
 }
-/* line 116, ../../app/assets/stylesheets/forms.scss */
+/* line 113, ../../app/assets/stylesheets/forms.scss */
 #jqt > * form input[type=radio].right + label {
   -webkit-border-radius: 0px 2px 2px 0px;
   -moz-border-radius: 0px 2px 2px 0px;
@@ -5464,9 +5446,9 @@ div.ui-spinner {
   -o-border-radius: 0px 2px 2px 0px;
   border-radius: 0px 2px 2px 0px;
 }
-/* line 118, ../../app/assets/stylesheets/forms.scss */
+/* line 115, ../../app/assets/stylesheets/forms.scss */
 #jqt > * form input[type=radio]:checked + label, #jqt > * form input[type=checkbox]:checked + label {
-  background-color: #cccccc;
+  background-color: #f1f1f1;
   outline: 0;
   -webkit-box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.05);
   -moz-box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.05);
@@ -6126,7 +6108,6 @@ body {
 }
 /* line 431, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .enter-score-label {
-  width: 99%;
   overflow: hidden;
 }
 /* line 433, ../../app/assets/stylesheets/superfit.scss */
@@ -6174,7 +6155,6 @@ body {
 /* line 463, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .enter-score {
   margin-bottom: 9px;
-  overflow: hidden;
 }
 /* line 467, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .enter-score div.input {
@@ -6219,7 +6199,7 @@ body {
 }
 /* line 480, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .enter-score .score-container .for_time .ui-spinner {
-  width: 46%;
+  width: 46.5%;
 }
 /* line 489, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .review-score {
@@ -6757,8 +6737,11 @@ body {
 }
 /* line 812, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs.photo .text-entry {
-  background: #f6f6f6;
+  background: white;
   color: #999999;
+  border: 1px solid #e7e7e7;
+  border-bottom: 0px;
+  border-left: 0px;
 }
 /* line 813, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs.photo .photo-capture {
@@ -6780,8 +6763,11 @@ body {
 }
 /* line 829, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs.text .photo-capture {
-  background: #f6f6f6;
+  background: white;
   color: #999999;
+  border: 1px solid #e7e7e7;
+  border-bottom: 0px;
+  border-right: 0;
 }
 /* line 830, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs.text #photo-capture {
