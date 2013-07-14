@@ -9167,7 +9167,9 @@ $.validator.prototype.elements = function() {
         return $(_this.el).timeago('refresh');
       });
       _.defer(function() {
-        return $.makeItRetina();
+        return $.makeItRetina({
+          'retinaBackgrounds': true
+        });
       });
       _.defer(function() {
         if (!user) {
