@@ -5510,6 +5510,7 @@ body {
   font-family: "Gibson-Light", Helvetica, Arial;
   background: #e8e6d9;
   color: #333333;
+  /***** Here goes the retina display good stuff ***/
 }
 /* line 28, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * h1 {
@@ -6804,4 +6805,11 @@ body {
 /* line 854, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs .take-photo .custom-wod-img {
   width: 280px;
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 2) {
+  /* line 860, ../../app/assets/stylesheets/superfit.scss */
+  #jqt > * .sprite-sf {
+    background: transparent url("../assets/sprite-superfit.png") no-repeat 0 0;
+    background-size: 320px 480px;
+  }
 }

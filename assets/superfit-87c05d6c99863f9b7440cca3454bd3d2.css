@@ -2087,7 +2087,7 @@ body {
 /* line 117, ../../app/assets/stylesheets/jqtouch_overrides.scss */
 #jqt > * ul li .toggle input[type="checkbox"] {
   background: white url(../img/jqt/on_off.png) 0 0 no-repeat;
-  background: url("../assets/on_off-48c837b5090f3cc5b989d18111588572.png");
+  background: url("../assets/on_off.png");
 }
 /* line 122, ../../app/assets/stylesheets/jqtouch_overrides.scss */
 #jqt > * .button {
@@ -5510,6 +5510,7 @@ body {
   font-family: "Gibson-Light", Helvetica, Arial;
   background: #e8e6d9;
   color: #333333;
+  /***** Here goes the retina display good stuff ***/
 }
 /* line 28, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * h1 {
@@ -5943,13 +5944,13 @@ body {
 }
 /* line 306, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .landing {
-  background: black url("../assets/bkg-landing-1e086ec2b601dbdecc80dc2e94454d6f.png") no-repeat 0 0;
+  background: black url("../assets/bkg-landing.png") no-repeat 0 0;
   overflow: hidden;
 }
 /* line 310, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .landing .splash {
   text-align: center;
-  background: transparent url("../assets/bkg-landing-white-00141393e41550d6169cbd315c0dbf8c.png") no-repeat center center;
+  background: transparent url("../assets/bkg-landing-white.png") no-repeat center center;
   padding: 50% 0;
   overflow: hidden;
 }
@@ -6804,4 +6805,11 @@ body {
 /* line 854, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs .take-photo .custom-wod-img {
   width: 280px;
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 2) {
+  /* line 860, ../../app/assets/stylesheets/superfit.scss */
+  #jqt > * .sprite-sf {
+    background: transparent url("../assets/sprite-superfit-3052b20b843ff19954580ab6e58975fd.png") no-repeat 0 0;
+    background-size: 320px 480px;
+  }
 }
