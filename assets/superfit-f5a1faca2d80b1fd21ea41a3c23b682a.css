@@ -6809,9 +6809,9 @@ body {
 #jqt > * .customwod-tabs .take-photo .custom-wod-img {
   width: 280px;
 }
-@media only screen and (-Webkit-min-device-pixel-ratio: 1.5), only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3 / 2), only screen and (min-device-pixel-ratio: 1.5) {
-  /* line 867, ../../app/assets/stylesheets/superfit.scss */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  /* line 865, ../../app/assets/stylesheets/superfit.scss */
   #jqt > * .sprite-sf {
-    background: transparent url("../assets/sprite-superfit-3052b20b843ff19954580ab6e58975fd.png") no-repeat 0 0;
+    background: transparent url("../assets/sprite-superfit_2x-9827f59ac98de9eac49e2af6c1566e17.png") no-repeat 0 0;
   }
 }
