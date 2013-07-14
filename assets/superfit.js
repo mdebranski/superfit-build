@@ -9330,7 +9330,7 @@ $.validator.prototype.elements = function() {
       return _ref;
     }
 
-    Goal.configure('Goal', 'id', 'start_date', 'complete_date', 'last_update', 'start_entry_id', 'last_entry_id', 'history', 'wod_id', 'score', 'min', 'sec', 'reps', 'type');
+    Goal.configure('Goal', 'id', 'start_date', 'complete_date', 'last_update', 'start_entry_id', 'start_score', 'last_entry_id', 'history', 'wod_id', 'score', 'min', 'sec', 'reps', 'type');
 
     Goal.extend(Spine.Model.Local);
 
@@ -9378,17 +9378,21 @@ $.validator.prototype.elements = function() {
       return WodEntry.scoreString(this, this.wod().scoring_method, summary);
     };
 
-    Goal.prototype.start_score = function() {
-      if (this.start_entry_id) {
-        return Goal.score(this.start_entry());
-      } else {
-        return 0;
-      }
-    };
+    Goal.prototype.best_score = function() {
+      var best_entry,
+        _this = this;
 
-    Goal.prototype.last_score = function() {
       if (this.last_entry_id) {
-        return Goal.score(this.last_entry());
+        if (this.wod().scoring_method === 'for_time') {
+          best_entry = _.min(this.entries(), function(entry) {
+            return _this.calcScore(entry);
+          });
+        } else {
+          best_entry = _.max(this.entries(), function(entry) {
+            return _this.calcScore(entry);
+          });
+        }
+        return this.calcScore(best_entry);
       } else {
         return 0;
       }
@@ -9396,28 +9400,44 @@ $.validator.prototype.elements = function() {
 
     Goal.prototype.progress = function() {
       if (this.wod().scoring_method === 'for_time') {
-        return this.start_score() - this.last_score();
+        return this.start_score - this.best_score();
       } else {
-        return this.last_score() - this.start_score();
+        return this.best_score() - this.start_score;
       }
     };
 
     Goal.prototype.total = function() {
       if (this.wod().scoring_method === 'for_time') {
-        return this.start_score() - this.goal_score();
+        return this.start_score - this.goal_score();
       } else {
-        return this.goal_score() - this.start_score();
+        return this.goal_score() - this.start_score;
       }
     };
 
     Goal.prototype.goal_score = function() {
-      return Goal.score(this);
+      return this.calcScore(this);
     };
 
-    Goal.prototype.newEntry = function(entry) {
+    Goal.prototype.entries = function() {
+      var entries,
+        _this = this;
+
+      entries = _.select(WodEntry.byWodId(this.wod_id), function(entry) {
+        return _this.start_entry_id === entry.id || (_this.isMatch(entry) && entry.created_date >= _this.start_date && (!_this.complete_date || entry.date < _this.complete_date));
+      });
+      return _.sortBy(entries, function(entry) {
+        return -1 * moment(entry.created_date).valueOf();
+      });
+    };
+
+    Goal.prototype.newEntry = function(entry, start) {
+      if (start == null) {
+        start = false;
+      }
       if (this.isMatch(entry)) {
-        if (!this.start_entry_id) {
+        if (start) {
           this.start_entry_id = entry.id;
+          this.start_score = this.calcScore(entry);
         }
         this.last_entry_id = entry.id;
         this.history || (this.history = []);
@@ -9453,15 +9473,48 @@ $.validator.prototype.elements = function() {
 
     Goal.prototype.isComplete = function() {
       if (this.wod().scoring_method === 'for_time') {
-        return this.last_score() <= this.goal_score();
+        return this.best_score() <= this.goal_score();
       } else {
-        return this.last_score() >= this.goal_score();
+        return this.best_score() >= this.goal_score();
+      }
+    };
+
+    Goal.prototype.calcScore = function(model) {
+      var wod;
+
+      wod = model.wod();
+      switch (wod.scoring_method) {
+        case 'for_time':
+          return (model.min * 60) + model.sec;
+        case 'rounds':
+        case 'weight':
+        case 'max_reps':
+          return model.score;
+        case 'weight_reps':
+          if (model.score) {
+            return model.score;
+          } else {
+            return model.repMax(this.reps);
+          }
+          break;
+        case 'pass_fail':
+          if (model.score.toUpperCase() === 'PASS') {
+            return 1;
+          } else {
+            return 0;
+          }
       }
     };
 
     Goal.byWodId = function(wodId) {
       return _.filter(Goal.all(), function(goal) {
         return goal.wod_id === wodId;
+      });
+    };
+
+    Goal.lastUpdated = function() {
+      return _.max(Goal.inProgress(), function(goal) {
+        return goal.last_update;
       });
     };
 
@@ -9475,27 +9528,6 @@ $.validator.prototype.elements = function() {
       return _.filter(Goal.all(), function(goal) {
         return goal.complete_date != null;
       });
-    };
-
-    Goal.score = function(model) {
-      var wod;
-
-      wod = model.wod();
-      switch (wod.scoring_method) {
-        case 'for_time':
-          return (model.min * 60) + model.sec;
-        case 'rounds':
-        case 'weight':
-        case 'max_reps':
-        case 'weight_reps':
-          return model.score;
-        case 'pass_fail':
-          if (model.score.toUpperCase() === 'PASS') {
-            return 1;
-          } else {
-            return 0;
-          }
-      }
     };
 
     return Goal;
@@ -9745,7 +9777,7 @@ $.validator.prototype.elements = function() {
       return _ref;
     }
 
-    WodEntry.configure('WodEntry', 'id', 'wod_id', 'name', 'score', 'min', 'sec', 'reps', 'weight', 'method', 'type', 'details', 'date', 'warm_up');
+    WodEntry.configure('WodEntry', 'id', 'wod_id', 'name', 'score', 'min', 'sec', 'reps', 'weight', 'method', 'type', 'details', 'created_date', 'date', 'warm_up');
 
     WodEntry.extend(Spine.Model.Local);
 
@@ -9767,7 +9799,7 @@ $.validator.prototype.elements = function() {
 
     WodEntry.history = function(wod) {
       return _.sortBy(WodEntry.byWodId(wod.id), function(entry) {
-        return -1 * moment(entry.date).valueOf();
+        return -1 * moment(entry.created_date).valueOf();
       });
     };
 
@@ -9803,7 +9835,9 @@ $.validator.prototype.elements = function() {
         case 'pass_fail':
           return score_obj.score.toUpperCase();
         case 'weight_reps':
-          if (score_obj.max_1) {
+          if (score_obj.score) {
+            return "" + score_obj.score + "lb x " + score_obj.reps + " reps";
+          } else if (score_obj.max_1) {
             return "" + score_obj.max_1 + " lbs 1RM";
           } else if (score_obj.max_3) {
             return "" + score_obj.max_3 + " lbs 3RM";
@@ -10087,6 +10121,87 @@ $.validator.prototype.elements = function() {
 
 }).call(this);
 (function() {
+  var _ref,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  Superfit.Chart = (function(_super) {
+    var options;
+
+    __extends(Chart, _super);
+
+    function Chart() {
+      _ref = Chart.__super__.constructor.apply(this, arguments);
+      return _ref;
+    }
+
+    Chart.extend(Spine.Log);
+
+    Chart.chart = function(el, data, options) {
+      var combinedOptions;
+
+      combinedOptions = $.extend(true, {}, this.defaultOptions, options);
+      this.log("Initing chart", combinedOptions);
+      if (data) {
+        return $.plot(el, [data], combinedOptions);
+      } else {
+        return el.hide();
+      }
+    };
+
+    Chart.goalChart = function(el, data) {
+      var options;
+
+      options = {
+        xaxis: {
+          mode: 'time'
+        },
+        yaxis: {
+          max: 100,
+          tickFormatter: function(value) {
+            return "" + value + "%";
+          }
+        }
+      };
+      return this.chart(el, data, options);
+    };
+
+    Chart.defaultOptions = options = {
+      xaxis: {
+        labelWidth: 40
+      },
+      yaxis: {
+        min: 0,
+        minTickSize: 1
+      },
+      series: {
+        color: 'rgba(78, 163, 227, 0.95)',
+        lines: {
+          show: true,
+          lineWidth: 1,
+          fill: true,
+          fillColor: 'rgba(78, 163, 227, 0.15)'
+        },
+        points: {
+          show: true,
+          borderWidth: 1
+        },
+        shadowSize: 0
+      },
+      grid: {
+        borderWidth: 0,
+        clickable: true,
+        color: 'rgba(0, 0, 0, 0.2)',
+        labelMargin: 20
+      }
+    };
+
+    return Chart;
+
+  })(Spine.Module);
+
+}).call(this);
+(function() {
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -10242,8 +10357,13 @@ $.validator.prototype.elements = function() {
         goal.updateAttributes(data);
       } else {
         goal = Goal.create(data);
-        if (last = _.last(WodEntry.byWodId(goal.wod_id))) {
-          goal.newEntry(last);
+        last = _.last(WodEntry.byWodId(goal.wod_id));
+        if (last && goal.isMatch(last)) {
+          goal.newEntry(last, true);
+        } else {
+          goal.start_score = 0;
+          goal.history = [[moment().valueOf(), 0]];
+          goal.save();
         }
       }
       return jQT.goTo('#goal-detail', jQT.settings.defaultTransition);
@@ -10694,7 +10814,8 @@ $.validator.prototype.elements = function() {
         method: this.wod ? this.wod.scoring_method : data.method,
         type: data.type,
         details: data.details,
-        date: new Date(Superfit.currentDate),
+        created_date: new Date().valueOf(),
+        date: new Date(Superfit.currentDate).valueOf(),
         warm_up: data.warm_up
       };
       if (data.entry_id) {
@@ -10792,6 +10913,10 @@ $.validator.prototype.elements = function() {
   Superfit.GoalDetail = (function(_super) {
     __extends(GoalDetail, _super);
 
+    GoalDetail.prototype.elements = {
+      '.chart': 'chart'
+    };
+
     GoalDetail.prototype.events = {
       'tap .delete': 'delete'
     };
@@ -10816,15 +10941,18 @@ $.validator.prototype.elements = function() {
     }
 
     GoalDetail.prototype.update = function(goal) {
+      var _ref;
+
       this.wod = Wod.find(goal.wod_id);
       this.goal = goal;
-      this.pastEntries = WodEntry.history(this.wod);
+      this.pastEntries = this.goal.entries();
       this.render({
         wod: this.wod,
         goal: this.goal,
         pastEntries: this.pastEntries
       });
-      return Superfit.trigger('timeago');
+      Superfit.trigger('timeago');
+      return Superfit.Chart.goalChart(this.chart, (_ref = this.goal) != null ? _ref.history : void 0);
     };
 
     GoalDetail.prototype["delete"] = function() {
@@ -10932,55 +11060,17 @@ $.validator.prototype.elements = function() {
     }
 
     Home.prototype.render = function() {
-      var entries;
+      var entries, _ref;
 
       entries = WodEntry.byDate(Superfit.currentDate);
-      this.goals = Goal.inProgress();
+      this.goal = Goal.lastUpdated();
       Home.__super__.render.call(this, {
         currentDate: Superfit.currentDate,
         entries: entries,
-        goals: this.goals,
+        goal: this.goal,
         today: this.today()
       });
-      return this.initCharts();
-    };
-
-    Home.prototype.initCharts = function() {
-      var data, goal, options;
-
-      goal = this.goals[0];
-      if (goal != null ? goal.history : void 0) {
-        data = [goal.history];
-        options = {
-          xaxis: {
-            mode: 'time',
-            labelWidth: 40
-          },
-          series: {
-            color: 'rgba(78, 163, 227, 0.95)',
-            lines: {
-              show: true,
-              lineWidth: 1,
-              fill: true,
-              fillColor: 'rgba(78, 163, 227, 0.15)'
-            },
-            points: {
-              show: true,
-              borderWidth: 1
-            },
-            shadowSize: 0
-          },
-          grid: {
-            borderWidth: 0,
-            clickable: true,
-            color: 'rgba(0, 0, 0, 0.2)',
-            labelMargin: 20
-          }
-        };
-        return $.plot(this.chart, data, options);
-      } else {
-        return this.chart.hide();
-      }
+      return Superfit.Chart.goalChart(this.chart, (_ref = this.goal) != null ? _ref.history : void 0);
     };
 
     Home.prototype.today = function() {
@@ -11132,6 +11222,8 @@ $.validator.prototype.elements = function() {
     }
 
     RecordDetail.prototype.update = function(wod, repMax) {
+      var _this = this;
+
       if (repMax == null) {
         repMax = 1;
       }
@@ -11139,6 +11231,11 @@ $.validator.prototype.elements = function() {
       this.repMax = repMax;
       if (this.wod.personal_record != null) {
         this.pastEntries = WodEntry.history(this.wod);
+        if (this.wod.type === 'Strength') {
+          this.pastEntries = _.filter(this.pastEntries, function(entry) {
+            return _.contains(entry.reps, _this.repMax);
+          });
+        }
         return this.render({
           wod: this.wod,
           pastEntries: this.pastEntries,
@@ -11505,7 +11602,7 @@ $.validator.prototype.elements = function() {
       $c = window.HAML.cleanValue;
       $o = [];
   if (this.pastEntries && this.pastEntries.length > 0) {
-    $o.push("<div class='content-main'>\n  <div class='secondary'>\n    <div class='title'>\n      <h3>" + this.wod.name + " History</h3>\n    </div>\n    <ul class='history'>");
+    $o.push("<div class='content-main'>\n  <div class='secondary'>\n    <div class='title'>\n      <h3>" + this.wod.name + " History</h3>\n    </div>\n    <ul class='history'>\n      <li class='chart-container'>\n        <div class='chart'></div>\n      </li>");
     _ref = this.pastEntries;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       history = _ref[_i];
@@ -11624,18 +11721,22 @@ $.validator.prototype.elements = function() {
       $e = window.HAML.escape;
       $c = window.HAML.cleanValue;
       $o = [];
-      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div>\n      <a class='awesome goback icon-chevron-left' href='#'></a>\n    </div>\n    <h1>" + this.wod.name + " Goal</h1>\n  </div>\n</div>\n<div class='content-main'>\n  <div class='content-block'>\n    <div class='yellow-block'>\n      <div class='score'>" + ($e($c(this.wod.name))) + "</div>\n      <p class='score-details'>" + ($e($c())));
-  if (this.user.gender === 'male' || (this.user.gender === 'female' && !this.wod.workout_female)) {
-    $o.push("        " + $c(Utils.simpleFormat(this.wod.workout_male)));
+      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div>\n      <a class='awesome goback icon-chevron-left' href='#'></a>\n    </div>\n    <h1>" + this.wod.name + " Goal</h1>\n  </div>\n</div>");
+  if (this.wod.type !== 'Strength') {
+    $o.push("<div class='content-main'>\n  <div class='content-block'>\n    <div class='yellow-block'>\n      <div class='score'>" + ($e($c(this.wod.name))) + "</div>\n      <p class='score-details'>" + ($e($c())));
+    if (this.user.gender === 'male' || (this.user.gender === 'female' && !this.wod.workout_female)) {
+      $o.push("        " + $c(Utils.simpleFormat(this.wod.workout_male)));
+    }
+    if (this.user.gender === 'female') {
+      $o.push("        " + $c(Utils.simpleFormat(this.wod.workout_female)));
+    }
+    $o.push("      </p>\n      <hr>\n      <p class='score-notes'>");
+    $o.push("        " + $e($c(this.wod.scoringMethod())));
+    $o.push("        <br>");
+    $o.push("        " + $e($c(this.wod.scoring_notes)));
+    $o.push("      </p>\n    </div>\n  </div>\n</div>");
       }
-  if (this.user.gender === 'female') {
-    $o.push("        " + $c(Utils.simpleFormat(this.wod.workout_female)));
-      }
-      $o.push("      </p>\n      <hr>\n      <p class='score-notes'>");
-      $o.push("        " + $e($c(this.wod.scoringMethod())));
-      $o.push("        <br>");
-      $o.push("        " + $e($c(this.wod.scoring_notes)));
-      $o.push("      </p>\n    </div>\n  </div>\n</div>\n<div class='content-main'>\n  <div class='content-block'>\n    <form>");
+      $o.push("<div class='content-main'>\n  <div class='content-block'>\n    <form>");
   if (this.wod) {
     $o.push("      <input type='hidden' name='wod_id' value='" + ($e($c(this.wod.id))) + "'>");
       }
@@ -11776,7 +11877,7 @@ $.validator.prototype.elements = function() {
   if (!this.wod) {
     $o.push("      <div class='content-main'>\n        <div class='content-block'>\n          <h3 class='sub-header'>Create Workout</h3>\n          <label class='custom' for='entry-name'>Workout name</label>\n          <input class='required' id='entry-name' name='name' type='text' placeholder='Name your WOD' value='" + ($e($c(this.entry ? this.entry.name : moment().format('MMM D, YYYY')))) + "'>");
     if (!this.wod) {
-      $o.push("          <div class='type'>\n            <p>How is the workout scored</p>\n            <select class='required' name='method'>\n              <option value='for_time' selected='" + ($e($c(((_ref = this.entry) != null ? _ref.method : void 0) === 'for_time'))) + "'>Time</option>\n              <option value='rounds' selected='" + ($e($c(((_ref1 = this.entry) != null ? _ref1.method : void 0) === 'rounds'))) + "'>Rounds</option>\n              <option value='weight' selected='" + ($e($c(((_ref2 = this.entry) != null ? _ref2.method : void 0) === 'weight'))) + "'>Weight (lbs)</option>\n              <option value='max_reps' selected='" + ($e($c(((_ref3 = this.entry) != null ? _ref3.method : void 0) === 'max_reps'))) + "'>Reps</option>\n              <option value='pass_fail' selected='" + ($e($c(((_ref4 = this.entry) != null ? _ref4.method : void 0) === 'pass_fail'))) + "'>Pass / Fail</option>\n            </select>\n          </div>");
+      $o.push("          <div class='type'>\n            <p>How is the workout scored</p>\n            <select class='required' name='method'>\n              <option value='for_time' selected='" + ($e($c(!this.entry || ((_ref = this.entry) != null ? _ref.method : void 0) === 'for_time'))) + "'>Time</option>\n              <option value='rounds' selected='" + ($e($c(((_ref1 = this.entry) != null ? _ref1.method : void 0) === 'rounds'))) + "'>Rounds</option>\n              <option value='weight' selected='" + ($e($c(((_ref2 = this.entry) != null ? _ref2.method : void 0) === 'weight'))) + "'>Weight (lbs)</option>\n              <option value='max_reps' selected='" + ($e($c(((_ref3 = this.entry) != null ? _ref3.method : void 0) === 'max_reps'))) + "'>Reps</option>\n              <option value='pass_fail' selected='" + ($e($c(((_ref4 = this.entry) != null ? _ref4.method : void 0) === 'pass_fail'))) + "'>Pass / Fail</option>\n            </select>\n          </div>");
     }
     $o.push("          <p>Enter the workout details</p>\n          <div class='customwod-tabs photo'>\n            <ul class='tab-nav'>\n              <li>\n                <a class='photo-capture tab-btn' href='#'>Photo Capture</a>\n              </li>\n              <li>\n                <a class='tab-btn text-entry' href='#'>Type It In</a>\n              </li>\n            </ul>\n            <div id='photo-capture'>\n              <a class='take-photo' href='#'>\n                <div class='initial-capture'>\n                  <span class='icon-camera-alt'></span>\n                  <br>\n                  <span>Take a Photo</span>\n                  <input class='custom-wod-photo' name='photo' type='hidden'>\n                  <img class='custom-wod-img'>\n                </div>\n                <div class='post-capture'></div>\n              </a>\n            </div>\n            <div id='text-entry'>\n              <textarea name='details' placeholder='What did you do? Burpees? Thrusters? ' cols='30' rows='5'></textarea>\n            </div>\n          </div>\n        </div>\n      </div>");
       }
@@ -11797,7 +11898,7 @@ $.validator.prototype.elements = function() {
     return (function() {
       var $o;
       $o = [];
-      $o.push("<div class='page' id='get-started-step1'>\n  <div class='content-main orientation'>\n    <div class='content-block'>\n      <h1>Log Workouts</h1>\n      <p>Superfit was designed to allow you to quickly and easily log all of our workouts.</p>\n      <img src='./assets/gfx-landing-record-workouts.png'>\n      <p class='small'>\n        <strong>TIP:</strong>\n        Look for the camera icon\n        <span class='icon-camera-alt'></span>\n        to take a photo of your Gyms custom daily workout rather than typing it in.\n      </p>\n    </div>\n    <div class='orientation-footer'>\n      <a class='bottomk button slide' href='#get-started-step2'>Next : See Your Progress</a>\n    </div>\n  </div>\n</div>");
+      $o.push("<div class='page' id='get-started-step1'>\n  <div class='orientation'>\n    <div class='main'>\n      <div class='step1'></div>\n      <h1>All about the work</h1>\n      <p>Log workouts and see the days activity from the dashboard. Want to see what you did last week? Pop open the calendar. Tap through to a day.</p>\n    </div>\n    <div class='orientation-footer'>\n      <a class='bottom button slide' href='#get-started-step2'>Next : See Your Progress</a>\n    </div>\n  </div>\n</div>");
       return $o.join("\n").replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
@@ -11808,7 +11909,7 @@ $.validator.prototype.elements = function() {
     return (function() {
       var $o;
       $o = [];
-      $o.push("<div class='page' id='get-started-step2'>\n  <div class='content-main orientation'>\n    <div class='content-block'>\n      <h1>See Your Progress</h1>\n      <p>Superfit visually tracks the progress ofBenchmarks, Strength and Common workouts.</p>\n      <img src='./assets/gfx-landing-see-progress.png'>\n      <p class='small'>\n        <strong>TIP:</strong>\n        Set up Goals to configure Superfit to track  what you want to work on. Your Daily Dashboard will display your most recent Goal Activity.\n      </p>\n    </div>\n    <div class='orientation-footer'>\n      <a class='bottomk button slide' href='#get-started-step3'>Next : Set-Up is Simple</a>\n    </div>\n  </div>\n</div>");
+      $o.push("<div class='page' id='get-started-step2'>\n  <div class='orientation'>\n    <div class='main'>\n      <div class='step2'></div>\n      <h1>Work = Progress</h1>\n      <p>Goals and PRs are integral to measuring progress. Superfit maintains those transparently with the workouts you enter via the dashboard.</p>\n    </div>\n    <div class='orientation-footer'>\n      <a class='bottom button slide' href='#get-started-step3'>Next : Set-Up is Simple</a>\n    </div>\n  </div>\n</div>");
       return $o.join("\n").replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
@@ -11832,12 +11933,22 @@ $.validator.prototype.elements = function() {
       $e = window.HAML.escape;
       $c = window.HAML.cleanValue;
       $o = [];
-      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <a class='awesome goback icon-chevron-left' href='#goals'></a>\n    <h1>" + ($e($c(this.goal.name()))) + "</h1>\n  </div>\n</div>\n<div class='scroll'>\n  <div class='content-main'>\n    <div class='content-block'>\n      <div class='yellow-block'>\n        <div class='review-score'>\n          <div class='score'>" + ($e($c("" + (this.goal.percentComplete()) + "% complete"))) + "\n            <span class='score-level'>" + ($e($c(this.goal.type))) + "</span>\n            <p class='score-details'>" + ($e($c(this.goal.scoreString(true)))) + "</p>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>");
+      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <a class='awesome back icon-chevron-left' href='#goals'></a>\n    <h1>" + ($e($c(this.goal.name()))) + "</h1>\n  </div>\n</div>\n<div class='scroll'>\n  <div class='content-main'>\n    <div class='content-block'>\n      <div class='yellow-block'>\n        <div class='review-score'>\n          <div class='score'>" + ($e($c("" + (this.goal.percentComplete()) + "% complete"))) + "\n            <span class='score-level'>" + ($e($c(this.goal.type))) + "</span>\n            <p class='score-details'>" + ($e($c(this.goal.scoreString(true)))) + "</p>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>");
   $o.push("  " + $c(JST['superfit/views/_history']({
     wod: this.wod,
     pastEntries: this.pastEntries
       })));
-      $o.push("  <div class='content-main'>\n    <div class='secondary'>\n      <div class='title'>\n        <h3>Details</h3>\n      </div>\n      <ul>\n        <li>\n          <div class='history label'>\n            <p>Start Date</p>\n            <p class='record'>" + ($e($c(moment(this.goal.start_date).format('MMMM D, YYYY')))) + "</p>\n          </div>\n        </li>\n        <li>\n          <div class='history label'>\n            <p>Movement</p>\n            <p class='record'>" + ($e($c(this.goal.wod().name))) + "</p>\n          </div>\n        </li>\n        <li>\n          <div class='history label'>\n            <p>Scoring Method</p>\n            <p class='record'>" + ($e($c(this.goal.type))) + "</p>\n          </div>\n        </li>\n        <li>\n          <div class='history label'>\n            <p>Goal Score</p>\n            <p class='record'>" + ($e($c(this.goal.scoreString()))) + "</p>\n          </div>\n        </li>\n        <li>\n          <div class='history label'>\n            <p>Last Updated</p>\n            <p class='record'>\n              <time class='timeago' datetime='" + ($e($c(moment(this.goal.last_update).format()))) + "'></time>\n            </p>\n          </div>\n        </li>\n      </ul>\n    </div>\n  </div>\n  <div class='footer'>\n    <a class='bottom button dissolve' href='#goals'>Return to Goals</a>\n    <a class='bottom button delete pop red' href='#goals' data-id='" + ($e($c(this.goal.id))) + "'>Delete Goal</a>\n  </div>\n</div>");
+      $o.push("  <div class='content-main'>\n    <div class='secondary'>\n      <div class='title'>\n        <h3>Details</h3>\n      </div>\n      <ul>\n        <li>\n          <div class='history label'>\n            <p>Start Date</p>\n            <p class='record'>" + ($e($c(moment(this.goal.start_date).format('MMMM D, YYYY')))) + "</p>\n          </div>\n        </li>\n        <li>\n          <div class='history label'>\n            <p>Movement</p>\n            <p class='record'>" + ($e($c(this.goal.wod().name))) + "</p>\n          </div>\n        </li>");
+  if (this.goal.type) {
+    $o.push("        <li>\n          <div class='history label'>\n            <p>Scoring Method</p>\n            <p class='record'>" + ($e($c(this.goal.type))) + "</p>\n          </div>\n        </li>");
+      }
+      $o.push("        <li>\n          <div class='history label'>\n            <p>Goal Score</p>\n            <p class='record'>" + ($e($c(this.goal.scoreString()))) + "</p>\n          </div>\n        </li>");
+  if (this.goal.complete_date) {
+    $o.push("        <li>\n          <div class='history label'>\n            <p>Completed</p>\n            <p class='record'>" + ($e($c(moment(this.goal.complete_date).format('MMMM D, YYYY')))) + "</p>\n          </div>\n        </li>");
+  } else {
+    $o.push("        <li>\n          <div class='history label'>\n            <p>Last Updated</p>\n            <p class='record'>\n              <time class='timeago' datetime='" + ($e($c(moment(this.goal.last_update).format()))) + "'></time>\n            </p>\n          </div>\n        </li>");
+      }
+      $o.push("      </ul>\n    </div>\n  </div>\n  <div class='footer'>\n    <a class='bottom button dissolve' href='#goals'>Return to Goals</a>\n    <a class='bottom button delete pop red' href='#goals' data-id='" + ($e($c(this.goal.id))) + "'>Delete Goal</a>\n  </div>\n</div>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
@@ -11872,11 +11983,11 @@ $.validator.prototype.elements = function() {
   this.JST || (this.JST = {});
   this.JST["superfit/views/home"] = (function(context) {
     return (function() {
-      var $c, $e, $o, entry, goal, _i, _j, _len, _len1, _ref, _ref1;
+      var $c, $e, $o, entry, _i, _len, _ref;
       $e = window.HAML.escape;
       $c = window.HAML.cleanValue;
       $o = [];
-      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div class='pulldown'>\n      Navigation Pulldown\n    </div>\n    <h1>Dashboard</h1>\n    <a class='awesome icon-plus' href='#add-wod'></a>\n  </div>\n</div>\n<div class='scroll'>\n  <div class='date-navigation'>\n    <ul>\n      <li class='awesome icon-chevron-left prev-day'></li>\n      <li class='date'>\n        <p class='icon-calendar-1'></p>");
+      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div class='pulldown sprite-sf'>\n      Navigation Pulldown\n    </div>\n    <h1>Dashboard</h1>\n    <a class='awesome icon-plus' href='#add-wod'></a>\n  </div>\n</div>\n<div class='scroll'>\n  <div class='date-navigation'>\n    <ul>\n      <li class='awesome icon-chevron-left prev-day'></li>\n      <li class='date'>\n        <p class='icon-calendar-1'></p>");
       $o.push("        " + $e($c(moment(this.currentDate).format('MMM D, YYYY'))));
       $o.push("      </li>");
   if (this.currentDate.getTime() < this.today.getTime()) {
@@ -11894,13 +12005,10 @@ $.validator.prototype.elements = function() {
     $o.push("      <li>\n        You haven't entered any workouts!\n      </li>\n      <li>\n        <a class='add-new' href='#add-wod'>\n          <div class='label'>\n            <p>Add Workout</p>\n          </div>\n          <p class='arrow awesome icon-plus'></p>\n        </a>\n      </li>");
       }
       $o.push("    </ul>\n  </div>\n  <div class='content-main'>\n    <ul>\n      <li class='title'>\n        <h2>Goals</h2>\n        <div class='action'>\n          <a class='dissolve' href='#goals'>\n            <p>View All</p>\n            <p class='arrow awesome icon-chevron-right'></p>\n          </a>\n        </div>\n      </li>\n      <li class='chart-container'>\n        <div class='chart'></div>\n      </li>");
-  if (this.goals.length === 0) {
+  if (this.goal) {
+    $o.push("      <li class='goal'>\n        <a href='#goal-detail' data-id='" + ($e($c(this.goal.id))) + "'>\n          <div class='label'>\n            <p class='goal-label'>" + ($e($c(this.goal.name()))) + "\n              <br>\n              <span>\n                Last Update:\n                <time class='timeago' datetime='" + ($e($c(moment(this.goal.last_update).format()))) + "'></time>\n              </span>\n            </p>\n          </div>\n          <div class='goal-progress'>" + ($e($c("" + (this.goal.percentComplete()) + "%"))) + "</div>\n          <p class='arrow awesome icon-chevron-right'></p>\n        </a>\n      </li>");
+  } else {
     $o.push("      <li>\n        <a class='add-new' href='#edit-goal'>\n          <div class='label'>\n            <p>Create New Goal</p>\n          </div>\n          <p class='arrow awesome icon-plus'></p>\n        </a>\n      </li>");
-      }
-  _ref1 = this.goals;
-  for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-    goal = _ref1[_j];
-    $o.push("      <li class='goal'>\n        <a href='#goal-detail' data-id='" + ($e($c(goal.id))) + "'>\n          <div class='label'>\n            <p class='goal-label'>" + ($e($c(goal.name()))) + "\n              <br>\n              <span>\n                Last Update:\n                <time class='timeago' datetime='" + ($e($c(moment(goal.last_update).format()))) + "'></time>\n              </span>\n            </p>\n          </div>\n          <div class='goal-progress'>" + ($e($c("" + (goal.percentComplete()) + "%"))) + "</div>\n          <p class='arrow awesome icon-chevron-right'></p>\n        </a>\n      </li>");
       }
       $o.push("    </ul>\n  </div>\n</div>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");
@@ -11987,7 +12095,7 @@ $.validator.prototype.elements = function() {
       $e = window.HAML.escape;
       $c = window.HAML.cleanValue;
       $o = [];
-      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div class='pulldown'>\n      Navigation Pulldown\n    </div>\n    <h1>Profile</h1>\n  </div>\n</div>\n<div class='scroll'>\n  <div class='content-main profile'>\n    <ul>\n      <li>\n        <p>Name</p>\n        <p>");
+      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div class='pulldown sprite-sf'>\n      Navigation Pulldown\n    </div>\n    <h1>Profile</h1>\n  </div>\n</div>\n<div class='scroll'>\n  <div class='content-main profile'>\n    <ul>\n      <li>\n        <p>Name</p>\n        <p>");
   if (this.user.name) {
     $o.push("          " + $e($c(this.user.name)));
       }
