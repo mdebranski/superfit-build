@@ -11586,9 +11586,9 @@ $.validator.prototype.elements = function() {
       $o.push("<li class='gym' data-id='" + ($e($c(this.gym.id))) + "'>\n  <a href='#dashboard'>\n    <div class='label'>\n      <p>");
       $o.push("        " + $e($c(this.gym.name)));
   if (this.gym.city) {
-    $o.push("        <span class='location'>" + ($e($c("" + this.gym.city + " " + this.gym.state))) + "</span>");
+    $o.push("        <!-- = %span.location= \"(" + this.gym.city + ", " + this.gym.state + ")\" -->");
       }
-      $o.push("      </p>\n    </div>\n    <p class='arrow awesome icon-chevron-right'>}</p>\n  </a>\n</li>");
+      $o.push("      </p>\n      <p class='arrow awesome icon-chevron-right'></p>\n    </div>\n  </a>\n</li>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
@@ -11765,7 +11765,7 @@ $.validator.prototype.elements = function() {
       $e = window.HAML.escape;
       $c = window.HAML.cleanValue;
       $o = [];
-      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div class='pulldown'>\n      Navigation Pulldown\n    </div>\n    <h1>Profile</h1>\n  </div>\n</div>\n<form>\n  <div class='content-main edit-profile scroll'>\n    <ul>\n      <li>\n        <p>Name</p>\n        <input class='profile-data' type='text' name='name' placeholder='Enter Full Name' value='" + ($e($c(this.user.name))) + "'>\n      </li>\n      <li>\n        <p>Zip Code</p>\n        <input class='profile-data' type='number' name='zipcode' placeholder='Enter Zip Code' value='" + ($e($c(this.user.zipcode))) + "'>\n      </li>\n      <li>\n        <p>Email</p>\n        <input class='profile-data' type='text' name='email' placeholder='Enter Email' value='" + ($e($c(this.user.email))) + "'>\n      </li>\n      <li class='radio'>\n        <p>Gender</p>\n        <fieldset class='profile-data'>\n          <input id='female' type='radio' name='gender' value='female' checked='" + ($e($c(this.user.gender === 'female'))) + "'>\n            <label class='radio' for='female'>Female</label>\n          <input id='male' type='radio' name='gender' value='male' checked='" + ($e($c(this.user.gender === 'male'))) + "'>\n            <label class='radio' for='male'>Male</label>\n        </fieldset>\n      </li>\n      <li>\n        <a href='#edit-profile-gym'>\n          <p>My Gym</p>\n          <p class='profile-data'>");
+      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div class='pulldown sprite-sf'>\n      Navigation Pulldown\n    </div>\n    <h1>Profile</h1>\n  </div>\n</div>\n<form>\n  <div class='content-main edit-profile scroll'>\n    <ul>\n      <li>\n        <p>Name</p>\n        <input class='profile-data' type='text' name='name' placeholder='Enter Full Name' value='" + ($e($c(this.user.name))) + "'>\n      </li>\n      <li>\n        <p>Zip Code</p>\n        <input class='profile-data' type='number' name='zipcode' placeholder='Enter Zip Code' value='" + ($e($c(this.user.zipcode))) + "'>\n      </li>\n      <li>\n        <p>Email</p>\n        <input class='profile-data' type='text' name='email' placeholder='Enter Email' value='" + ($e($c(this.user.email))) + "'>\n      </li>\n      <li class='radio'>\n        <p>Gender</p>\n        <fieldset class='profile-data'>\n          <input id='female' type='radio' name='gender' value='female' checked='" + ($e($c(this.user.gender === 'female'))) + "'>\n            <label class='radio' for='female'>Female</label>\n          <input id='male' type='radio' name='gender' value='male' checked='" + ($e($c(this.user.gender === 'male'))) + "'>\n            <label class='radio' for='male'>Male</label>\n        </fieldset>\n      </li>\n      <li>\n        <a href='#edit-profile-gym'>\n          <p>My Gym</p>\n          <p class='profile-data'>");
   if (this.user.gym) {
     $o.push("            " + $e($c(this.user.gym)));
       }
@@ -11909,7 +11909,7 @@ $.validator.prototype.elements = function() {
     return (function() {
       var $o;
       $o = [];
-      $o.push("<div class='page' id='get-started-step2'>\n  <div class='orientation'>\n    <div class='main'>\n      <div class='step2'></div>\n      <h1>Work = Progress</h1>\n      <p>Goals and PRs are integral to measuring progress. Superfit maintains those transparently with the workouts you enter via the dashboard.</p>\n    </div>\n    <div class='orientation-footer'>\n      <a class='bottom button slide' href='#get-started-step3'>Next : Set-Up is Simple</a>\n    </div>\n  </div>\n</div>");
+      $o.push("<div class='page' id='get-started-step2'>\n  <div class='orientation'>\n    <div class='main'>\n      <div class='step2'></div>\n      <h1>Work = Progress</h1>\n      <p>Goals and PRs are integral to measuring progress. Superfit maintains those in the background with the workouts you enter via the dashboard.</p>\n    </div>\n    <div class='orientation-footer'>\n      <a class='bottom button slide' href='#get-started-step3'>Next : Set-Up is Simple</a>\n    </div>\n  </div>\n</div>");
       return $o.join("\n").replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
@@ -11920,7 +11920,7 @@ $.validator.prototype.elements = function() {
     return (function() {
       var $o;
       $o = [];
-      $o.push("<div class='page' id='get-started-step3'>\n  <div class='content-main orientation'>\n    <div class='content-block'>\n      <form>\n        <input type='hidden' name='gym_id'>\n        <h1>Set-Up is Simple!</h1>\n        <p>We have just a few quick questions to get to know you better.</p>\n        <h2>Male or Female?</h2>\n        <p class='small'>Some workouts differ for males and females. We ask you to make this selection so we can present you with the correct workout.</p>\n        <fieldset>\n          <input id='female' type='radio' name='gender' value='female' checked='checked'>\n            <label class='radio' for='female'>Female</label>\n          <input id='male' type='radio' name='gender' value='male'>\n            <label class='radio' for='male'>Male</label>\n        </fieldset>\n        <h2>Where do you Workout?</h2>\n        <fieldset>\n          <input id='gym-search' type='text' name='search' placeholder='Enter Gym Name'>\n        </fieldset>\n        <p>\n          <a class='small' href='#home'>Don't Workout at an Affiliate? Skip this ›</a>\n        </p>\n        <h3 class='no-matches'>No gyms found for this search.</h3>\n        <ul class='gyms' style='display:none'></ul>\n        <div class='orientation-footer'>\n          <input class='bottom button' id='get-started' type='submit' value='Start Logging Workouts'>\n        </div>\n      </form>\n    </div>\n  </div>\n</div>");
+      $o.push("<div class='page' id='get-started-step3'>\n  <div class='orientation'>\n    <form>\n      <div class='main'>\n        <h1>A few Questions!\n          <input type='hidden' name='gym_id'>\n          <h2>Male or Female?</h2>\n          <p class='left'>Some workouts differ for males and females.</p>\n          <fieldset>\n            <input class='left' id='female' type='radio' name='gender' value='female' checked='checked'>\n              <label class='radio' for='female'>Female</label>\n            <input class='right' id='male' type='radio' name='gender' value='male'>\n              <label class='radio' for='male'>Male</label>\n          </fieldset>\n          <h2>Where do you Workout?</h2>\n          <fieldset>\n            <input id='gym-search' type='text' name='search' placeholder='Enter Gym Name'>\n          </fieldset>\n          <p>\n            <a class='small' href='#home'>Don't Workout at an Affiliate? Skip this ›</a>\n          </p>\n          <h3 class='no-matches'>No gyms found for this search.</h3>\n          <ul class='gyms' style='display:none'></ul>\n        </h1>\n      </div>\n      <div class='orientation-footer'>\n        <input class='bottom button' id='get-started' type='submit' value='Start Logging Workouts'>\n      </div>\n    </form>\n  </div>\n</div>");
       return $o.join("\n").replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
@@ -11961,7 +11961,7 @@ $.validator.prototype.elements = function() {
       $e = window.HAML.escape;
       $c = window.HAML.cleanValue;
       $o = [];
-      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div class='pulldown'>Navigation Pulldown</div>\n    <h1>Goals</h1>\n    <a class='awesome icon-plus' href='#edit-goal'></a>\n  </div>\n</div>\n<div class='scroll'>\n  <ul class='filter-navigation two'>\n    <li>\n      <a class='" + ($e($c(this.type === 'in_progress' ? 'selected' : ''))) + "' href='#' data-type='in_progress'>In Progress</a>\n    </li>\n    <li>\n      <a class='" + ($e($c(this.type === 'completed' ? 'selected' : ''))) + "' href='#' data-type='completed'>Completed</a>\n    </li>\n  </ul>\n  <div class='content-main'>\n    <ul>");
+      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div class='pulldown sprite-sf'>Navigation Pulldown</div>\n    <h1>Goals</h1>\n    <a class='awesome icon-plus' href='#edit-goal'></a>\n  </div>\n</div>\n<div class='scroll'>\n  <ul class='filter-navigation two'>\n    <li>\n      <a class='" + ($e($c(this.type === 'in_progress' ? 'selected' : ''))) + "' href='#' data-type='in_progress'>In Progress</a>\n    </li>\n    <li>\n      <a class='" + ($e($c(this.type === 'completed' ? 'selected' : ''))) + "' href='#' data-type='completed'>Completed</a>\n    </li>\n  </ul>\n  <div class='content-main'>\n    <ul>");
   if (this.goals.length === 0) {
     if (this.type === 'in_progress') {
       $o.push("      <li>No goals in progress</li>");
@@ -12089,6 +12089,17 @@ $.validator.prototype.elements = function() {
 }).call(this);
 (function() {
   this.JST || (this.JST = {});
+  this.JST["superfit/views/overlay_goal_complete"] = (function(context) {
+    return (function() {
+      var $o;
+      $o = [];
+      $o.push("<div class='page' id='overlay-goal-complete'>\n  <div class='overlay'>\n    <div class='main'>\n      <h1>High Fives!</h1>\n      <p>You completed [Enter Goal Name Here]!</p>\n    </div>\n  </div>\n</div>");
+      return $o.join("\n").replace(/\s(?:id|class)=(['"])(\1)/mg, "");
+    }).call(window.HAML.context(context));
+  });;
+}).call(this);
+(function() {
+  this.JST || (this.JST = {});
   this.JST["superfit/views/profile"] = (function(context) {
     return (function() {
       var $c, $e, $o;
@@ -12173,7 +12184,7 @@ $.validator.prototype.elements = function() {
       $e = window.HAML.escape;
       $c = window.HAML.cleanValue;
       $o = [];
-      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div class='pulldown'>Navigation Pulldown</div>\n    <h1>Records</h1>\n  </div>\n</div>\n<div class='scroll'>\n  <ul class='filter-navigation'>\n    <li>\n      <a class='filter-strength' href='#' data-type='strength'>Strength</a>\n    </li>\n    <li>\n      <a class='filter-strength' href='#' data-type='benchmark'>Benchmarks</a>\n    </li>\n    <li>\n      <a class='filter-strength' href='#' data-type='other'>Other</a>\n    </li>\n  </ul>\n  <div class='content-main'>");
+      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div class='pulldown sprite-sf'>Navigation Pulldown</div>\n    <h1>Records</h1>\n  </div>\n</div>\n<div class='scroll'>\n  <ul class='filter-navigation'>\n    <li>\n      <a class='filter-strength' href='#' data-type='strength'>Strength</a>\n    </li>\n    <li>\n      <a class='filter-strength' href='#' data-type='benchmark'>Benchmarks</a>\n    </li>\n    <li>\n      <a class='filter-strength' href='#' data-type='other'>Other</a>\n    </li>\n  </ul>\n  <div class='content-main'>");
   _.each(['strength', 'benchmark', 'other'], function(type) {
         var wod, _i, _len, _ref;
     $o.push("    <section class='" + ($e($c(type))) + "' style='display: none;'>\n      <ul class='records'>");
@@ -12227,7 +12238,7 @@ $.validator.prototype.elements = function() {
     $o.push("  " + $c(JST['superfit/views/get_started_step2']()));
     $o.push("  " + $c(JST['superfit/views/get_started_step3']()));
       }
-      $o.push("  <div class='page' id='home'></div>\n  <div class='page' id='calendar'></div>\n  <div class='page' id='add-wod'></div>\n  <div class='page' id='browse-wods'></div>\n  <div class='page' id='records'></div>\n  <div class='page' id='record-detail'></div>\n  <div class='page' id='edit-record'></div>\n  <div class='page' id='edit-wod'></div>\n  <div class='page' id='review-wod'></div>\n  <div class='in page slideupSelector' id='goals'></div>\n  <div class='page' id='edit-goal'></div>\n  <div class='page' id='edit-profile'></div>\n  <div class='page' id='edit-profile-gym'></div>\n  <div class='in page slideupSelector' id='profile'></div>\n  <div class='page' id='goal-detail'></div>\n</div>");
+      $o.push("  <div class='page' id='home'></div>\n  <div class='page' id='calendar'></div>\n  <div class='page' id='add-wod'></div>\n  <div class='page' id='browse-wods'></div>\n  <div class='page' id='records'></div>\n  <div class='page' id='record-detail'></div>\n  <div class='page' id='edit-record'></div>\n  <div class='page' id='edit-wod'></div>\n  <div class='page' id='review-wod'></div>\n  <div class='in page slideupSelector' id='goals'></div>\n  <div class='page' id='edit-goal'></div>\n  <div class='page' id='edit-profile'></div>\n  <div class='page' id='edit-profile-gym'></div>\n  <div class='in page slideupSelector' id='profile'></div>\n  <div class='page' id='overlay-goal-complete'></div>\n  <div class='page' id='goal-detail'></div>\n</div>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
