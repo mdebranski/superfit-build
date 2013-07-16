@@ -11822,7 +11822,7 @@ $.validator.prototype.elements = function() {
   this.JST || (this.JST = {});
   this.JST["superfit/views/enter_strength_score"] = (function(context) {
     return (function() {
-      var $c, $e, $o;
+      var $c, $e, $o, _ref;
       $e = window.HAML.escape;
       $c = window.HAML.cleanValue;
       $o = [];
@@ -11830,7 +11830,9 @@ $.validator.prototype.elements = function() {
   if (this.entry) {
     $o.push("      <input type='hidden' name='entry_id' value='" + ($e($c(this.entry.id))) + "'>");
       }
-      $o.push("      <div class='sets'></div>\n      <textarea name='details' placeholder='Enter Workout Notes' cols='30' rows='5'></textarea>\n      <a class='add-set bottom button lighter' href='#'>Add Another Set</a>\n      <input class='bluer bottom button' type='submit'>\n    </form>\n  </div>\n</div>");
+      $o.push("      <div class='sets'></div>\n      <textarea name='details' placeholder='Enter Workout Notes' cols='30' rows='5'></textarea>");
+      $o.push("      " + $e($c((_ref = this.entry) != null ? _ref.details : void 0)));
+      $o.push("      <a class='add-set bottom button lighter' href='#'>Add Another Set</a>\n      <input class='bluer bottom button' type='submit'>\n    </form>\n  </div>\n</div>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
