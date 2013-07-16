@@ -11830,7 +11830,7 @@ $.validator.prototype.elements = function() {
   if (this.entry) {
     $o.push("      <input type='hidden' name='entry_id' value='" + ($e($c(this.entry.id))) + "'>");
       }
-      $o.push("      <div class='sets'></div>\n      <textarea name='notes' placeholder='Enter Workout Notes' cols='30' rows='5'></textarea>\n      <a class='add-set bottom button lighter' href='#'>Add Another Set</a>\n      <input class='bluer bottom button' type='submit'>\n    </form>\n  </div>\n</div>");
+      $o.push("      <div class='sets'></div>\n      <textarea name='details' placeholder='Enter Workout Notes' cols='30' rows='5'></textarea>\n      <a class='add-set bottom button lighter' href='#'>Add Another Set</a>\n      <input class='bluer bottom button' type='submit'>\n    </form>\n  </div>\n</div>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
@@ -12212,12 +12212,12 @@ $.validator.prototype.elements = function() {
       $e = window.HAML.escape;
       $c = window.HAML.cleanValue;
       $o = [];
-      $o.push("<div class='page' id='review-wod'>\n  <div class='page-header'>\n    <div class='toolbar'>\n      <div>\n        <a class='awesome goback icon-chevron-left' href='#'></a>\n      </div>\n      <h1>" + ($e($c(this.entry.wodName()))) + "</h1>\n    </div>\n  </div>\n  <div class='content-main'>\n    <div class='content-block'>\n      <div class='yellow-block'>\n        <div class='review-score'>\n          <div class='score'>" + ($e($c(this.entry.scoreString()))) + "\n            <span class='score-level'>" + ($e($c(this.entry.type))) + "</span>\n          </div>\n          <div class='score-tags'>\n            <span class='pr'>Personal Record</span>\n          </div>\n          <p class='score-details'>" + ($e($c(this.entry.details))) + "</p>\n        </div>\n      </div>\n      <a class='bottom button fade' href='#home'>Jump To Dashboard</a>\n    </div>\n  </div>");
+      $o.push("<div class='page' id='review-wod'>\n  <div class='page-header'>\n    <div class='toolbar'>\n      <div>\n        <a class='awesome goback icon-chevron-left' href='#'></a>\n      </div>\n      <h1>" + ($e($c(this.entry.wodName()))) + "</h1>\n    </div>\n  </div>\n  <div class='content-main'>\n    <div class='content-block'>\n      <div class='yellow-block'>\n        <div class='review-score'>\n          <div class='score'>" + ($e($c(this.entry.scoreString()))) + "\n            <span class='score-level'>" + ($e($c(this.entry.type))) + "</span>\n          </div>\n          <div class='score-tags'>\n            <span class='pr'>Personal Record</span>\n          </div>\n          <p class='score-details'>" + ($e($c(this.entry.details))) + "</p>\n        </div>\n      </div>\n      <a class='bottom button dissolve lighter' data-id='" + ($e($c(this.entry.id))) + "' href='#edit-wod'>Edit Workout</a>\n      <a class='bottom button fade' href='#home'>Jump To Dashboard</a>\n      <a class='delete pop red' data-id='" + ($e($c(this.entry.id))) + "' href='#home'><i class=\"remove-set icon-remove-sign\"></i> Delete This Workout</a>\n    </div>\n  </div>\n  <div class='footer'></div>");
   $o.push("  " + $c(JST['superfit/views/_history']({
     wod: this.wod,
     pastEntries: this.pastEntries
       })));
-      $o.push("  <div class='footer'>\n    <a class='bottom button dissolve lighter' data-id='" + ($e($c(this.entry.id))) + "' href='#edit-wod'>Edit Workout</a>\n    <a class='bottom button delete pop red' data-id='" + ($e($c(this.entry.id))) + "' href='#home'>Delete Workout</a>\n  </div>\n</div>");
+      $o.push("</div>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
