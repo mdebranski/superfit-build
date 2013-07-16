@@ -59,7 +59,7 @@
 	<feature name="http://api.phonegap.com/1.0/device" />
 
 	<!-- Plugins -->
-	<gap:plugin name="GAPlugin" />
+	<gap:plugin name="com.phonegap.plugins.GAPlugin" />
 
 	<!-- Access -->
 	<access origin="*" />
