@@ -11585,9 +11585,6 @@ $.validator.prototype.elements = function() {
       $o = [];
       $o.push("<li class='gym' data-id='" + ($e($c(this.gym.id))) + "'>\n  <a href='#dashboard'>\n    <div class='label'>\n      <p>");
       $o.push("        " + $e($c(this.gym.name)));
-  if (this.gym.city) {
-    $o.push("        <!-- = %span.location= \"(" + this.gym.city + ", " + this.gym.state + ")\" -->");
-      }
       $o.push("      </p>\n      <p class='arrow awesome icon-chevron-right'></p>\n    </div>\n  </a>\n</li>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
@@ -11602,7 +11599,7 @@ $.validator.prototype.elements = function() {
       $c = window.HAML.cleanValue;
       $o = [];
   if (this.pastEntries && this.pastEntries.length > 0) {
-    $o.push("<div class='content-main'>\n  <div class='secondary'>\n    <div class='title'>\n      <h3>" + this.wod.name + " History</h3>\n    </div>\n    <ul class='history'>\n      <li class='chart-container'>\n        <div class='chart'></div>\n      </li>");
+    $o.push("<div class='content-main'>\n  <div class='secondary'>\n    <div class='title'>\n      <h3>History</h3>\n    </div>\n    <ul class='history'>\n      <li class='chart-container'>\n        <div class='chart'></div>\n      </li>");
     _ref = this.pastEntries;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       history = _ref[_i];
@@ -11618,7 +11615,7 @@ $.validator.prototype.elements = function() {
   this.JST || (this.JST = {});
   this.JST["superfit/views/_score"] = (function(context) {
     return (function() {
-      var $c, $e, $o, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8;
+      var $c, $e, $o, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6;
       $e = window.HAML.escape;
       $c = window.HAML.cleanValue;
       $o = [];
@@ -11626,7 +11623,7 @@ $.validator.prototype.elements = function() {
   if (this.repMax) {
     $o.push("    <input class='required' type='number' name='max_" + ($e($c(this.repMax))) + "' placeholder='Enter Weight (lbs)' value='" + ($e($c((_ref6 = this.entry) != null ? _ref6.score : void 0))) + "'>");
   } else {
-    $o.push("    <input class='required' type='number' name='score' placeholder='Enter Weight (lbs)' value='" + ($e($c((_ref7 = this.entry) != null ? _ref7.score : void 0))) + "'>\n    x\n    <input class='required' type='number' name='reps' placeholder='Reps' value='" + ($e($c((_ref8 = this.entry) != null ? _ref8.reps : void 0))) + "'>");
+    $o.push("    <div class='enter-score'>\n      <div class='set'>\n        <div class='input'>\n          <input class='number required' type='number' name='weight' placeholder='ex. 155' value='" + ($e($c(this.weight))) + "'>\n          <span class='small'>Enter Weight (lbs)</span>\n        </div>\n        <div class='times'>\n          <span class='awesome icon-cancel'></span>\n        </div>\n        <div class='reps'>\n          <input class='number required' type='number' name='reps' placeholder='ex. 10' value='" + ($e($c(this.reps))) + "'>\n          <span class='small'>Enter Reps</span>\n        </div>\n      </div>\n    </div>");
       }
       $o.push("  </div>\n</div>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");
@@ -11752,7 +11749,7 @@ $.validator.prototype.elements = function() {
   if (this.wod.typeSlug() !== 'strength') {
     $o.push("        <div class='score-type'>\n          <input id='rx-type' type='radio' name='type' value='rx' checked='" + ($e($c(this.goal ? ((_ref = this.goal) != null ? _ref.type : void 0) === 'rx' : 'checked'))) + "'>\n            <label class='radio' for='rx-type'>RX</label>\n          <input id='scaled-type' type='radio' name='type' value='scaled' checked='" + ($e($c(((_ref1 = this.goal) != null ? _ref1.type : void 0) === 'scaled'))) + "'>\n            <label class='radio' for='scaled-type'>Scaled</label>\n        </div>");
       }
-      $o.push("      </div>\n      <input class='bottom button fade' type='submit'>\n    </form>\n  </div>\n</div>");
+      $o.push("      </div>\n      <input class='bluer bottom button fade' type='submit'>\n    </form>\n  </div>\n</div>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
@@ -11765,14 +11762,14 @@ $.validator.prototype.elements = function() {
       $e = window.HAML.escape;
       $c = window.HAML.cleanValue;
       $o = [];
-      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div class='pulldown sprite-sf'>\n      Navigation Pulldown\n    </div>\n    <h1>Profile</h1>\n  </div>\n</div>\n<form>\n  <div class='content-main edit-profile scroll'>\n    <ul>\n      <li>\n        <p>Name</p>\n        <input class='profile-data' type='text' name='name' placeholder='Enter Full Name' value='" + ($e($c(this.user.name))) + "'>\n      </li>\n      <li>\n        <p>Zip Code</p>\n        <input class='profile-data' type='number' name='zipcode' placeholder='Enter Zip Code' value='" + ($e($c(this.user.zipcode))) + "'>\n      </li>\n      <li>\n        <p>Email</p>\n        <input class='profile-data' type='text' name='email' placeholder='Enter Email' value='" + ($e($c(this.user.email))) + "'>\n      </li>\n      <li class='radio'>\n        <p>Gender</p>\n        <fieldset class='profile-data'>\n          <input id='female' type='radio' name='gender' value='female' checked='" + ($e($c(this.user.gender === 'female'))) + "'>\n            <label class='radio' for='female'>Female</label>\n          <input id='male' type='radio' name='gender' value='male' checked='" + ($e($c(this.user.gender === 'male'))) + "'>\n            <label class='radio' for='male'>Male</label>\n        </fieldset>\n      </li>\n      <li>\n        <a href='#edit-profile-gym'>\n          <p>My Gym</p>\n          <p class='profile-data'>");
+      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div class='pulldown sprite-sf'>\n      Navigation Pulldown\n    </div>\n    <h1>Profile</h1>\n  </div>\n</div>\n<form>\n  <div class='content-main edit-profile scroll'>\n    <ul>\n      <li>\n        <p>Name</p>\n        <input class='profile-data' type='text' name='name' placeholder='Enter Full Name' value='" + ($e($c(this.user.name))) + "'>\n      </li>\n      <li>\n        <p>Zip Code</p>\n        <input class='profile-data' type='number' name='zipcode' placeholder='Enter Zip Code' value='" + ($e($c(this.user.zipcode))) + "'>\n      </li>\n      <li>\n        <p>Email</p>\n        <input class='profile-data' type='text' name='email' placeholder='Enter Email' value='" + ($e($c(this.user.email))) + "'>\n      </li>\n      <li>\n        <a href='#edit-profile-gym'>\n          <p>My Gym</p>\n          <p class='profile-data'>");
   if (this.user.gym) {
     $o.push("            " + $e($c(this.user.gym)));
       }
   if (!this.user.gym) {
     $o.push("            <span class='placeholder'>Find My Gym</span>\n            <span class='icon-chevron-right'></span>");
       }
-      $o.push("          </p>\n        </a>\n      </li>\n    </ul>\n  </div>\n  <div class='footer'>\n  </div>\n</form>");
+      $o.push("          </p>\n        </a>\n      </li>\n      <li class='radio'>\n        <p>Gender</p>\n        <fieldset class='profile-data'>\n          <input class='left' id='female' type='radio' name='gender' value='female' checked='" + ($e($c(this.user.gender === 'female'))) + "'>\n            <label class='radio' for='female'>Female</label>\n          <input class='right' id='male' type='radio' name='gender' value='male' checked='" + ($e($c(this.user.gender === 'male'))) + "'>\n            <label class='radio' for='male'>Male</label>\n        </fieldset>\n      </li>\n    </ul>\n  </div>\n  <div class='footer'>\n  </div>\n</form>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
@@ -11833,7 +11830,7 @@ $.validator.prototype.elements = function() {
   if (this.entry) {
     $o.push("      <input type='hidden' name='entry_id' value='" + ($e($c(this.entry.id))) + "'>");
       }
-      $o.push("      <div class='sets'></div>\n      <a class='add-set bottom button lighter' href='#'>Add Another Set</a>\n      <input class='bluer bottom button' type='submit'>\n    </form>\n  </div>\n</div>");
+      $o.push("      <div class='sets'></div>\n      <textarea name='notes' placeholder='Enter Workout Notes' cols='30' rows='5'></textarea>\n      <a class='add-set bottom button lighter' href='#'>Add Another Set</a>\n      <input class='bluer bottom button' type='submit'>\n    </form>\n  </div>\n</div>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
@@ -11885,7 +11882,7 @@ $.validator.prototype.elements = function() {
   $o.push("            " + $c(JST['superfit/views/_score']({
     entry: this.entry
       })));
-      $o.push("            <div>\n              <input class='left' id='rx-type' type='radio' name='type' value='RX' checked='" + ($e($c(this.entry ? ((_ref5 = this.entry) != null ? _ref5.type : void 0) === 'rx' : 'checked'))) + "'>\n                <label class='radio' for='rx-type'>RX</label>\n              <input class='right' id='scaled-type' type='radio' name='type' value='scaled' checked='" + ($e($c(((_ref6 = this.entry) != null ? _ref6.type : void 0) === 'scaled'))) + "'>\n                <label class='radio' for='scaled-type'>Scaled</label>\n              <textarea name='notes' placeholder='Enter Workout Notes' cols='30' rows='5'></textarea>");
+      $o.push("            <div>\n              <input class='left' id='rx-type' type='radio' name='type' value='RX' checked='" + ($e($c(this.entry ? ((_ref5 = this.entry) != null ? _ref5.type : void 0) === 'rx' : 'checked'))) + "'>\n                <label class='radio' for='rx-type'>RX</label>\n              <input class='right' id='scaled-type' type='radio' name='type' value='scaled' checked='" + ($e($c(((_ref6 = this.entry) != null ? _ref6.type : void 0) === 'scaled'))) + "'>\n                <label class='radio' for='scaled-type'>Scaled</label>\n              <textarea name='details' placeholder='Enter Workout Notes' cols='30' rows='5'></textarea>");
       $o.push("              " + $e($c((_ref7 = this.entry) != null ? _ref7.details : void 0)));
       $o.push("            </div>\n          </div>\n          <input class='bluer bottom button' type='submit'>\n        </div>\n      </div>\n    </form>\n  </fieldset>\n</div>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");

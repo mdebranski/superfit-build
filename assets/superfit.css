@@ -5777,7 +5777,7 @@ body {
 }
 /* line 178, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .content-main ul li .label.empty p {
-  color: #cccccc;
+  color: #999999;
 }
 /* line 179, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .content-main ul li .arrow {
@@ -6032,7 +6032,7 @@ body {
   text-align: center;
   overflow: hidden;
   padding-bottom: 12px;
-  margin-top: 9px;
+  margin-top: 12px;
 }
 /* line 383, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .date-navigation ul:first-child {
@@ -6096,7 +6096,7 @@ body {
   line-height: 18px  !important;
 }
 /* line 418, ../../app/assets/stylesheets/superfit.scss */
-#jqt > * .sets .set {
+#jqt > * .set {
   overflow: hidden;
   margin-bottom: 9px;
   padding-bottom: 18px;
