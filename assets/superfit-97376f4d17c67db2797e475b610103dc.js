@@ -9392,7 +9392,11 @@ $.validator.prototype.elements = function() {
             return _this.calcScore(entry);
           });
         }
-        return this.calcScore(best_entry);
+        if (best_entry) {
+          return this.calcScore(best_entry);
+        } else {
+          return 0;
+        }
       } else {
         return 0;
       }
@@ -9443,6 +9447,7 @@ $.validator.prototype.elements = function() {
         this.history || (this.history = []);
         this.history.push([moment().valueOf(), this.percentComplete()]);
         if (this.isComplete() && !this.complete_date) {
+          this.trigger('complete');
           this.complete_date = moment().valueOf();
         }
         return this.save();
@@ -9491,10 +9496,10 @@ $.validator.prototype.elements = function() {
         case 'max_reps':
           return model.score;
         case 'weight_reps':
-          if (model.score) {
-            return model.score;
-          } else {
+          if (model.repMax != null) {
             return model.repMax(this.reps);
+          } else {
+            return model.score;
           }
           break;
         case 'pass_fail':
@@ -9663,6 +9668,17 @@ $.validator.prototype.elements = function() {
       }
     };
 
+    Wod.prototype.history = function() {
+      var history;
+
+      history = _.map(WodEntry.byWodId(this.id), function(entry) {
+        return [entry.date, entry.value()];
+      });
+      return _.sortBy(history, function(history) {
+        return history[0];
+      });
+    };
+
     Wod.prototype.isRecord = function(entry) {
       var entry_seconds, max_1, max_3, max_5, record, record_seconds, _ref1, _ref2, _ref3;
 
@@ -9799,7 +9815,7 @@ $.validator.prototype.elements = function() {
 
     WodEntry.history = function(wod) {
       return _.sortBy(WodEntry.byWodId(wod.id), function(entry) {
-        return -1 * moment(entry.created_date).valueOf();
+        return -1 * entry.created_date;
       });
     };
 
@@ -9812,6 +9828,19 @@ $.validator.prototype.elements = function() {
         summary = false;
       }
       return WodEntry.scoreString(this, this.method, summary);
+    };
+
+    WodEntry.prototype.value = function() {
+      switch (this.method) {
+        case 'for_time':
+          return this.min * 60 + this.sec;
+        case 'rounds':
+        case 'weight':
+        case 'max_reps':
+          return this.score;
+        case 'weight_reps':
+          return _.max(this.weight);
+      }
     };
 
     WodEntry.scoreString = function(score_obj, method, summary) {
@@ -10153,9 +10182,6 @@ $.validator.prototype.elements = function() {
       var options;
 
       options = {
-        xaxis: {
-          mode: 'time'
-        },
         yaxis: {
           max: 100,
           tickFormatter: function(value) {
@@ -10166,9 +10192,44 @@ $.validator.prototype.elements = function() {
       return this.chart(el, data, options);
     };
 
+    Chart.wodChart = function(el, data, method) {
+      var options,
+        _this = this;
+
+      options = {
+        yaxis: {
+          tickFormatter: function(value) {
+            return _this.formatWodValue(value, method);
+          }
+        }
+      };
+      return this.chart(el, data, options);
+    };
+
+    Chart.formatWodValue = function(value, method) {
+      var min, sec;
+
+      switch (method) {
+        case 'for_time':
+          min = Math.floor(value / 60);
+          sec = value % 60;
+          return _.str.sprintf("%d:%02d", Number(min), Number(sec));
+        case 'rounds':
+        case 'weight':
+        case 'max_reps':
+          return value;
+        case 'weight_reps':
+          return "" + value + " lb";
+      }
+    };
+
     Chart.defaultOptions = options = {
       xaxis: {
-        labelWidth: 40
+        mode: 'time',
+        labelWidth: 40,
+        tickFormatter: function(value) {
+          return moment(value).format('MMM D, YYYY');
+        }
       },
       yaxis: {
         min: 0,
@@ -10346,9 +10407,10 @@ $.validator.prototype.elements = function() {
 
       data = this.form.serializeObject();
       data.wod_id = parseInt(data.wod_id);
-      data.score = parseInt(data.score);
+      data.score = data.score ? parseInt(data.score) : parseInt(data.weight);
       data.min = parseInt(data.min);
       data.sec = parseInt(data.sec);
+      data.reps = parseInt(data.reps);
       data.reps = parseInt(data.reps);
       data.start_date = moment().valueOf();
       data.last_update = moment().valueOf();
@@ -10941,8 +11003,6 @@ $.validator.prototype.elements = function() {
     }
 
     GoalDetail.prototype.update = function(goal) {
-      var _ref;
-
       this.wod = Wod.find(goal.wod_id);
       this.goal = goal;
       this.pastEntries = this.goal.entries();
@@ -10952,7 +11012,7 @@ $.validator.prototype.elements = function() {
         pastEntries: this.pastEntries
       });
       Superfit.trigger('timeago');
-      return Superfit.Chart.goalChart(this.chart, (_ref = this.goal) != null ? _ref.history : void 0);
+      return Superfit.Chart.goalChart(this.chart, this.goal.history);
     };
 
     GoalDetail.prototype["delete"] = function() {
@@ -11375,6 +11435,10 @@ $.validator.prototype.elements = function() {
   Superfit.ReviewWod = (function(_super) {
     __extends(ReviewWod, _super);
 
+    ReviewWod.prototype.elements = {
+      '.chart': 'chart'
+    };
+
     ReviewWod.prototype.events = {
       'tap .delete': 'deleteWod',
       'tap .history a': 'history'
@@ -11387,6 +11451,9 @@ $.validator.prototype.elements = function() {
       ReviewWod.__super__.constructor.apply(this, arguments);
       WodEntry.bind('create', this.updateReviewWod);
       WodEntry.bind('update', this.updateReviewWod);
+      Goal.bind('complete', function(goal) {
+        return _this.completedGoal = goal;
+      });
       this.el.bind("pageAnimationStart", function(e, data) {
         var entry, id, referrer;
 
@@ -11407,11 +11474,18 @@ $.validator.prototype.elements = function() {
       if (entry.wod_id != null) {
         this.pastEntries = WodEntry.history(this.wod);
       }
-      return this.render({
+      this.render({
         wod: this.wod,
         entry: this.entry,
-        pastEntries: this.pastEntries
+        pastEntries: this.pastEntries,
+        completedGoal: this.completedGoal
       });
+      this.completedGoal = null;
+      if (this.wod.method === 'pass_fail') {
+        return this.chart.hide();
+      } else {
+        return Superfit.Chart.wodChart(this.chart, this.wod.history(), this.wod.scoring_method);
+      }
     };
 
     ReviewWod.prototype.deleteWod = function() {
@@ -11598,15 +11672,13 @@ $.validator.prototype.elements = function() {
       $e = window.HAML.escape;
       $c = window.HAML.cleanValue;
       $o = [];
-  if (this.pastEntries && this.pastEntries.length > 0) {
-    $o.push("<div class='content-main'>\n  <div class='secondary'>\n    <div class='title'>\n      <h3>History</h3>\n    </div>\n    <ul class='history'>\n      <li class='chart-container'>\n        <div class='chart'></div>\n      </li>");
-    _ref = this.pastEntries;
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      history = _ref[_i];
-      $o.push("      <li>\n        <a href='#review-wod' data-id='" + ($e($c(history.id))) + "'>\n          <div class='label'>\n            <p>" + ($e($c(moment(history.date).format('MMM D, YYYY')))) + "</p>\n            <p>" + ($e($c(history.scoreString()))) + "</p>\n          </div>\n        </a>\n      </li>");
-    }
-    $o.push("    </ul>\n  </div>\n</div>");
+      $o.push("<div class='content-main'>\n  <div class='secondary'>\n    <div class='title'>\n      <h3>History</h3>\n    </div>\n    <ul class='history'>\n      <li class='chart-container'>\n        <div class='chart'></div>\n      </li>");
+  _ref = this.pastEntries;
+  for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+    history = _ref[_i];
+    $o.push("      <li>\n        <a href='#review-wod' data-id='" + ($e($c(history.id))) + "'>\n          <div class='label'>\n            <p>" + ($e($c(moment(history.date).format('MMM D, YYYY')))) + "</p>\n            <p>" + ($e($c(history.scoreString()))) + "</p>\n          </div>\n        </a>\n      </li>");
       }
+      $o.push("    </ul>\n  </div>\n</div>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
@@ -11830,10 +11902,10 @@ $.validator.prototype.elements = function() {
   if (this.entry) {
     $o.push("      <input type='hidden' name='entry_id' value='" + ($e($c(this.entry.id))) + "'>");
       }
-      $o.push("      <div class='sets'></div>\n      <textarea name='details' placeholder='Enter Workout Notes' cols='30' rows='5'></textarea>");
+      $o.push("      <div class='sets'></div>\n      <textarea name='details' placeholder='Enter Workout Notes' cols='30' rows='5'>");
       $o.push("      " + $e($c((_ref = this.entry) != null ? _ref.details : void 0)));
-      $o.push("      <a class='add-set bottom button lighter' href='#'>Add Another Set</a>\n      <input class='bluer bottom button' type='submit'>\n    </form>\n  </div>\n</div>");
-      return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");
+      $o.push("      </textarea>\n      <a class='add-set bottom button lighter' href='#'>Add Another Set</a>\n      <input class='bluer bottom button' type='submit'>\n    </form>\n  </div>\n</div>");
+      return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "").replace(/[\s\n]*\u0091/mg, '').replace(/\u0092[\s\n]*/mg, '');
     }).call(window.HAML.context(context));
   });;
 }).call(this);
@@ -11884,10 +11956,10 @@ $.validator.prototype.elements = function() {
   $o.push("            " + $c(JST['superfit/views/_score']({
     entry: this.entry
       })));
-      $o.push("            <div>\n              <input class='left' id='rx-type' type='radio' name='type' value='RX' checked='" + ($e($c(this.entry ? ((_ref5 = this.entry) != null ? _ref5.type : void 0) === 'rx' : 'checked'))) + "'>\n                <label class='radio' for='rx-type'>RX</label>\n              <input class='right' id='scaled-type' type='radio' name='type' value='scaled' checked='" + ($e($c(((_ref6 = this.entry) != null ? _ref6.type : void 0) === 'scaled'))) + "'>\n                <label class='radio' for='scaled-type'>Scaled</label>\n              <textarea name='details' placeholder='Enter Workout Notes' cols='30' rows='5'></textarea>");
+      $o.push("            <div>\n              <input class='left' id='rx-type' type='radio' name='type' value='RX' checked='" + ($e($c(this.entry ? ((_ref5 = this.entry) != null ? _ref5.type : void 0) === 'rx' : 'checked'))) + "'>\n                <label class='radio' for='rx-type'>RX</label>\n              <input class='right' id='scaled-type' type='radio' name='type' value='scaled' checked='" + ($e($c(((_ref6 = this.entry) != null ? _ref6.type : void 0) === 'scaled'))) + "'>\n                <label class='radio' for='scaled-type'>Scaled</label>\n              <textarea name='details' placeholder='Enter Workout Notes' cols='30' rows='5'>");
       $o.push("              " + $e($c((_ref7 = this.entry) != null ? _ref7.details : void 0)));
-      $o.push("            </div>\n          </div>\n          <input class='bluer bottom button' type='submit'>\n        </div>\n      </div>\n    </form>\n  </fieldset>\n</div>");
-      return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");
+      $o.push("              </textarea>\n            </div>\n          </div>\n          <input class='bluer bottom button' type='submit'>\n        </div>\n      </div>\n    </form>\n  </fieldset>\n</div>");
+      return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "").replace(/[\s\n]*\u0091/mg, '').replace(/\u0092[\s\n]*/mg, '');
     }).call(window.HAML.context(context));
   });;
 }).call(this);
@@ -12001,13 +12073,13 @@ $.validator.prototype.elements = function() {
     }
     $o.push("      <li>\n        <a class='add-new' href='#add-wod'>\n          <div class='label'>\n            <p>Add Workout</p>\n          </div>\n          <p class='arrow awesome icon-plus'></p>\n        </a>\n      </li>");
   } else {
-    $o.push("      <li>\n        You haven't entered any workouts!\n      </li>\n      <li>\n        <a class='add-new' href='#add-wod'>\n          <div class='label'>\n            <p>Add Workout</p>\n          </div>\n          <p class='arrow awesome icon-plus'></p>\n        </a>\n      </li>");
+    $o.push("      <li>\n        <a class='add-new' href='#add-wod'>\n          <p class='wodnodata'></p>\n        </a>\n      </li>\n      <li>\n        <a class='add-new' href='#add-wod'>\n          <div class='label'>\n            <p>Add Workout</p>\n          </div>\n          <p class='arrow awesome icon-plus'></p>\n        </a>\n      </li>");
       }
-      $o.push("    </ul>\n  </div>\n  <div class='content-main'>\n    <ul>\n      <li class='title'>\n        <h2>Goals</h2>\n        <div class='action'>\n          <a class='dissolve' href='#goals'>\n            <p>View All</p>\n            <p class='arrow awesome icon-chevron-right'></p>\n          </a>\n        </div>\n      </li>\n      <li class='chart-container'>\n        <div class='chart'></div>\n      </li>");
+      $o.push("    </ul>\n  </div>\n  <div class='content-main'>\n    <ul>\n      <li class='title'>\n        <h2>Goals</h2>\n        <div class='action'>\n          <a class='dissolve' href='#goals'>\n            <p>View All</p>\n            <p class='arrow awesome icon-chevron-right'></p>\n          </a>\n        </div>\n      </li>");
   if (this.goal) {
-    $o.push("      <li class='goal'>\n        <a href='#goal-detail' data-id='" + ($e($c(this.goal.id))) + "'>\n          <div class='label'>\n            <p class='goal-label'>" + ($e($c(this.goal.name()))) + "\n              <br>\n              <span>\n                Last Update:\n                <time class='timeago' datetime='" + ($e($c(moment(this.goal.last_update).format()))) + "'></time>\n              </span>\n            </p>\n          </div>\n          <div class='goal-progress'>" + ($e($c("" + (this.goal.percentComplete()) + "%"))) + "</div>\n          <p class='arrow awesome icon-chevron-right'></p>\n        </a>\n      </li>");
+    $o.push("      <li class='chart-container'>\n        <div class='chart'></div>\n      </li>\n      <li class='goal'>\n        <a href='#goal-detail' data-id='" + ($e($c(this.goal.id))) + "'>\n          <div class='label'>\n            <p class='goal-label'>" + ($e($c(this.goal.name()))) + "\n              <br>\n              <span>\n                Last Update:\n                <time class='timeago' datetime='" + ($e($c(moment(this.goal.last_update).format()))) + "'></time>\n              </span>\n            </p>\n          </div>\n          <div class='goal-progress'>" + ($e($c("" + (this.goal.percentComplete()) + "%"))) + "</div>\n          <p class='arrow awesome icon-chevron-right'></p>\n        </a>\n      </li>");
   } else {
-    $o.push("      <li>\n        <a class='add-new' href='#edit-goal'>\n          <div class='label'>\n            <p>Create New Goal</p>\n          </div>\n          <p class='arrow awesome icon-plus'></p>\n        </a>\n      </li>");
+    $o.push("      <li>\n        <a class='add-new' href='#edit-goal'>\n          <p class='goalsnodata'></p>\n        </a>\n      </li>\n      <li>\n        <a class='add-new' href='#edit-goal'>\n          <div class='label'>\n            <p>Create New Goal</p>\n          </div>\n          <p class='arrow awesome icon-plus'></p>\n        </a>\n      </li>");
       }
       $o.push("    </ul>\n  </div>\n</div>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");
@@ -12214,12 +12286,15 @@ $.validator.prototype.elements = function() {
       $e = window.HAML.escape;
       $c = window.HAML.cleanValue;
       $o = [];
-      $o.push("<div class='page' id='review-wod'>\n  <div class='page-header'>\n    <div class='toolbar'>\n      <div>\n        <a class='awesome goback icon-chevron-left' href='#'></a>\n      </div>\n      <h1>" + ($e($c(this.entry.wodName()))) + "</h1>\n    </div>\n  </div>\n  <div class='content-main'>\n    <div class='content-block'>\n      <div class='yellow-block'>\n        <div class='review-score'>\n          <div class='score'>" + ($e($c(this.entry.scoreString()))) + "\n            <span class='score-level'>" + ($e($c(this.entry.type))) + "</span>\n          </div>\n          <div class='score-tags'>\n            <span class='pr'>Personal Record</span>\n          </div>\n          <p class='score-details'>" + ($e($c(this.entry.details))) + "</p>\n        </div>\n      </div>\n      <a class='bottom button dissolve lighter' data-id='" + ($e($c(this.entry.id))) + "' href='#edit-wod'>Edit Workout</a>\n      <a class='bottom button fade' href='#home'>Jump To Dashboard</a>\n      <a class='delete pop red' data-id='" + ($e($c(this.entry.id))) + "' href='#home'><i class=\"remove-set icon-remove-sign\"></i> Delete This Workout</a>\n    </div>\n  </div>\n  <div class='footer'></div>");
-  $o.push("  " + $c(JST['superfit/views/_history']({
+      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div>\n      <a class='awesome goback icon-chevron-left' href='#'></a>\n    </div>\n    <h1>" + ($e($c(this.entry.wodName()))) + "</h1>\n  </div>\n</div>");
+  if (this.completedGoal) {
+    $o.push("<div class='overlay'>\n  <div class='main'>\n    <h1>High Fives!</h1>\n    <p>You completed " + (this.completedGoal.name()) + "!</p>\n  </div>\n</div>");
+      }
+      $o.push("<div class='content-main'>\n  <div class='content-block'>\n    <div class='yellow-block'>\n      <div class='review-score'>\n        <div class='score'>" + ($e($c(this.entry.scoreString()))) + "\n          <span class='score-level'>" + ($e($c(this.entry.type))) + "</span>\n        </div>\n        <div class='score-tags'>\n          <span class='pr'>Personal Record</span>\n        </div>\n        <p class='score-details'>" + ($e($c(this.entry.details))) + "</p>\n      </div>\n    </div>\n    <a class='bottom button dissolve lighter' data-id='" + ($e($c(this.entry.id))) + "' href='#edit-wod'>Edit Workout</a>\n    <a class='bottom button fade' href='#home'>Jump To Dashboard</a>\n    <a class='delete pop red' data-id='" + ($e($c(this.entry.id))) + "' href='#home'><i class=\"remove-set icon-remove-sign\"></i> Delete This Workout</a>\n  </div>\n</div>\n<div class='footer'></div>");
+  $o.push("" + $c(JST['superfit/views/_history']({
     wod: this.wod,
     pastEntries: this.pastEntries
       })));
-      $o.push("</div>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
