@@ -127,8 +127,8 @@ font/superfit.ttf: font/superfit-c35bf31fe75be2af15c0678a23bedf86.ttf
 font/superfit/index.ttf: font/superfit-c35bf31fe75be2af15c0678a23bedf86.ttf
 font/superfit.woff: font/superfit-d0deddd622608dc938e66a83688c1832.woff
 font/superfit/index.woff: font/superfit-d0deddd622608dc938e66a83688c1832.woff
-superfit.css: superfit-578fc147d4c6497a490adcfb59383262.css
-superfit/index.css: superfit-578fc147d4c6497a490adcfb59383262.css
+superfit.css: superfit-1f55cbed05bd73cbfebb1a3282855ef8.css
+superfit/index.css: superfit-1f55cbed05bd73cbfebb1a3282855ef8.css
 cordova.js: cordova-c40dba849ffd9d9b993a23947f094b41.js
 cordova/index.js: cordova-c40dba849ffd9d9b993a23947f094b41.js
 fontawesome-webfont.eot: fontawesome-webfont-b49e662c23140944a17d6301d2259446.eot
