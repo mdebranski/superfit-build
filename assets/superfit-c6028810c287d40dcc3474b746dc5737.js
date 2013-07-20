@@ -10184,6 +10184,7 @@ $.validator.prototype.elements = function() {
       options = {
         yaxis: {
           max: 100,
+          tickSize: 25,
           tickFormatter: function(value) {
             return "" + value + "%";
           }
@@ -10228,12 +10229,13 @@ $.validator.prototype.elements = function() {
         mode: 'time',
         labelWidth: 40,
         tickFormatter: function(value) {
-          return moment(value).format('MMM D, YYYY');
+          return moment(value).format('MMM D');
         }
       },
       yaxis: {
         min: 0,
-        minTickSize: 1
+        minTickSize: 1,
+        ticks: 5
       },
       series: {
         color: 'rgba(78, 163, 227, 0.95)',
@@ -11834,14 +11836,7 @@ $.validator.prototype.elements = function() {
       $e = window.HAML.escape;
       $c = window.HAML.cleanValue;
       $o = [];
-      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div class='pulldown sprite-sf'>\n      Navigation Pulldown\n    </div>\n    <h1>Profile</h1>\n  </div>\n</div>\n<form>\n  <div class='content-main edit-profile scroll'>\n    <ul>\n      <li>\n        <p>Name</p>\n        <input class='profile-data' type='text' name='name' placeholder='Enter Full Name' value='" + ($e($c(this.user.name))) + "'>\n      </li>\n      <li>\n        <p>Zip Code</p>\n        <input class='profile-data' type='number' name='zipcode' placeholder='Enter Zip Code' value='" + ($e($c(this.user.zipcode))) + "'>\n      </li>\n      <li>\n        <p>Email</p>\n        <input class='profile-data' type='text' name='email' placeholder='Enter Email' value='" + ($e($c(this.user.email))) + "'>\n      </li>\n      <li>\n        <a href='#edit-profile-gym'>\n          <p>My Gym</p>\n          <p class='profile-data'>");
-  if (this.user.gym) {
-    $o.push("            " + $e($c(this.user.gym)));
-      }
-  if (!this.user.gym) {
-    $o.push("            <span class='placeholder'>Find My Gym</span>\n            <span class='icon-chevron-right'></span>");
-      }
-      $o.push("          </p>\n        </a>\n      </li>\n      <li class='radio'>\n        <p>Gender</p>\n        <fieldset class='profile-data'>\n          <input class='left' id='female' type='radio' name='gender' value='female' checked='" + ($e($c(this.user.gender === 'female'))) + "'>\n            <label class='radio' for='female'>Female</label>\n          <input class='right' id='male' type='radio' name='gender' value='male' checked='" + ($e($c(this.user.gender === 'male'))) + "'>\n            <label class='radio' for='male'>Male</label>\n        </fieldset>\n      </li>\n    </ul>\n  </div>\n  <div class='footer'>\n  </div>\n</form>");
+      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div class='pulldown sprite-sf'>\n      Navigation Pulldown\n    </div>\n    <h1>Profile</h1>\n  </div>\n</div>\n<form>\n  <div class='content-main edit-profile scroll'>\n    <ul>\n      <li>\n        <p>Name</p>\n        <input class='profile-data' type='text' name='name' placeholder='Enter Full Name' value='" + ($e($c(this.user.name))) + "'>\n      </li>\n      <li>\n        <p>Zip Code</p>\n        <input class='profile-data' type='number' name='zipcode' placeholder='Enter Zip Code' value='" + ($e($c(this.user.zipcode))) + "'>\n      </li>\n      <li>\n        <p>Email</p>\n        <input class='profile-data' type='text' name='email' placeholder='Enter Email' value='" + ($e($c(this.user.email))) + "'>\n      </li>\n      <li>\n        <p>My Gym</p>\n        <input class='profile-data' type='text' name='gym' placeholder='My Gym' value='" + ($e($c(this.user.gym))) + "'>\n      </li>\n      <li class='radio'>\n        <p>Gender</p>\n        <select class='profile-data' name='gender'>\n          <option value='female' selected='" + ($e($c(this.user.gender === 'female'))) + "'>Female</option>\n          <option value='male' selected='" + ($e($c(this.user.gender === 'male'))) + "'>Male</option>\n        </select>\n      </li>\n    </ul>\n  </div>\n  <div class='footer'>\n  </div>\n</form>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
@@ -11872,7 +11867,7 @@ $.validator.prototype.elements = function() {
       $e = window.HAML.escape;
       $c = window.HAML.cleanValue;
       $o = [];
-      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div>\n      <a class='awesome goback icon-chevron-left' href='#record'></a>\n    </div>\n    <h1>" + ($e($c(this.wod.name))) + "</h1>\n  </div>\n</div>\n<div class='scroll'>");
+      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div>\n      <a class='awesome icon-chevron-left slideright' href='#records'></a>\n    </div>\n    <h1>" + ($e($c(this.wod.name))) + "</h1>\n  </div>\n</div>\n<div class='scroll'>");
   if (this.wod.typeSlug() === 'strength') {
     $o.push("  <ul class='filter-navigation not-main'>\n    <li>\n      <a class='" + ($e($c(this.repMax === 1 ? 'selected' : ''))) + "' href='#' data-rep-max='" + ($e($c(1))) + "'>1RM</a>\n    </li>\n    <li>\n      <a class='" + ($e($c(this.repMax === 3 ? 'selected' : ''))) + "' href='#' data-rep-max='" + ($e($c(3))) + "'>3RM</a>\n    </li>\n    <li>\n      <a class='" + ($e($c(this.repMax === 5 ? 'selected' : ''))) + "' href='#' data-rep-max='" + ($e($c(5))) + "'>5RM</a>\n    </li>\n  </ul>");
       }
@@ -11991,7 +11986,7 @@ $.validator.prototype.elements = function() {
     return (function() {
       var $o;
       $o = [];
-      $o.push("<div class='page' id='get-started-step3'>\n  <div class='orientation'>\n    <form>\n      <div class='main'>\n        <h1>A few Questions!\n          <input type='hidden' name='gym_id'>\n          <h2>Male or Female?</h2>\n          <p class='left'>Some workouts differ for males and females.</p>\n          <fieldset>\n            <input class='left' id='female' type='radio' name='gender' value='female' checked='checked'>\n              <label class='radio' for='female'>Female</label>\n            <input class='right' id='male' type='radio' name='gender' value='male'>\n              <label class='radio' for='male'>Male</label>\n          </fieldset>\n          <h2>Where do you Workout?</h2>\n          <fieldset>\n            <input id='gym-search' type='text' name='search' placeholder='Enter Gym Name'>\n          </fieldset>\n          <p>\n            <a class='small' href='#home'>Don't Workout at an Affiliate? Skip this ›</a>\n          </p>\n          <h3 class='no-matches'>No gyms found for this search.</h3>\n          <ul class='gyms' style='display:none'></ul>\n        </h1>\n      </div>\n      <div class='orientation-footer'>\n        <input class='bottom button' id='get-started' type='submit' value='Start Logging Workouts'>\n      </div>\n    </form>\n  </div>\n</div>");
+      $o.push("<div class='page' id='get-started-step3'>\n  <div class='orientation'>\n    <form>\n      <div class='main'>\n        <h1>A few Questions!\n          <input type='hidden' name='gym_id'>\n          <h2>Male or Female?</h2>\n          <p class='left'>Some workouts differ for males and females.</p>\n          <fieldset>\n            <input class='left' id='female' type='radio' name='gender' value='female' checked='checked'>\n              <label class='radio' for='female'>Female</label>\n            <input class='right' id='male' type='radio' name='gender' value='male'>\n              <label class='radio' for='male'>Male</label>\n          </fieldset>\n          <h2>Where do you Workout?</h2>\n          <fieldset>\n            <input type='text' name='gym' placeholder='Enter Gym Name'>\n          </fieldset>\n        </h1>\n      </div>\n      <div class='orientation-footer'>\n        <input class='bottom button' id='get-started' type='submit' value='Start Logging Workouts'>\n      </div>\n    </form>\n  </div>\n</div>");
       return $o.join("\n").replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
@@ -12004,7 +11999,7 @@ $.validator.prototype.elements = function() {
       $e = window.HAML.escape;
       $c = window.HAML.cleanValue;
       $o = [];
-      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <a class='awesome back icon-chevron-left' href='#goals'></a>\n    <h1>" + ($e($c(this.goal.name()))) + "</h1>\n  </div>\n</div>\n<div class='scroll'>\n  <div class='content-main'>\n    <div class='content-block'>\n      <div class='yellow-block'>\n        <div class='review-score'>\n          <div class='score'>" + ($e($c("" + (this.goal.percentComplete()) + "% complete"))) + "\n            <span class='score-level'>" + ($e($c(this.goal.type))) + "</span>\n            <p class='score-details'>" + ($e($c(this.goal.scoreString(true)))) + "</p>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>");
+      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div>\n      <a class='awesome icon-chevron-left slideright' href='#goals'></a>\n    </div>\n    <h1>" + ($e($c(this.goal.name()))) + "</h1>\n  </div>\n</div>\n<div class='scroll'>\n  <div class='content-main'>\n    <div class='content-block'>\n      <div class='yellow-block'>\n        <div class='review-score'>\n          <div class='score'>" + ($e($c("" + (this.goal.percentComplete()) + "% complete"))) + "\n            <span class='score-level'>" + ($e($c(this.goal.type))) + "</span>\n            <p class='score-details'>" + ($e($c(this.goal.scoreString(true)))) + "</p>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>");
   $o.push("  " + $c(JST['superfit/views/_history']({
     wod: this.wod,
     pastEntries: this.pastEntries
@@ -12035,7 +12030,7 @@ $.validator.prototype.elements = function() {
       $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div class='pulldown sprite-sf'>Navigation Pulldown</div>\n    <h1>Goals</h1>\n    <a class='awesome icon-plus' href='#edit-goal'></a>\n  </div>\n</div>\n<div class='scroll'>\n  <ul class='filter-navigation two'>\n    <li>\n      <a class='" + ($e($c(this.type === 'in_progress' ? 'selected' : ''))) + "' href='#' data-type='in_progress'>In Progress</a>\n    </li>\n    <li>\n      <a class='" + ($e($c(this.type === 'completed' ? 'selected' : ''))) + "' href='#' data-type='completed'>Completed</a>\n    </li>\n  </ul>\n  <div class='content-main'>\n    <ul>");
   if (this.goals.length === 0) {
     if (this.type === 'in_progress') {
-      $o.push("      <li>No goals in progress</li>");
+      $o.push("      <li>\n        <a class='add-new' href='#edit-goal'>\n          <p class='goalsnodata'></p>\n        </a>\n      </li>");
     } else {
       $o.push("      <li>No goals completed yet</li>");
     }
@@ -12073,13 +12068,13 @@ $.validator.prototype.elements = function() {
     }
     $o.push("      <li>\n        <a class='add-new' href='#add-wod'>\n          <div class='label'>\n            <p>Add Workout</p>\n          </div>\n          <p class='arrow awesome icon-plus'></p>\n        </a>\n      </li>");
   } else {
-    $o.push("      <li>\n        <a class='add-new' href='#add-wod'>\n          <p class='wodnodata'></p>\n        </a>\n      </li>\n      <li>\n        <a class='add-new' href='#add-wod'>\n          <div class='label'>\n            <p>Add Workout</p>\n          </div>\n          <p class='arrow awesome icon-plus'></p>\n        </a>\n      </li>");
+    $o.push("      <li>\n        <a class='add-new' href='#add-wod'>\n          <p class='wodnodata'></p>\n        </a>\n      </li>");
       }
       $o.push("    </ul>\n  </div>\n  <div class='content-main'>\n    <ul>\n      <li class='title'>\n        <h2>Goals</h2>\n        <div class='action'>\n          <a class='dissolve' href='#goals'>\n            <p>View All</p>\n            <p class='arrow awesome icon-chevron-right'></p>\n          </a>\n        </div>\n      </li>");
   if (this.goal) {
     $o.push("      <li class='chart-container'>\n        <div class='chart'></div>\n      </li>\n      <li class='goal'>\n        <a href='#goal-detail' data-id='" + ($e($c(this.goal.id))) + "'>\n          <div class='label'>\n            <p class='goal-label'>" + ($e($c(this.goal.name()))) + "\n              <br>\n              <span>\n                Last Update:\n                <time class='timeago' datetime='" + ($e($c(moment(this.goal.last_update).format()))) + "'></time>\n              </span>\n            </p>\n          </div>\n          <div class='goal-progress'>" + ($e($c("" + (this.goal.percentComplete()) + "%"))) + "</div>\n          <p class='arrow awesome icon-chevron-right'></p>\n        </a>\n      </li>");
   } else {
-    $o.push("      <li>\n        <a class='add-new' href='#edit-goal'>\n          <p class='goalsnodata'></p>\n        </a>\n      </li>\n      <li>\n        <a class='add-new' href='#edit-goal'>\n          <div class='label'>\n            <p>Create New Goal</p>\n          </div>\n          <p class='arrow awesome icon-plus'></p>\n        </a>\n      </li>");
+    $o.push("      <li>\n        <a class='add-new' href='#edit-goal'>\n          <p class='goalsnodata'></p>\n        </a>\n      </li>");
       }
       $o.push("    </ul>\n  </div>\n</div>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");
@@ -12225,9 +12220,9 @@ $.validator.prototype.elements = function() {
       $e = window.HAML.escape;
       $c = window.HAML.cleanValue;
       $o = [];
-      $o.push("<div class='page' id='record-detail'>\n  <div class='page-header'>\n    <div class='toolbar'>\n      <div>\n        <a class='awesome goback icon-chevron-left' href='#records'></a>\n      </div>\n      <h1>" + ($e($c(this.wod.name))) + "</h1>\n    </div>\n  </div>\n  <div class='scroll'>");
+      $o.push("<div class='page' id='record-detail'>\n  <div class='page-header'>\n    <div class='toolbar'>\n      <div>\n        <a class='awesome icon-chevron-left slideright' href='#records'></a>\n      </div>\n      <h1>" + ($e($c(this.wod.name))) + "</h1>\n    </div>\n  </div>\n  <div class='scroll'>");
   if (this.wod.typeSlug() === 'strength') {
-    $o.push("    <ul class='filter-navigation not-main'>\n      <li>\n        <a class='" + ($e($c(this.repMax === 1 ? 'selected' : ''))) + "' href='#' data-rep-max='" + ($e($c(1))) + "'>1RM</a>\n      </li>\n      <li>\n        <a class='" + ($e($c(this.repMax === 3 ? 'selected' : ''))) + "' href='#' data-rep-max='" + ($e($c(3))) + "'>3RM</a>\n      </li>\n      <li>\n        <a class='" + ($e($c(this.repMax === 5 ? 'selected' : ''))) + "' href='#' data-rep-max='" + ($e($c(5))) + "'>5RM</a>\n      </li>\n    </ul>");
+    $o.push("    <ul class='filter-navigation not-main'>\n      <li>\n        <a class='" + (['dissolve', "" + ($e($c(this.repMax === 1 ? 'selected' : '')))].sort().join(' ').replace(/^\s+|\s+$/g, '')) + "' href='#' data-rep-max='" + ($e($c(1))) + "'>1RM</a>\n      </li>\n      <li>\n        <a class='" + (['dissolve', "" + ($e($c(this.repMax === 3 ? 'selected' : '')))].sort().join(' ').replace(/^\s+|\s+$/g, '')) + "' href='#' data-rep-max='" + ($e($c(3))) + "'>3RM</a>\n      </li>\n      <li>\n        <a class='" + (['dissolve', "" + ($e($c(this.repMax === 5 ? 'selected' : '')))].sort().join(' ').replace(/^\s+|\s+$/g, '')) + "' href='#' data-rep-max='" + ($e($c(5))) + "'>5RM</a>\n      </li>\n    </ul>");
       }
       $o.push("    <div class='content-main'>\n      <div class='content-block'>\n        <div class='yellow-block'>\n          <div class='review-score'>\n            <div class='score'>");
   if (this.wod.typeSlug() === 'strength') {
@@ -12264,9 +12259,9 @@ $.validator.prototype.elements = function() {
       wod = _ref[_i];
       $o.push("        <li>");
       if (wod.personal_record != null) {
-        $o.push("          <a href='#record-detail' data-id='" + ($e($c(wod.id))) + "'>\n            <div class='label'>\n              <p>" + ($e($c(wod.name))) + "</p>\n              <p>" + ($e($c(wod.recordString(true)))) + "</p>\n            </div>\n            <p class='arrow awesome icon-chevron-right'></p>\n          </a>");
+        $o.push("          <a class='slideleft' href='#record-detail' data-id='" + ($e($c(wod.id))) + "'>\n            <div class='label'>\n              <p>" + ($e($c(wod.name))) + "</p>\n              <p>" + ($e($c(wod.recordString(true)))) + "</p>\n            </div>\n            <p class='arrow awesome icon-chevron-right'></p>\n          </a>");
       } else {
-        $o.push("          <a href='#edit-record' data-id='" + ($e($c(wod.id))) + "'>\n            <div class='empty label'>\n              <p>" + ($e($c(wod.name))) + "</p>\n              <p>\n            </div>\n            <p class='arrow awesome icon-plus'></p>\n          </a>");
+        $o.push("          <a class='slideleft' href='#edit-record' data-id='" + ($e($c(wod.id))) + "'>\n            <div class='empty label'>\n              <p>" + ($e($c(wod.name))) + "</p>\n              <p>\n            </div>\n            <p class='arrow awesome icon-plus'></p>\n          </a>");
       }
       $o.push("        </li>");
     }
@@ -12290,7 +12285,7 @@ $.validator.prototype.elements = function() {
   if (this.completedGoal) {
     $o.push("<div class='overlay'>\n  <div class='main'>\n    <h1>High Fives!</h1>\n    <p>You completed " + (this.completedGoal.name()) + "!</p>\n  </div>\n</div>");
       }
-      $o.push("<div class='content-main'>\n  <div class='content-block'>\n    <div class='yellow-block'>\n      <div class='review-score'>\n        <div class='score'>" + ($e($c(this.entry.scoreString()))) + "\n          <span class='score-level'>" + ($e($c(this.entry.type))) + "</span>\n        </div>\n        <div class='score-tags'>\n          <span class='pr'>Personal Record</span>\n        </div>\n        <p class='score-details'>" + ($e($c(this.entry.details))) + "</p>\n      </div>\n    </div>\n    <a class='bottom button dissolve lighter' data-id='" + ($e($c(this.entry.id))) + "' href='#edit-wod'>Edit Workout</a>\n    <a class='bottom button fade' href='#home'>Jump To Dashboard</a>\n    <a class='delete pop red' data-id='" + ($e($c(this.entry.id))) + "' href='#home'><i class=\"remove-set icon-remove-sign\"></i> Delete This Workout</a>\n  </div>\n</div>\n<div class='footer'></div>");
+      $o.push("<div class='content-main'>\n  <div class='content-block'>\n    <div class='yellow-block'>\n      <div class='review-score'>\n        <div class='score'>" + ($e($c(this.entry.scoreString()))) + "\n          <span class='score-level'>" + ($e($c(this.entry.type))) + "</span>\n        </div>\n        <div class='score-tags'>\n          <span class='pr'>Personal Record</span>\n        </div>\n        <p class='score-details'>" + ($e($c(this.entry.details))) + "</p>\n      </div>\n    </div>\n    <a class='bottom button lighter slideleft' data-id='" + ($e($c(this.entry.id))) + "' href='#edit-wod'>Edit Workout</a>\n    <a class='bottom button fade' href='#home'>Jump To Dashboard</a>\n    <a class='delete pop red' data-id='" + ($e($c(this.entry.id))) + "' href='#home'><i class=\"remove-set icon-remove-sign\"></i> Delete This Workout</a>\n  </div>\n</div>\n<div class='footer'></div>");
   $o.push("" + $c(JST['superfit/views/_history']({
     wod: this.wod,
     pastEntries: this.pastEntries

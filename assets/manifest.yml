@@ -13,10 +13,12 @@ gfx-landing-see-progress_2x.png: gfx-landing-see-progress_2x-7172f3984e0ef40fdaf
 gfx-landing-see-progress_2x/index.png: gfx-landing-see-progress_2x-7172f3984e0ef40fdafe8d1a3f5b52a2.png
 img-goals-nodata.png: img-goals-nodata-eda999628abbb86bf67afdb6a6cf41e8.png
 img-goals-nodata/index.png: img-goals-nodata-eda999628abbb86bf67afdb6a6cf41e8.png
-img-goals-nodata@2x.png: img-goals-nodata@2x-04473a642e179406e344151ac4be4b15.png
-img-goals-nodata@2x/index.png: img-goals-nodata@2x-04473a642e179406e344151ac4be4b15.png
+img-goals-nodata_2x.png: img-goals-nodata_2x-04473a642e179406e344151ac4be4b15.png
+img-goals-nodata_2x/index.png: img-goals-nodata_2x-04473a642e179406e344151ac4be4b15.png
 img-workout-nodata.png: img-workout-nodata-e7b82ff2499a9d94aa3606110af056ca.png
 img-workout-nodata/index.png: img-workout-nodata-e7b82ff2499a9d94aa3606110af056ca.png
+img-workout-nodata_2x.png: img-workout-nodata_2x-1e21a50d3f37ba2dbf24fa7b0d72ee9d.png
+img-workout-nodata_2x/index.png: img-workout-nodata_2x-1e21a50d3f37ba2dbf24fa7b0d72ee9d.png
 intro-step1.png: intro-step1-623e645e32c5abac03f564a497d9f058.png
 intro-step1/index.png: intro-step1-623e645e32c5abac03f564a497d9f058.png
 intro-step1_2x.png: intro-step1_2x-b21aa29d64f3a85a0c3f2efc33950e48.png
@@ -39,8 +41,8 @@ tile-pg-header_2x.png: tile-pg-header_2x-9439397ce006d6d8971cd2be7e895456.png
 tile-pg-header_2x/index.png: tile-pg-header_2x-9439397ce006d6d8971cd2be7e895456.png
 tile-ticks.png: tile-ticks-44e90c673462786237826c78b6f34f36.png
 tile-ticks/index.png: tile-ticks-44e90c673462786237826c78b6f34f36.png
-superfit.js: superfit-97376f4d17c67db2797e475b610103dc.js
-superfit/index.js: superfit-97376f4d17c67db2797e475b610103dc.js
+superfit.js: superfit-c6028810c287d40dcc3474b746dc5737.js
+superfit/index.js: superfit-c6028810c287d40dcc3474b746dc5737.js
 font/FontAwesome.otf: font/FontAwesome-468f83b63df32064983141584a19ff17.otf
 font/FontAwesome/index.otf: font/FontAwesome-468f83b63df32064983141584a19ff17.otf
 font/Gibson/1219DC_0.eot: font/Gibson/1219DC_0-7434080356fcdc69bff0558671df9eca.eot
@@ -125,8 +127,8 @@ font/superfit.ttf: font/superfit-c35bf31fe75be2af15c0678a23bedf86.ttf
 font/superfit/index.ttf: font/superfit-c35bf31fe75be2af15c0678a23bedf86.ttf
 font/superfit.woff: font/superfit-d0deddd622608dc938e66a83688c1832.woff
 font/superfit/index.woff: font/superfit-d0deddd622608dc938e66a83688c1832.woff
-superfit.css: superfit-82c9c59d4f69229e35f35c8896b474de.css
-superfit/index.css: superfit-82c9c59d4f69229e35f35c8896b474de.css
+superfit.css: superfit-578fc147d4c6497a490adcfb59383262.css
+superfit/index.css: superfit-578fc147d4c6497a490adcfb59383262.css
 cordova.js: cordova-c40dba849ffd9d9b993a23947f094b41.js
 cordova/index.js: cordova-c40dba849ffd9d9b993a23947f094b41.js
 fontawesome-webfont.eot: fontawesome-webfont-b49e662c23140944a17d6301d2259446.eot

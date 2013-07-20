@@ -5288,10 +5288,32 @@ div.ui-spinner {
 }
 
 /* Flot overrides */
-/* line 134, ../../app/assets/stylesheets/plugins.scss */
+/* line 133, ../../app/assets/stylesheets/plugins.scss */
+.chart {
+  margin: 15px 0;
+  padding-bottom: 15px;
+}
+/* line 135, ../../app/assets/stylesheets/plugins.scss */
 .chart .flot-tick-label.tickLabel {
-  color: #cccccc;
-  font-size: 9px;
+  color: #999999;
+  font-size: 10px;
+  line-height: 18px;
+  text-align: right;
+}
+/* line 136, ../../app/assets/stylesheets/plugins.scss */
+.chart .flot-y-axis .flot-tick-label.tickLabel {
+  position: absolute;
+  left: 0 !important;
+}
+/* line 137, ../../app/assets/stylesheets/plugins.scss */
+.chart .flot-text {
+  position: relative;
+  top: -8px !important;
+}
+/* line 138, ../../app/assets/stylesheets/plugins.scss */
+.chart .flot-overlay {
+  position: relative;
+  left: 18px !important;
 }
 
 /* line 5, ../../app/assets/stylesheets/forms.scss */
@@ -5547,7 +5569,7 @@ body {
 #jqt > * p {
   color: #666666;
   font-family: "Gibson-Light", Helvetica, Arial;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: normal;
 }
 /* line 34, ../../app/assets/stylesheets/superfit.scss */
@@ -5757,7 +5779,7 @@ body {
 /* line 161, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .content-main ul li .icon {
   margin-top: 8px;
-  margin-right: 15px;
+  margin-right: 5px;
   float: left;
 }
 /* line 168, ../../app/assets/stylesheets/superfit.scss */
@@ -5882,7 +5904,7 @@ body {
 #jqt > * .content-main .secondary ul li {
   line-height: 45px;
   height: 45px;
-  border-bottom: 1px solid #cccccc;
+  border-bottom: 1px solid #e7e7e7;
 }
 /* line 242, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .content-main .secondary ul li:last-of-type {
@@ -5891,10 +5913,9 @@ body {
 /* line 245, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .content-main .secondary .title {
   background: #f1f1f1;
-  border-bottom: 1px solid #cccccc;
   overflow: hidden;
 }
-/* line 251, ../../app/assets/stylesheets/superfit.scss */
+/* line 250, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .content-main .secondary .title h3 {
   line-height: 54px;
   padding-left: 18px;
@@ -5905,7 +5926,7 @@ body {
   height: 54px;
   color: #333333;
 }
-/* line 262, ../../app/assets/stylesheets/superfit.scss */
+/* line 261, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .content-main .secondary .title .action {
   right: 9px;
   position: absolute;
@@ -5914,48 +5935,48 @@ body {
   color: #999999;
   font-size: 18px;
 }
-/* line 269, ../../app/assets/stylesheets/superfit.scss */
+/* line 268, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .content-main .secondary .title .action p {
   float: left;
 }
-/* line 270, ../../app/assets/stylesheets/superfit.scss */
+/* line 269, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .content-main .secondary .title .action a {
   color: #cccccc;
 }
-/* line 273, ../../app/assets/stylesheets/superfit.scss */
+/* line 272, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .content-main .secondary .title .action .awesome {
   display: block;
   padding: 18px 10px 0 8px;
 }
-/* line 274, ../../app/assets/stylesheets/superfit.scss */
+/* line 273, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .content-main .secondary .title .action .goal-progress {
   margin-top: 9px;
 }
-/* line 277, ../../app/assets/stylesheets/superfit.scss */
+/* line 276, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .content-main .secondary .label {
   width: 99%;
 }
-/* line 279, ../../app/assets/stylesheets/superfit.scss */
+/* line 278, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .content-main .secondary .label p {
   font-size: 12px;
 }
-/* line 285, ../../app/assets/stylesheets/superfit.scss */
+/* line 284, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .content-main .secondary.details .title h4 {
   position: relative;
   top: 4px;
   color: #333333;
   font-size: 16px;
 }
-/* line 294, ../../app/assets/stylesheets/superfit.scss */
+/* line 293, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .content-main .secondary.details ul li p {
   font-size: 14px;
 }
-/* line 303, ../../app/assets/stylesheets/superfit.scss */
+/* line 302, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .footer {
   width: 96%;
   margin: 9px auto;
 }
-/* line 313, ../../app/assets/stylesheets/superfit.scss */
+/* line 312, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * #navigation {
   position: absolute;
   top: -170px;
@@ -5970,7 +5991,7 @@ body {
   opacity: .95;
   padding-bottom: 4px;
 }
-/* line 325, ../../app/assets/stylesheets/superfit.scss */
+/* line 324, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * #navigation.active {
   -webkit-transform: translate3d(0, 205px, 0);
   -moz-transform: translate3d(0, 205px, 0);
@@ -5978,37 +5999,37 @@ body {
   -o-transform: translate3d(0, 205px, 0);
   transform: translate3d(0, 205px, 0);
 }
-/* line 329, ../../app/assets/stylesheets/superfit.scss */
+/* line 328, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .navigation {
   position: relative;
   width: 100%;
   margin: 12px auto 0 auto;
 }
-/* line 336, ../../app/assets/stylesheets/superfit.scss */
+/* line 335, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .navigation div {
   font-size: 16px;
   border-bottom: 1px solid #1a1a1a;
   padding-left: 12px;
 }
-/* line 342, ../../app/assets/stylesheets/superfit.scss */
+/* line 341, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .navigation div:first-of-type {
   border-top: none;
   padding-top: 5px;
 }
-/* line 343, ../../app/assets/stylesheets/superfit.scss */
+/* line 342, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .navigation div:last-of-type {
   border-bottom: none;
 }
-/* line 344, ../../app/assets/stylesheets/superfit.scss */
+/* line 343, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .navigation div:active {
   background: #000000;
 }
-/* line 345, ../../app/assets/stylesheets/superfit.scss */
+/* line 344, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .navigation div p {
   float: left;
   margin-right: 20px;
 }
-/* line 349, ../../app/assets/stylesheets/superfit.scss */
+/* line 348, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .navigation div a {
   color: white;
   font-size: 14px;
@@ -6019,36 +6040,36 @@ body {
   display: block;
   padding-left: 2px;
 }
-/* line 360, ../../app/assets/stylesheets/superfit.scss */
+/* line 359, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .navigation div a:active {
   opacity: 0.75;
   background: transparent;
 }
-/* line 364, ../../app/assets/stylesheets/superfit.scss */
+/* line 363, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .navigation div a.dissolve:active {
   background: transparent;
 }
-/* line 367, ../../app/assets/stylesheets/superfit.scss */
+/* line 366, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .navigation div:active {
   background-color: #333333;
 }
-/* line 372, ../../app/assets/stylesheets/superfit.scss */
+/* line 371, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .content-main.home {
   margin: 0px auto 9px auto;
   position: relative;
 }
-/* line 378, ../../app/assets/stylesheets/superfit.scss */
+/* line 377, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .date-navigation {
   text-align: center;
   overflow: hidden;
   padding-bottom: 12px;
   margin-top: 12px;
 }
-/* line 385, ../../app/assets/stylesheets/superfit.scss */
+/* line 384, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .date-navigation ul:first-child {
   margin-top: 0;
 }
-/* line 387, ../../app/assets/stylesheets/superfit.scss */
+/* line 386, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .date-navigation li {
   font-size: 13px;
   font-weight: normal;
@@ -6056,79 +6077,79 @@ body {
   float: left;
   width: 10%;
 }
-/* line 394, ../../app/assets/stylesheets/superfit.scss */
+/* line 393, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .date-navigation li.date {
   width: 80%;
   cursor: pointer;
   font-size: 16px;
   position: relative;
 }
-/* line 400, ../../app/assets/stylesheets/superfit.scss */
+/* line 399, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .date-navigation li.date img {
   position: relative;
   top: 5px;
 }
-/* line 402, ../../app/assets/stylesheets/superfit.scss */
+/* line 401, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .date-navigation li.prev-day, #jqt > * .date-navigation li.next-day {
   position: relative;
   top: 5px;
 }
-/* line 407, ../../app/assets/stylesheets/superfit.scss */
+/* line 406, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .wods-search {
   display: none;
 }
-/* line 410, ../../app/assets/stylesheets/superfit.scss */
+/* line 409, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .photo-capture {
   overflow: hidden;
 }
-/* line 412, ../../app/assets/stylesheets/superfit.scss */
+/* line 411, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .photo-capture p {
   float: left;
   font-size: 12px;
   color: #999999;
   margin-top: 6px !important;
 }
-/* line 413, ../../app/assets/stylesheets/superfit.scss */
+/* line 412, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .photo-capture a.button {
   float: right;
   width: 50%;
   text-align: left;
   padding: 6px;
 }
-/* line 414, ../../app/assets/stylesheets/superfit.scss */
+/* line 413, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .photo-capture span {
   font-size: 14px;
   margin: 0 4px;
 }
-/* line 417, ../../app/assets/stylesheets/superfit.scss */
+/* line 416, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .score-details {
   margin-top: 0 !important;
   line-height: 18px  !important;
 }
-/* line 420, ../../app/assets/stylesheets/superfit.scss */
+/* line 419, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .set {
   overflow: hidden;
   margin-bottom: 9px;
   padding-bottom: 18px;
 }
-/* line 421, ../../app/assets/stylesheets/superfit.scss */
+/* line 420, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .enter-score-label {
   overflow: hidden;
 }
-/* line 423, ../../app/assets/stylesheets/superfit.scss */
+/* line 422, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .enter-score-label p {
   float: left;
   width: 42px;
   margin-top: 9px !important;
 }
-/* line 424, ../../app/assets/stylesheets/superfit.scss */
+/* line 423, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .enter-score-label .icon-remove-sign {
   float: left;
   position: relative;
   top: 17px;
   color: #c0392b;
 }
-/* line 430, ../../app/assets/stylesheets/superfit.scss */
+/* line 429, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .enter-score-label .warm-up {
   float: right;
   background: #f1f1f1;
@@ -6148,26 +6169,26 @@ body {
   line-height: 18px;
   text-transform: capitalize;
 }
-/* line 443, ../../app/assets/stylesheets/superfit.scss */
+/* line 442, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .enter-score-label .warm-up.selected {
   background: #1abc9c;
   color: #ffffff;
 }
-/* line 446, ../../app/assets/stylesheets/superfit.scss */
+/* line 445, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .enter-score-label .warm-up:before {
   content: "Warm-Up";
 }
-/* line 453, ../../app/assets/stylesheets/superfit.scss */
+/* line 452, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .enter-score {
   margin-bottom: 9px;
 }
-/* line 457, ../../app/assets/stylesheets/superfit.scss */
+/* line 456, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .enter-score div.input {
   width: 55%;
   float: left;
   margin-top: 0px;
 }
-/* line 458, ../../app/assets/stylesheets/superfit.scss */
+/* line 457, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .enter-score div.times {
   float: left;
   width: 9%;
@@ -6175,36 +6196,36 @@ body {
   top: 22px;
   text-align: left;
 }
-/* line 459, ../../app/assets/stylesheets/superfit.scss */
+/* line 458, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .enter-score div.reps {
   width: 35%;
   float: left;
 }
-/* line 460, ../../app/assets/stylesheets/superfit.scss */
+/* line 459, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .enter-score .small {
   position: relative;
   top: 5px;
 }
-/* line 463, ../../app/assets/stylesheets/superfit.scss */
+/* line 462, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .enter-score .score-container {
   margin-bottom: 3px;
 }
-/* line 467, ../../app/assets/stylesheets/superfit.scss */
+/* line 466, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .enter-score .score-container .for_time .ui-spinner:first-of-type {
   margin-right: 5%;
 }
-/* line 468, ../../app/assets/stylesheets/superfit.scss */
+/* line 467, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .enter-score .score-container .for_time .ui-spinner {
   width: 46.5%;
 }
-/* line 477, ../../app/assets/stylesheets/superfit.scss */
+/* line 476, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .review-score {
   text-align: center;
   font-size: 40px;
   color: #333333;
   font-weight: bold;
 }
-/* line 484, ../../app/assets/stylesheets/superfit.scss */
+/* line 483, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .review-score .score-level {
   font-size: 12px;
   padding: 5px 4px 4px 5px;
@@ -6219,7 +6240,7 @@ body {
   position: relative;
   top: -6px;
 }
-/* line 494, ../../app/assets/stylesheets/superfit.scss */
+/* line 493, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .review-score .pr {
   font-size: 12px;
   background-color: #1abc9c;
@@ -6238,7 +6259,7 @@ body {
   width: 120px;
   margin: auto;
 }
-/* line 513, ../../app/assets/stylesheets/superfit.scss */
+/* line 512, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .filter-navigation {
   text-align: center;
   overflow: hidden;
@@ -6248,11 +6269,11 @@ body {
   color: #333333;
   margin-left: 5px;
 }
-/* line 522, ../../app/assets/stylesheets/superfit.scss */
+/* line 521, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .filter-navigation.not-main {
   margin-top: 18px !important;
 }
-/* line 523, ../../app/assets/stylesheets/superfit.scss */
+/* line 522, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .filter-navigation li {
   font-size: 13px;
   font-weight: normal;
@@ -6261,17 +6282,18 @@ body {
   width: 33%;
   text-align: center;
 }
-/* line 531, ../../app/assets/stylesheets/superfit.scss */
+/* line 530, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .filter-navigation li a {
-  color: #333333;
+  color: #999999;
   padding: 4px 0px;
+  height: 18px;
+  line-height: 18px;
 }
-/* line 534, ../../app/assets/stylesheets/superfit.scss */
+/* line 533, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .filter-navigation li a:active, #jqt > * .filter-navigation li a.active {
   background: transparent;
-  color: #333333;
 }
-/* line 536, ../../app/assets/stylesheets/superfit.scss */
+/* line 535, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .filter-navigation li a.selected {
   background: #dedcd0;
   -webkit-border-radius: 18px;
@@ -6279,76 +6301,77 @@ body {
   -ms-border-radius: 18px;
   -o-border-radius: 18px;
   border-radius: 18px;
+  color: #333333;
 }
-/* line 540, ../../app/assets/stylesheets/superfit.scss */
+/* line 539, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .filter-navigation.two li {
   width: 50%;
 }
-/* line 543, ../../app/assets/stylesheets/superfit.scss */
+/* line 542, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * #get-started-step1 {
   height: 100%;
 }
-/* line 546, ../../app/assets/stylesheets/superfit.scss */
+/* line 545, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .orientation {
   padding: 0px;
   background: white;
   min-height: 100%;
   position: relative;
 }
-/* line 551, ../../app/assets/stylesheets/superfit.scss */
+/* line 550, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .orientation h1 {
   font-size: 22px;
   text-align: center;
   text-transform: uppercase;
 }
-/* line 552, ../../app/assets/stylesheets/superfit.scss */
+/* line 551, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .orientation h2 {
   font-size: 16px;
   font-weight: bold;
   line-height: 27px;
   margin-top: 18px;
 }
-/* line 553, ../../app/assets/stylesheets/superfit.scss */
+/* line 552, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .orientation img {
   text-align: center;
   margin-top: 9px;
   margin-bottom: 9px;
 }
-/* line 554, ../../app/assets/stylesheets/superfit.scss */
+/* line 553, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .orientation p {
   font-size: 14px;
   text-align: center;
   line-height: 18px;
   margin-top: 9px;
 }
-/* line 555, ../../app/assets/stylesheets/superfit.scss */
+/* line 554, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .orientation .step1 {
   background: transparent url("../assets/intro-step1.png") no-repeat center center;
   width: 298px;
   height: 298px;
   background-size: 298px 298px;
 }
-/* line 561, ../../app/assets/stylesheets/superfit.scss */
+/* line 560, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .orientation .step2 {
   background: transparent url("../assets/intro-step2.png") no-repeat center center;
   width: 287px;
   height: 253px;
   background-size: 287px 253px;
 }
-/* line 568, ../../app/assets/stylesheets/superfit.scss */
+/* line 567, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .orientation .main {
   padding: 18px 20px 100px 20px;
 }
-/* line 569, ../../app/assets/stylesheets/superfit.scss */
+/* line 568, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .orientation .left {
   text-align: left;
 }
-/* line 570, ../../app/assets/stylesheets/superfit.scss */
+/* line 569, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .orientation .button {
   background: #333333;
   color: white;
 }
-/* line 571, ../../app/assets/stylesheets/superfit.scss */
+/* line 570, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .orientation .small {
   font-size: 10px;
   line-height: 14px;
@@ -6358,16 +6381,16 @@ body {
   text-align: center;
   width: 80%;
 }
-/* line 583, ../../app/assets/stylesheets/superfit.scss */
+/* line 582, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .orientation ul {
   margin: 18px 0 18px 0;
 }
-/* line 584, ../../app/assets/stylesheets/superfit.scss */
+/* line 583, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .orientation .arrow {
   margin-top: 9px;
   margin-bottom: 9px;
 }
-/* line 585, ../../app/assets/stylesheets/superfit.scss */
+/* line 584, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .orientation .orientation-footer {
   background: #f1f1f1;
   overflow: hidden;
@@ -6376,51 +6399,51 @@ body {
   width: 100%;
   height: 80px;
 }
-/* line 592, ../../app/assets/stylesheets/superfit.scss */
+/* line 591, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .orientation .orientation-footer a, #jqt > * .orientation .orientation-footer input {
   margin-top: 18px;
   margin-bottom: 18px;
   width: 80%;
 }
-/* line 593, ../../app/assets/stylesheets/superfit.scss */
+/* line 592, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .orientation .orientation-footer input {
   margin: 18px auto;
   line-height: 45px;
   height: 45px;
 }
-/* line 601, ../../app/assets/stylesheets/superfit.scss */
+/* line 600, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .gyms .gym {
   line-height: 45px;
   height: 45px;
   padding-top: 9px;
   border-top: 1px solid #e7e7e7;
 }
-/* line 607, ../../app/assets/stylesheets/superfit.scss */
+/* line 606, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .gyms .label p {
   float: left;
   width: 83%;
   padding-left: 10px;
 }
-/* line 608, ../../app/assets/stylesheets/superfit.scss */
+/* line 607, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .gyms .label p + p {
   float: left;
   width: 10%;
 }
-/* line 609, ../../app/assets/stylesheets/superfit.scss */
+/* line 608, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .gyms p {
   text-align: left;
 }
-/* line 610, ../../app/assets/stylesheets/superfit.scss */
+/* line 609, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .gyms .gym.selected {
   background: #1abc9c;
   text-align: left;
 }
-/* line 613, ../../app/assets/stylesheets/superfit.scss */
+/* line 612, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .gyms .gym.selected p {
   color: #ffffff;
   text-align: left;
 }
-/* line 617, ../../app/assets/stylesheets/superfit.scss */
+/* line 616, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .new-goal {
   background: #f1f1f1;
   border: 1px solid #e7e7e7;
@@ -6433,36 +6456,36 @@ body {
   -o-border-radius: 2px;
   border-radius: 2px;
 }
-/* line 623, ../../app/assets/stylesheets/superfit.scss */
+/* line 622, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .new-goal select {
   background: #ffffff;
 }
-/* line 626, ../../app/assets/stylesheets/superfit.scss */
+/* line 625, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .new-goal .goal-length input {
   width: 30% !important;
   float: left;
   margin-right: 10%;
 }
-/* line 627, ../../app/assets/stylesheets/superfit.scss */
+/* line 626, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .new-goal .goal-length select {
   width: 50% !important;
   float: left;
 }
-/* line 635, ../../app/assets/stylesheets/superfit.scss */
+/* line 634, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * button, #jqt > * .button {
   display: block;
   margin-left: auto;
   margin-right: auto;
 }
-/* line 640, ../../app/assets/stylesheets/superfit.scss */
+/* line 639, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * button.bottom, #jqt > * .button.bottom {
   margin-bottom: 9px;
 }
-/* line 642, ../../app/assets/stylesheets/superfit.scss */
+/* line 641, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * button.red, #jqt > * .button.red {
   background: #c0392b;
 }
-/* line 647, ../../app/assets/stylesheets/superfit.scss */
+/* line 646, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .yellow-block {
   background-color: #fffae8;
   -webkit-border-radius: 2px;
@@ -6477,28 +6500,28 @@ body {
   padding: 20px;
   color: #999999;
 }
-/* line 657, ../../app/assets/stylesheets/superfit.scss */
+/* line 656, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .yellow-block p {
   font-size: 14px;
 }
-/* line 658, ../../app/assets/stylesheets/superfit.scss */
+/* line 657, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .yellow-block span {
   font-size: 12px;
   display: block;
 }
-/* line 659, ../../app/assets/stylesheets/superfit.scss */
+/* line 658, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .yellow-block hr {
   border: 0px;
   border-bottom: 1px dashed;
   margin: 0;
   margin: 18px 0 9px 0;
 }
-/* line 661, ../../app/assets/stylesheets/superfit.scss */
+/* line 660, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .yellow-block .score-notes {
   margin-top: 0px !important;
   line-height: 18px !important;
 }
-/* line 664, ../../app/assets/stylesheets/superfit.scss */
+/* line 663, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .icon-button {
   background-color: #f1f1f1;
   border: 1px solid #e2e2e2;
@@ -6510,13 +6533,13 @@ body {
   padding: 4px;
   color: #999999;
 }
-/* line 672, ../../app/assets/stylesheets/superfit.scss */
+/* line 671, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * label.radio {
   margin-right: 20px;
   position: relative;
   top: -3px;
 }
-/* line 677, ../../app/assets/stylesheets/superfit.scss */
+/* line 676, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .sprite-sf {
   display: block;
   line-height: 0 !important;
@@ -6527,52 +6550,52 @@ body {
   height: 480px;
   width: 320px;
 }
-/* line 690, ../../app/assets/stylesheets/superfit.scss */
+/* line 689, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .icon {
   width: 35px;
   height: 34px;
 }
-/* line 692, ../../app/assets/stylesheets/superfit.scss */
+/* line 691, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .icon.strength {
   background-position: -25px -68px;
 }
-/* line 693, ../../app/assets/stylesheets/superfit.scss */
+/* line 692, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .icon.custom {
   background-position: -25px -110px;
 }
-/* line 694, ../../app/assets/stylesheets/superfit.scss */
+/* line 693, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .icon.other {
   background-position: -25px -24px;
 }
-/* line 695, ../../app/assets/stylesheets/superfit.scss */
+/* line 694, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .icon.benchmark {
   background-position: -25px -150px;
 }
-/* line 696, ../../app/assets/stylesheets/superfit.scss */
+/* line 695, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .icon.mainsite {
   background-position: -25px -195px;
 }
-/* line 698, ../../app/assets/stylesheets/superfit.scss */
+/* line 697, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .icon.dashboard {
   background-position: -27px -239px;
   height: 32px;
 }
-/* line 699, ../../app/assets/stylesheets/superfit.scss */
+/* line 698, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .icon.goals {
   background-position: -27px -279px;
   height: 32px;
 }
-/* line 700, ../../app/assets/stylesheets/superfit.scss */
+/* line 699, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .icon.records {
   background-position: -27px -317px;
   height: 32px;
 }
-/* line 701, ../../app/assets/stylesheets/superfit.scss */
+/* line 700, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .icon.me {
   background-position: -27px -352px;
   height: 33px;
 }
-/* line 706, ../../app/assets/stylesheets/superfit.scss */
+/* line 705, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .toolbar .pulldown {
   width: 46px;
   height: 50px;
@@ -6581,72 +6604,78 @@ body {
   position: relative;
   top: -1px;
 }
-/* line 713, ../../app/assets/stylesheets/superfit.scss */
+/* line 712, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .toolbar .pulldown:active {
   background-position: -214px -25px;
 }
-/* line 714, ../../app/assets/stylesheets/superfit.scss */
+/* line 713, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .toolbar .pulldown.open {
   background-position: -214px -96px;
 }
-/* line 717, ../../app/assets/stylesheets/superfit.scss */
+/* line 716, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .small {
   color: #999999;
   font-size: 11px;
 }
-/* line 720, ../../app/assets/stylesheets/superfit.scss */
+/* line 719, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .chart-container {
   width: 100%;
-  height: 200px !important;
+  height: 220px !important;
+  margin-bottom: 20px !important;
 }
 /* line 724, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .chart-container .chart {
-  width: 100%;
-  height: 100%;
+  width: 95%;
+  padding-left: 5%;
+  height: 90%;
   font-size: 14px;
   line-height: 1.2em;
 }
-/* line 734, ../../app/assets/stylesheets/superfit.scss */
+/* line 735, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .wodnodata {
   background: transparent url("../assets/img-workout-nodata.png") no-repeat 40px 20px;
+  width: 227px;
   height: 160px;
+  background-size: 187px 123px;
 }
-/* line 739, ../../app/assets/stylesheets/superfit.scss */
+/* line 742, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .goalsnodata {
   background: transparent url("../assets/img-goals-nodata.png") no-repeat 40px 20px;
+  width: 227px;
   height: 160px;
+  background-size: 187px 123px;
 }
-/* line 746, ../../app/assets/stylesheets/superfit.scss */
+/* line 751, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .overlay {
   background: rgba(0, 0, 0, 0.5);
 }
-/* line 749, ../../app/assets/stylesheets/superfit.scss */
+/* line 754, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .overlay .main {
   background: white;
   width: 80%;
   padding: 27px 10px;
 }
-/* line 754, ../../app/assets/stylesheets/superfit.scss */
+/* line 759, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .profile-header {
   text-align: left;
   overflow: hidden;
   border-bottom: 2px groove #eae7e1;
   padding-bottom: 12px;
 }
-/* line 760, ../../app/assets/stylesheets/superfit.scss */
+/* line 765, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .profile-header a {
   color: #4ea3e3;
 }
-/* line 762, ../../app/assets/stylesheets/superfit.scss */
+/* line 767, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .profile-header .name {
   padding-top: 10px;
   margin-left: 3%;
 }
-/* line 766, ../../app/assets/stylesheets/superfit.scss */
+/* line 771, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .profile-header .name p {
   line-height: 18px;
 }
-/* line 769, ../../app/assets/stylesheets/superfit.scss */
+/* line 774, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .profile-header .profile-image {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -6660,32 +6689,32 @@ body {
   margin-right: 20px;
   margin-left: 2%;
 }
-/* line 780, ../../app/assets/stylesheets/superfit.scss */
+/* line 785, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .profile p {
   float: left;
   width: 40%;
 }
-/* line 781, ../../app/assets/stylesheets/superfit.scss */
+/* line 786, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .profile p + p {
   float: left;
   width: 60%;
   text-align: right;
 }
-/* line 783, ../../app/assets/stylesheets/superfit.scss */
+/* line 788, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .profile .disable {
   opacity: 0.35;
 }
-/* line 784, ../../app/assets/stylesheets/superfit.scss */
+/* line 789, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .profile a {
   color: #4ea3e3;
 }
-/* line 788, ../../app/assets/stylesheets/superfit.scss */
+/* line 793, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .edit-profile li {
   clear: both;
   overflow: hidden;
   margin-top: 18px;
 }
-/* line 794, ../../app/assets/stylesheets/superfit.scss */
+/* line 799, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .edit-profile li p {
   float: left;
   width: 30%;
@@ -6693,19 +6722,19 @@ body {
   font-family: "Gibson-Light", Helvetica, Arial;
   color: #333333;
 }
-/* line 796, ../../app/assets/stylesheets/superfit.scss */
+/* line 801, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .edit-profile li .profile-data {
   float: left;
   width: 60%;
 }
-/* line 797, ../../app/assets/stylesheets/superfit.scss */
-#jqt > * .edit-profile li input[type=text], #jqt > * .edit-profile li input[type=number], #jqt > * .edit-profile li input[type=date] {
+/* line 802, ../../app/assets/stylesheets/superfit.scss */
+#jqt > * .edit-profile li input[type=text], #jqt > * .edit-profile li input[type=number], #jqt > * .edit-profile li input[type=date], #jqt > * .edit-profile li select {
   border: 0px solid #e7e7e7;
   height: 50px;
   font-family: "Gibson-Light", Helvetica, Arial;
   padding-left: 0;
 }
-/* line 803, ../../app/assets/stylesheets/superfit.scss */
+/* line 808, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .edit-profile li input[type=date] {
   padding-left: 5%;
   width: 95%;
@@ -6717,26 +6746,26 @@ body {
   padding-top: 1px;
   font-size: 14px;
 }
-/* line 805, ../../app/assets/stylesheets/superfit.scss */
+/* line 810, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .edit-profile li.radio p {
   margin: 0;
 }
-/* line 806, ../../app/assets/stylesheets/superfit.scss */
+/* line 811, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .edit-profile li.radio fieldset {
   position: relative;
   top: 7px;
   margin: 0;
 }
-/* line 807, ../../app/assets/stylesheets/superfit.scss */
+/* line 812, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .edit-profile li.radio label {
   font-size: 14px;
   color: #333333;
 }
-/* line 809, ../../app/assets/stylesheets/superfit.scss */
+/* line 814, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .edit-profile li .placeholder {
   color: #666666;
 }
-/* line 810, ../../app/assets/stylesheets/superfit.scss */
+/* line 815, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .edit-profile li .action {
   right: 0px;
   position: absolute;
@@ -6745,33 +6774,33 @@ body {
   color: #999999;
   font-size: 18px;
 }
-/* line 817, ../../app/assets/stylesheets/superfit.scss */
+/* line 822, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .edit-profile li .action input.date::-webkit-calendar-picker-indicator {
   display: none;
   -webkit-appearance: none;
   -webkit-appearance: none;
 }
-/* line 822, ../../app/assets/stylesheets/superfit.scss */
+/* line 827, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .edit-profile li .action a {
   color: #cccccc;
 }
-/* line 828, ../../app/assets/stylesheets/superfit.scss */
+/* line 833, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .edit-profile .divider {
   border-top: 1px solid #bfd2e1;
   border-bottom: 0px solid #bfd2e1;
   padding: 9px 0;
 }
-/* line 830, ../../app/assets/stylesheets/superfit.scss */
+/* line 835, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs {
   margin-bottom: 9px;
 }
-/* line 832, ../../app/assets/stylesheets/superfit.scss */
+/* line 837, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs ul.tab-nav {
   width: 100%;
   overflow: hidden;
   margin-left: 0;
 }
-/* line 836, ../../app/assets/stylesheets/superfit.scss */
+/* line 841, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs ul.tab-nav li {
   float: left;
   width: 50%;
@@ -6780,7 +6809,7 @@ body {
   padding: 0;
   margin: 0;
 }
-/* line 838, ../../app/assets/stylesheets/superfit.scss */
+/* line 843, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs ul.tab-nav .text-entry {
   -webkit-border-radius: 0px 2px 2px 0px;
   -moz-border-radius: 0px 2px 2px 0px;
@@ -6790,7 +6819,7 @@ body {
   margin-bottom: 0;
   border: 1px solid mercury;
 }
-/* line 839, ../../app/assets/stylesheets/superfit.scss */
+/* line 844, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs ul.tab-nav .photo-capture {
   -webkit-border-radius: 2px 0px 0px 2px;
   -moz-border-radius: 2px 0px 0px 2px;
@@ -6800,18 +6829,18 @@ body {
   margin-bottom: 0;
   border: 1px solid mercury;
 }
-/* line 841, ../../app/assets/stylesheets/superfit.scss */
+/* line 846, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs #text-entry {
   background: #f1f1f1;
   height: 90px;
   padding: 9px;
 }
-/* line 846, ../../app/assets/stylesheets/superfit.scss */
+/* line 851, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs #text-entry textarea {
   width: 97%;
   height: 63px;
 }
-/* line 850, ../../app/assets/stylesheets/superfit.scss */
+/* line 855, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs.photo .text-entry {
   background: white;
   color: #999999;
@@ -6819,25 +6848,25 @@ body {
   border-bottom: 0px;
   border-left: 0px;
 }
-/* line 851, ../../app/assets/stylesheets/superfit.scss */
+/* line 856, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs.photo .photo-capture {
   background: #f1f1f1;
   color: #666666;
   border: 1px solid #e7e7e7;
   border-bottom: 0;
 }
-/* line 857, ../../app/assets/stylesheets/superfit.scss */
+/* line 862, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs.photo #text-entry {
   display: none;
 }
-/* line 861, ../../app/assets/stylesheets/superfit.scss */
+/* line 866, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs.text .text-entry {
   background: #f1f1f1;
   color: #666666;
   border: 1px solid #e7e7e7;
   border-bottom: 0;
 }
-/* line 867, ../../app/assets/stylesheets/superfit.scss */
+/* line 872, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs.text .photo-capture {
   background: white;
   color: #999999;
@@ -6845,24 +6874,24 @@ body {
   border-bottom: 0px;
   border-right: 0;
 }
-/* line 868, ../../app/assets/stylesheets/superfit.scss */
+/* line 873, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs.text #photo-capture {
   display: none;
 }
-/* line 873, ../../app/assets/stylesheets/superfit.scss */
+/* line 878, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs #photo-capture.initial .post-capture {
   display: none;
 }
-/* line 876, ../../app/assets/stylesheets/superfit.scss */
+/* line 881, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs #photo-capture.post .initial-capture {
   display: none;
 }
-/* line 879, ../../app/assets/stylesheets/superfit.scss */
+/* line 884, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs .icon-camera-alt {
   font-size: 54px;
   opacity: .75;
 }
-/* line 880, ../../app/assets/stylesheets/superfit.scss */
+/* line 885, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs .take-photo {
   line-height: 27px;
   font-size: 14px;
@@ -6880,25 +6909,33 @@ body {
   border: 1px solid #e7e7e7;
   border-top: 0;
 }
-/* line 893, ../../app/assets/stylesheets/superfit.scss */
+/* line 898, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs .take-photo .custom-wod-img {
   width: 280px;
 }
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-  /* line 899, ../../app/assets/stylesheets/superfit.scss */
+  /* line 904, ../../app/assets/stylesheets/superfit.scss */
   #jqt > * .sprite-sf {
     background: transparent url("../assets/sprite-superfit_2x.png") no-repeat 0 0;
   }
-  /* line 900, ../../app/assets/stylesheets/superfit.scss */
+  /* line 905, ../../app/assets/stylesheets/superfit.scss */
   #jqt > * .page-header {
     background: transparent url("../assets/tile-pg-header_2x.png") repeat-x 0 0;
   }
-  /* line 901, ../../app/assets/stylesheets/superfit.scss */
-  #jqt > * .step1 {
+  /* line 906, ../../app/assets/stylesheets/superfit.scss */
+  #jqt > * .orientation .step1 {
     background: transparent url("../assets/intro-step1_2x.png") no-repeat center center;
   }
-  /* line 902, ../../app/assets/stylesheets/superfit.scss */
-  #jqt > * .step2 {
+  /* line 907, ../../app/assets/stylesheets/superfit.scss */
+  #jqt > * .orientation .step2 {
     background: transparent url("../assets/intro-step2_2x.png") no-repeat center center;
+  }
+  /* line 910, ../../app/assets/stylesheets/superfit.scss */
+  #jqt > * .wodnodata {
+    background: transparent url("../assets/img-workout-nodata_2x.png") no-repeat 40px 20px;
+  }
+  /* line 911, ../../app/assets/stylesheets/superfit.scss */
+  #jqt > * .goalsnodata {
+    background: transparent url("../assets/img-goals-nodata_2x.png") no-repeat 40px 20px;
   }
 }
