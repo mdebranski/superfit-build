@@ -10230,12 +10230,14 @@ $.validator.prototype.elements = function() {
         labelWidth: 40,
         tickFormatter: function(value) {
           return moment(value).format('MMM D');
-        }
+        },
+        ticks: 4
       },
       yaxis: {
         min: 0,
         minTickSize: 1,
-        ticks: 5
+        ticks: 4,
+        labelWidth: 15
       },
       series: {
         color: 'rgba(78, 163, 227, 0.95)',
@@ -11678,7 +11680,7 @@ $.validator.prototype.elements = function() {
   _ref = this.pastEntries;
   for (_i = 0, _len = _ref.length; _i < _len; _i++) {
     history = _ref[_i];
-    $o.push("      <li>\n        <a href='#review-wod' data-id='" + ($e($c(history.id))) + "'>\n          <div class='label'>\n            <p>" + ($e($c(moment(history.date).format('MMM D, YYYY')))) + "</p>\n            <p>" + ($e($c(history.scoreString()))) + "</p>\n          </div>\n        </a>\n      </li>");
+    $o.push("      <li>\n        <a href='#' data-id='" + ($e($c(history.id))) + "'></a>\n        <div class='label'>\n          <p>" + ($e($c(moment(history.date).format('MMM D, YYYY')))) + "</p>\n          <p>" + ($e($c(history.scoreString()))) + "</p>\n        </div>\n      </li>");
       }
       $o.push("    </ul>\n  </div>\n</div>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");
@@ -11775,7 +11777,7 @@ $.validator.prototype.elements = function() {
   } else {
     $o.push("    <h1>Create Goal</h1>");
       }
-      $o.push("  </div>\n</div>\n<p>Start by selecting a Movement or Benchmark you want to measure.</p>\n<div class='search-block'>\n  <form>\n    <input class='search-text' type='text' name='search-text' placeholder='Search All'>\n  </form>\n</div>\n<div class='content-main'>\n  <h3 class='no-matches'>No WODs found for this search.</h3>\n  <ul class='wods-search'></ul>\n  <ul class='wods-browse'>");
+      $o.push("  </div>\n</div>\n<p class='goalstart'>Start by selecting a Movement, Workout or Benchmark you want to measure.</p>\n<div class='search-block'>\n  <form>\n    <input class='search-text' type='text' name='search-text' placeholder='Search All'>\n  </form>\n</div>\n<div class='content-main'>\n  <h3 class='no-matches'>No WODs found for this search.</h3>\n  <ul class='wods-search'></ul>\n  <ul class='wods-browse'>");
   if (!this.wods_type) {
     $o.push("    <li data-type='benchmark'>\n      <a class='browse' href='#edit-goal'>\n        <div class='label'>\n          <div class='benchmark icon sprite-sf'></div>\n          <p>Benchmark</p>\n        </div>\n        <p class='arrow awesome icon-chevron-right'></p>\n      </a>\n    </li>\n    <li data-type='strength'>\n      <a class='browse' href='#edit-goal'>\n        <div class='label'>\n          <div class='icon sprite-sf strength'></div>\n          <p>Strength</p>\n        </div>\n        <p class='arrow awesome icon-chevron-right'></p>\n      </a>\n    </li>\n    <li data-type='other'>\n      <a class='browse' href='#edit-goal'>\n        <div class='label'>\n          <div class='icon other sprite-sf'></div>\n          <p>Other</p>\n        </div>\n        <p class='arrow awesome icon-chevron-right'></p>\n      </a>\n    </li>");
       }
@@ -12072,7 +12074,7 @@ $.validator.prototype.elements = function() {
       }
       $o.push("    </ul>\n  </div>\n  <div class='content-main'>\n    <ul>\n      <li class='title'>\n        <h2>Goals</h2>\n        <div class='action'>\n          <a class='dissolve' href='#goals'>\n            <p>View All</p>\n            <p class='arrow awesome icon-chevron-right'></p>\n          </a>\n        </div>\n      </li>");
   if (this.goal) {
-    $o.push("      <li class='chart-container'>\n        <div class='chart'></div>\n      </li>\n      <li class='goal'>\n        <a href='#goal-detail' data-id='" + ($e($c(this.goal.id))) + "'>\n          <div class='label'>\n            <p class='goal-label'>" + ($e($c(this.goal.name()))) + "\n              <br>\n              <span>\n                Last Update:\n                <time class='timeago' datetime='" + ($e($c(moment(this.goal.last_update).format()))) + "'></time>\n              </span>\n            </p>\n          </div>\n          <div class='goal-progress'>" + ($e($c("" + (this.goal.percentComplete()) + "%"))) + "</div>\n          <p class='arrow awesome icon-chevron-right'></p>\n        </a>\n      </li>");
+    $o.push("      <li class='chart-container'>\n        <div class='chart'></div>\n      </li>\n      <li class='goal home'>\n        <a href='#goal-detail' data-id='" + ($e($c(this.goal.id))) + "'>\n          <div class='label'>\n            <p class='goal-label'>" + ($e($c(this.goal.name()))) + "\n              <br>\n              <span>\n                Last Update:\n                <time class='timeago' datetime='" + ($e($c(moment(this.goal.last_update).format()))) + "'></time>\n              </span>\n            </p>\n          </div>\n          <div class='goal-progress'>" + ($e($c("" + (this.goal.percentComplete()) + "%"))) + "</div>\n          <p class='arrow awesome icon-chevron-right'></p>\n        </a>\n      </li>");
   } else {
     $o.push("      <li>\n        <a class='add-new' href='#edit-goal'>\n          <p class='goalsnodata'></p>\n        </a>\n      </li>");
       }

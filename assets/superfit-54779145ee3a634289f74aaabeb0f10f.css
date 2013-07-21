@@ -5298,7 +5298,6 @@ div.ui-spinner {
   color: #999999;
   font-size: 10px;
   line-height: 18px;
-  text-align: right;
 }
 /* line 136, ../../app/assets/stylesheets/plugins.scss */
 .chart .flot-y-axis .flot-tick-label.tickLabel {
@@ -6626,63 +6625,78 @@ body {
 }
 /* line 721, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .chart-container {
-  width: 100%;
+  width: 98%;
   height: 220px !important;
-  margin-bottom: 20px !important;
+  border-bottom: 0 !important;
+  margin: 0 auto;
+  margin-bottom: 10px !important;
+  text-align: center;
 }
-/* line 726, ../../app/assets/stylesheets/superfit.scss */
+/* line 729, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .chart-container .chart {
-  width: 95%;
-  padding-left: 5%;
+  width: 100%;
+  padding-left: 2%;
   height: 90%;
   font-size: 14px;
   line-height: 1.2em;
 }
-/* line 737, ../../app/assets/stylesheets/superfit.scss */
+/* line 740, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .wodnodata {
   background: transparent url("../assets/img-workout-nodata-e7b82ff2499a9d94aa3606110af056ca.png") no-repeat 40px 20px;
   width: 227px;
   height: 160px;
   background-size: 187px 123px;
 }
-/* line 744, ../../app/assets/stylesheets/superfit.scss */
+/* line 747, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .goalsnodata {
   background: transparent url("../assets/img-goals-nodata-eda999628abbb86bf67afdb6a6cf41e8.png") no-repeat 40px 20px;
   width: 227px;
   height: 160px;
   background-size: 187px 123px;
 }
-/* line 753, ../../app/assets/stylesheets/superfit.scss */
+/* line 754, ../../app/assets/stylesheets/superfit.scss */
+#jqt > * .goal.home {
+  border-top: 1px solid #bfd2e1 !important;
+}
+/* line 761, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .overlay {
   background: rgba(0, 0, 0, 0.5);
 }
-/* line 756, ../../app/assets/stylesheets/superfit.scss */
+/* line 764, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .overlay .main {
   background: white;
   width: 80%;
   padding: 27px 10px;
 }
-/* line 761, ../../app/assets/stylesheets/superfit.scss */
+/* line 769, ../../app/assets/stylesheets/superfit.scss */
+#jqt > * .goalstart {
+  text-align: center;
+  margin: 9px auto;
+  padding-top: 18px;
+  width: 75%;
+  font-size: 16px;
+}
+/* line 773, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .profile-header {
   text-align: left;
   overflow: hidden;
   border-bottom: 2px groove #eae7e1;
   padding-bottom: 12px;
 }
-/* line 767, ../../app/assets/stylesheets/superfit.scss */
+/* line 779, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .profile-header a {
   color: #4ea3e3;
 }
-/* line 769, ../../app/assets/stylesheets/superfit.scss */
+/* line 781, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .profile-header .name {
   padding-top: 10px;
   margin-left: 3%;
 }
-/* line 773, ../../app/assets/stylesheets/superfit.scss */
+/* line 785, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .profile-header .name p {
   line-height: 18px;
 }
-/* line 776, ../../app/assets/stylesheets/superfit.scss */
+/* line 788, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .profile-header .profile-image {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -6696,32 +6710,32 @@ body {
   margin-right: 20px;
   margin-left: 2%;
 }
-/* line 787, ../../app/assets/stylesheets/superfit.scss */
+/* line 799, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .profile p {
   float: left;
   width: 40%;
 }
-/* line 788, ../../app/assets/stylesheets/superfit.scss */
+/* line 800, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .profile p + p {
   float: left;
   width: 60%;
   text-align: right;
 }
-/* line 790, ../../app/assets/stylesheets/superfit.scss */
+/* line 802, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .profile .disable {
   opacity: 0.35;
 }
-/* line 791, ../../app/assets/stylesheets/superfit.scss */
+/* line 803, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .profile a {
   color: #4ea3e3;
 }
-/* line 795, ../../app/assets/stylesheets/superfit.scss */
+/* line 807, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .edit-profile li {
   clear: both;
   overflow: hidden;
   margin-top: 18px;
 }
-/* line 801, ../../app/assets/stylesheets/superfit.scss */
+/* line 813, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .edit-profile li p {
   float: left;
   width: 30%;
@@ -6729,19 +6743,19 @@ body {
   font-family: "Gibson-Light", Helvetica, Arial;
   color: #333333;
 }
-/* line 803, ../../app/assets/stylesheets/superfit.scss */
+/* line 815, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .edit-profile li .profile-data {
   float: left;
   width: 60%;
 }
-/* line 804, ../../app/assets/stylesheets/superfit.scss */
+/* line 816, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .edit-profile li input[type=text], #jqt > * .edit-profile li input[type=number], #jqt > * .edit-profile li input[type=date], #jqt > * .edit-profile li select {
   border: 0px solid #e7e7e7;
   height: 50px;
   font-family: "Gibson-Light", Helvetica, Arial;
   padding-left: 0;
 }
-/* line 810, ../../app/assets/stylesheets/superfit.scss */
+/* line 822, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .edit-profile li input[type=date] {
   padding-left: 5%;
   width: 95%;
@@ -6753,26 +6767,26 @@ body {
   padding-top: 1px;
   font-size: 14px;
 }
-/* line 812, ../../app/assets/stylesheets/superfit.scss */
+/* line 824, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .edit-profile li.radio p {
   margin: 0;
 }
-/* line 813, ../../app/assets/stylesheets/superfit.scss */
+/* line 825, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .edit-profile li.radio fieldset {
   position: relative;
   top: 7px;
   margin: 0;
 }
-/* line 814, ../../app/assets/stylesheets/superfit.scss */
+/* line 826, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .edit-profile li.radio label {
   font-size: 14px;
   color: #333333;
 }
-/* line 816, ../../app/assets/stylesheets/superfit.scss */
+/* line 828, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .edit-profile li .placeholder {
   color: #666666;
 }
-/* line 817, ../../app/assets/stylesheets/superfit.scss */
+/* line 829, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .edit-profile li .action {
   right: 0px;
   position: absolute;
@@ -6781,33 +6795,33 @@ body {
   color: #999999;
   font-size: 18px;
 }
-/* line 824, ../../app/assets/stylesheets/superfit.scss */
+/* line 836, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .edit-profile li .action input.date::-webkit-calendar-picker-indicator {
   display: none;
   -webkit-appearance: none;
   -webkit-appearance: none;
 }
-/* line 829, ../../app/assets/stylesheets/superfit.scss */
+/* line 841, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .edit-profile li .action a {
   color: #cccccc;
 }
-/* line 835, ../../app/assets/stylesheets/superfit.scss */
+/* line 847, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .edit-profile .divider {
   border-top: 1px solid #bfd2e1;
   border-bottom: 0px solid #bfd2e1;
   padding: 9px 0;
 }
-/* line 837, ../../app/assets/stylesheets/superfit.scss */
+/* line 849, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs {
   margin-bottom: 9px;
 }
-/* line 839, ../../app/assets/stylesheets/superfit.scss */
+/* line 851, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs ul.tab-nav {
   width: 100%;
   overflow: hidden;
   margin-left: 0;
 }
-/* line 843, ../../app/assets/stylesheets/superfit.scss */
+/* line 855, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs ul.tab-nav li {
   float: left;
   width: 50%;
@@ -6816,7 +6830,7 @@ body {
   padding: 0;
   margin: 0;
 }
-/* line 845, ../../app/assets/stylesheets/superfit.scss */
+/* line 857, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs ul.tab-nav .text-entry {
   -webkit-border-radius: 0px 2px 2px 0px;
   -moz-border-radius: 0px 2px 2px 0px;
@@ -6826,7 +6840,7 @@ body {
   margin-bottom: 0;
   border: 1px solid mercury;
 }
-/* line 846, ../../app/assets/stylesheets/superfit.scss */
+/* line 858, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs ul.tab-nav .photo-capture {
   -webkit-border-radius: 2px 0px 0px 2px;
   -moz-border-radius: 2px 0px 0px 2px;
@@ -6836,18 +6850,18 @@ body {
   margin-bottom: 0;
   border: 1px solid mercury;
 }
-/* line 848, ../../app/assets/stylesheets/superfit.scss */
+/* line 860, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs #text-entry {
   background: #f1f1f1;
   height: 90px;
   padding: 9px;
 }
-/* line 853, ../../app/assets/stylesheets/superfit.scss */
+/* line 865, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs #text-entry textarea {
   width: 97%;
   height: 63px;
 }
-/* line 857, ../../app/assets/stylesheets/superfit.scss */
+/* line 869, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs.photo .text-entry {
   background: white;
   color: #999999;
@@ -6855,25 +6869,25 @@ body {
   border-bottom: 0px;
   border-left: 0px;
 }
-/* line 858, ../../app/assets/stylesheets/superfit.scss */
+/* line 870, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs.photo .photo-capture {
   background: #f1f1f1;
   color: #666666;
   border: 1px solid #e7e7e7;
   border-bottom: 0;
 }
-/* line 864, ../../app/assets/stylesheets/superfit.scss */
+/* line 876, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs.photo #text-entry {
   display: none;
 }
-/* line 868, ../../app/assets/stylesheets/superfit.scss */
+/* line 880, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs.text .text-entry {
   background: #f1f1f1;
   color: #666666;
   border: 1px solid #e7e7e7;
   border-bottom: 0;
 }
-/* line 874, ../../app/assets/stylesheets/superfit.scss */
+/* line 886, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs.text .photo-capture {
   background: white;
   color: #999999;
@@ -6881,24 +6895,24 @@ body {
   border-bottom: 0px;
   border-right: 0;
 }
-/* line 875, ../../app/assets/stylesheets/superfit.scss */
+/* line 887, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs.text #photo-capture {
   display: none;
 }
-/* line 880, ../../app/assets/stylesheets/superfit.scss */
+/* line 892, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs #photo-capture.initial .post-capture {
   display: none;
 }
-/* line 883, ../../app/assets/stylesheets/superfit.scss */
+/* line 895, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs #photo-capture.post .initial-capture {
   display: none;
 }
-/* line 886, ../../app/assets/stylesheets/superfit.scss */
+/* line 898, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs .icon-camera-alt {
   font-size: 54px;
   opacity: .75;
 }
-/* line 887, ../../app/assets/stylesheets/superfit.scss */
+/* line 899, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs .take-photo {
   line-height: 27px;
   font-size: 14px;
@@ -6916,32 +6930,32 @@ body {
   border: 1px solid #e7e7e7;
   border-top: 0;
 }
-/* line 900, ../../app/assets/stylesheets/superfit.scss */
+/* line 912, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs .take-photo .custom-wod-img {
   width: 280px;
 }
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-  /* line 906, ../../app/assets/stylesheets/superfit.scss */
+  /* line 918, ../../app/assets/stylesheets/superfit.scss */
   #jqt > * .sprite-sf {
     background: transparent url("../assets/sprite-superfit_2x-bd6f75b616edb3e4c390944343cec5f1.png") no-repeat 0 0;
   }
-  /* line 907, ../../app/assets/stylesheets/superfit.scss */
+  /* line 919, ../../app/assets/stylesheets/superfit.scss */
   #jqt > * .page-header {
     background: transparent url("../assets/tile-pg-header_2x-9439397ce006d6d8971cd2be7e895456.png") repeat-x 0 0;
   }
-  /* line 908, ../../app/assets/stylesheets/superfit.scss */
+  /* line 920, ../../app/assets/stylesheets/superfit.scss */
   #jqt > * .orientation .step1 {
     background: transparent url("../assets/intro-step1_2x-b21aa29d64f3a85a0c3f2efc33950e48.png") no-repeat center center;
   }
-  /* line 909, ../../app/assets/stylesheets/superfit.scss */
+  /* line 921, ../../app/assets/stylesheets/superfit.scss */
   #jqt > * .orientation .step2 {
     background: transparent url("../assets/intro-step2_2x-20df74f44abc00d13e24d31d1422bd27.png") no-repeat center center;
   }
-  /* line 912, ../../app/assets/stylesheets/superfit.scss */
+  /* line 924, ../../app/assets/stylesheets/superfit.scss */
   #jqt > * .wodnodata {
     background: transparent url("../assets/img-workout-nodata_2x-1e21a50d3f37ba2dbf24fa7b0d72ee9d.png") no-repeat 40px 20px;
   }
-  /* line 913, ../../app/assets/stylesheets/superfit.scss */
+  /* line 925, ../../app/assets/stylesheets/superfit.scss */
   #jqt > * .goalsnodata {
     background: transparent url("../assets/img-goals-nodata_2x-04473a642e179406e344151ac4be4b15.png") no-repeat 40px 20px;
   }

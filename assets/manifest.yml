@@ -41,8 +41,8 @@ tile-pg-header_2x.png: tile-pg-header_2x-9439397ce006d6d8971cd2be7e895456.png
 tile-pg-header_2x/index.png: tile-pg-header_2x-9439397ce006d6d8971cd2be7e895456.png
 tile-ticks.png: tile-ticks-44e90c673462786237826c78b6f34f36.png
 tile-ticks/index.png: tile-ticks-44e90c673462786237826c78b6f34f36.png
-superfit.js: superfit-c6028810c287d40dcc3474b746dc5737.js
-superfit/index.js: superfit-c6028810c287d40dcc3474b746dc5737.js
+superfit.js: superfit-083480e3f6348d95b8f4b1123b927961.js
+superfit/index.js: superfit-083480e3f6348d95b8f4b1123b927961.js
 font/FontAwesome.otf: font/FontAwesome-468f83b63df32064983141584a19ff17.otf
 font/FontAwesome/index.otf: font/FontAwesome-468f83b63df32064983141584a19ff17.otf
 font/Gibson/1219DC_0.eot: font/Gibson/1219DC_0-7434080356fcdc69bff0558671df9eca.eot
@@ -127,8 +127,8 @@ font/superfit.ttf: font/superfit-c35bf31fe75be2af15c0678a23bedf86.ttf
 font/superfit/index.ttf: font/superfit-c35bf31fe75be2af15c0678a23bedf86.ttf
 font/superfit.woff: font/superfit-d0deddd622608dc938e66a83688c1832.woff
 font/superfit/index.woff: font/superfit-d0deddd622608dc938e66a83688c1832.woff
-superfit.css: superfit-1f55cbed05bd73cbfebb1a3282855ef8.css
-superfit/index.css: superfit-1f55cbed05bd73cbfebb1a3282855ef8.css
+superfit.css: superfit-54779145ee3a634289f74aaabeb0f10f.css
+superfit/index.css: superfit-54779145ee3a634289f74aaabeb0f10f.css
 cordova.js: cordova-c40dba849ffd9d9b993a23947f094b41.js
 cordova/index.js: cordova-c40dba849ffd9d9b993a23947f094b41.js
 fontawesome-webfont.eot: fontawesome-webfont-b49e662c23140944a17d6301d2259446.eot
