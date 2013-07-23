@@ -9075,6 +9075,7 @@ $.validator.prototype.elements = function() {
 } )( jQuery, window );
 (function() {
   var Superfit,
+    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -9101,10 +9102,21 @@ $.validator.prototype.elements = function() {
       '.page#calendar': 'calendar',
       '.page#edit-profile': 'editProfile',
       '.page#edit-profile-gym': 'editProfileGym',
-      '.page#profile': 'profile'
+      '.page#profile': 'profile',
+      '.page#about': 'about'
+    };
+
+    Superfit.prototype.events = {
+      'pageAnimationStart .page': 'onPageTransition'
     };
 
     function Superfit() {
+      this.trackPageError = __bind(this.trackPageError, this);
+      this.trackPageSuccess = __bind(this.trackPageSuccess, this);
+      this.onPageTransition = __bind(this.onPageTransition, this);
+      this.gaError = __bind(this.gaError, this);
+      this.gaSuccess = __bind(this.gaSuccess, this);
+      this.loadAnalytics = __bind(this.loadAnalytics, this);
       var user,
         _this = this;
 
@@ -9164,6 +9176,9 @@ $.validator.prototype.elements = function() {
       new Superfit.Profile({
         el: this.profile
       });
+      new Superfit.About({
+        el: this.about
+      });
       $(this.el).timeago();
       Superfit.bind('timeago', function() {
         return $(_this.el).timeago('refresh');
@@ -9178,7 +9193,50 @@ $.validator.prototype.elements = function() {
           return jQT.goTo('#get-started-step1', jQT.settings.defaultTransition);
         }
       });
+      $(document).on('deviceready', this.loadAnalytics);
     }
+
+    Superfit.prototype.loadAnalytics = function() {
+      var _ref;
+
+      this.gaPlugin = (_ref = window.plugins) != null ? _ref.gaPlugin : void 0;
+      if (this.gaPlugin != null) {
+        return this.gaPlugin.init(this.gaSuccess, this.gaError, "UA-40739445-2", 10);
+      }
+    };
+
+    Superfit.prototype.gaSuccess = function() {
+      alert("Google Analytics initialized");
+      return this.gaPlugin.trackPage(this.trackPageSuccess, this.trackPageError, "index.html");
+    };
+
+    Superfit.prototype.gaError = function(msg) {
+      this.log("Google Analytics failed to load: " + msg);
+      return alert("Google Analytics failed to load: " + msg);
+    };
+
+    Superfit.prototype.onPageTransition = function(e, data) {
+      var pageId;
+
+      if (data.direction === 'in') {
+        pageId = $(e.target).attr('id');
+        this.log("Tracking page: " + pageId);
+        if (this.gaPlugin != null) {
+          alert("Tracking page: " + pageId);
+          return this.gaPlugin.trackPage(this.trackPageSuccess, this.trackPageError, pageId);
+        }
+      }
+    };
+
+    Superfit.prototype.trackPageSuccess = function() {
+      this.log("Track page success");
+      return alert("Page tracked successfully");
+    };
+
+    Superfit.prototype.trackPageError = function(msg) {
+      this.log("Track page error: " + msg);
+      return alert("Error tracking page: " + msg);
+    };
 
     return Superfit;
 
@@ -9221,6 +9279,7 @@ $.validator.prototype.elements = function() {
           });
           wods_version.version = latest_version;
           wods_version.save();
+          Wod.trigger('refresh');
           return console.log("" + (Wod.all().length) + " WODs updated to version " + latest_version);
         });
       }
@@ -9576,7 +9635,7 @@ $.validator.prototype.elements = function() {
       return _ref;
     }
 
-    User.configure('User', 'id', 'name', 'gender', 'gym_id', 'gym', 'zipcode', 'birthdate', 'email');
+    User.configure('User', 'id', 'name', 'gender', 'gym_id', 'gym', 'zipcode', 'birthdate', 'email', 'newsletter');
 
     User.extend(Spine.Model.Local);
 
@@ -9981,6 +10040,28 @@ $.validator.prototype.elements = function() {
   })(Spine.Model);
 
   window.WodsVersion = WodsVersion;
+
+}).call(this);
+(function() {
+  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  Superfit.About = (function(_super) {
+    __extends(About, _super);
+
+    function About() {
+      this.render = __bind(this.render, this);      About.__super__.constructor.apply(this, arguments);
+      this.render();
+    }
+
+    About.prototype.render = function() {
+      return About.__super__.render.call(this);
+    };
+
+    return About;
+
+  })(Spine.Controller);
 
 }).call(this);
 (function() {
@@ -11395,7 +11476,7 @@ $.validator.prototype.elements = function() {
 
       Records.__super__.constructor.apply(this, arguments);
       this.render();
-      Wod.bind('newRecord', function() {
+      Wod.bind('refresh newRecord', function() {
         return _this.render();
       });
       Wod.bind('goToRecord', this.goToRecord);
@@ -11804,6 +11885,17 @@ $.validator.prototype.elements = function() {
 }).call(this);
 (function() {
   this.JST || (this.JST = {});
+  this.JST["superfit/views/about"] = (function(context) {
+    return (function() {
+      var $o;
+      $o = [];
+      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div class='pulldown sprite-sf'>\n      Navigation Pulldown\n    </div>\n    <h1>About</h1>\n  </div>\n</div>\n<div class='about'>\n  <h3>About Superfit</h3>\n  <p>Superfit was designed to provide the everyday athlete with a better tool for tracking progress and workout activity.</p>\n  <p>\n    <a href='http://www.superfitapp.com' target='_blank'>Learn more about Superfit.</a>\n  </p>\n  <p>Not affiliated with CrossFit, Inc.</p>\n</div>");
+      return $o.join("\n").replace(/\s(?:id|class)=(['"])(\1)/mg, "");
+    }).call(window.HAML.context(context));
+  });;
+}).call(this);
+(function() {
+  this.JST || (this.JST = {});
   this.JST["superfit/views/add_wod"] = (function(context) {
     return (function() {
       var $o;
@@ -11908,7 +12000,7 @@ $.validator.prototype.elements = function() {
       $e = window.HAML.escape;
       $c = window.HAML.cleanValue;
       $o = [];
-      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div class='pulldown sprite-sf'>\n      Navigation Pulldown\n    </div>\n    <h1>Profile</h1>\n  </div>\n</div>\n<form>\n  <div class='content-main edit-profile scroll'>\n    <ul>\n      <li>\n        <p>Name</p>\n        <input class='profile-data' type='text' name='name' placeholder='Enter Full Name' value='" + ($e($c(this.user.name))) + "'>\n      </li>\n      <li>\n        <p>Zip Code</p>\n        <input class='profile-data' type='number' name='zipcode' placeholder='Enter Zip Code' value='" + ($e($c(this.user.zipcode))) + "'>\n      </li>\n      <li>\n        <p>Email</p>\n        <input class='profile-data' type='text' name='email' placeholder='Enter Email' value='" + ($e($c(this.user.email))) + "'>\n      </li>\n      <li>\n        <p>My Gym</p>\n        <input class='profile-data' type='text' name='gym' placeholder='My Gym' value='" + ($e($c(this.user.gym))) + "'>\n      </li>\n      <li class='radio'>\n        <p>Gender</p>\n        <select class='profile-data' name='gender'>\n          <option value='female' selected='" + ($e($c(this.user.gender === 'female'))) + "'>Female</option>\n          <option value='male' selected='" + ($e($c(this.user.gender === 'male'))) + "'>Male</option>\n        </select>\n      </li>\n    </ul>\n  </div>\n  <div class='footer'>\n  </div>\n</form>");
+      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div class='pulldown sprite-sf'>\n      Navigation Pulldown\n    </div>\n    <h1>Profile</h1>\n  </div>\n</div>\n<form>\n  <div class='content-main edit-profile scroll'>\n    <ul>\n      <li>\n        <p>Name</p>\n        <input class='profile-data' type='text' name='name' placeholder='Enter Full Name' value='" + ($e($c(this.user.name))) + "'>\n      </li>\n      <li>\n        <p>Zip Code</p>\n        <input class='profile-data' type='number' name='zipcode' placeholder='Enter Zip Code' value='" + ($e($c(this.user.zipcode))) + "'>\n      </li>\n      <li>\n        <p>Email</p>\n        <input class='profile-data' type='text' name='email' placeholder='Enter Email' value='" + ($e($c(this.user.email))) + "'>\n      </li>\n      <li>\n        <p>My Gym</p>\n        <input class='profile-data' type='text' name='gym' placeholder='My Gym' value='" + ($e($c(this.user.gym))) + "'>\n      </li>\n      <li class='radio'>\n        <p>Gender</p>\n        <select class='profile-data' name='gender'>\n          <option value='female' selected='" + ($e($c(this.user.gender === 'female'))) + "'>Female</option>\n          <option value='male' selected='" + ($e($c(this.user.gender === 'male'))) + "'>Male</option>\n        </select>\n      </li>\n      <li class='radio'>\n        <p>Newsletter</p>\n        <select class='profile-data' name='newsletter'>\n          <option value='yes' selected='" + ($e($c(this.user.newsletter === 'yes'))) + "'>Yes,  I want the Newsletter.</option>\n          <option value='no' selected='" + ($e($c(this.user.newsletter === 'no'))) + "'>No Thanks</option>\n        </select>\n      </li>\n    </ul>\n  </div>\n  <div class='footer'>\n  </div>\n</form>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
@@ -12222,7 +12314,7 @@ $.validator.prototype.elements = function() {
     return (function() {
       var $o;
       $o = [];
-      $o.push("<div id='navigation'>\n  <div class='navigation'>\n    <div>\n      <a class='dissolve' href='#home'>\n        <p class='dashboard icon sprite-sf'></p>\n        Dashboard\n      </a>\n    </div>\n    <div>\n      <a class='dissolve' href='#goals'>\n        <p class='goals icon sprite-sf'></p>\n        Goals\n      </a>\n    </div>\n    <div>\n      <a class='dissolve' href='#records'>\n        <p class='icon records sprite-sf'></p>\n        Records\n      </a>\n    </div>\n    <div>\n      <a class='dissolve' href='#edit-profile'>\n        <p class='icon me sprite-sf'></p>\n        Profile\n      </a>\n    </div>\n  </div>\n</div>");
+      $o.push("<div id='navigation'>\n  <div class='navigation'>\n    <div>\n      <a class='dissolve' href='#home'>\n        <p class='dashboard icon sprite-sf'></p>\n        Dashboard\n      </a>\n    </div>\n    <div>\n      <a class='dissolve' href='#goals'>\n        <p class='goals icon sprite-sf'></p>\n        Goals\n      </a>\n    </div>\n    <div>\n      <a class='dissolve' href='#records'>\n        <p class='icon records sprite-sf'></p>\n        Records\n      </a>\n    </div>\n    <div>\n      <a class='dissolve' href='#edit-profile'>\n        <p class='icon me sprite-sf'></p>\n        Profile\n      </a>\n    </div>\n    <div>\n      <a class='dissolve' href='#about'>\n        <p class='about icon sprite-sf'></p>\n        About\n      </a>\n    </div>\n  </div>\n</div>");
       return $o.join("\n").replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
@@ -12385,7 +12477,7 @@ $.validator.prototype.elements = function() {
     $o.push("  " + $c(JST['superfit/views/get_started_step2']()));
     $o.push("  " + $c(JST['superfit/views/get_started_step3']()));
       }
-      $o.push("  <div class='page' id='home'></div>\n  <div class='page' id='calendar'></div>\n  <div class='page' id='add-wod'></div>\n  <div class='page' id='browse-wods'></div>\n  <div class='page' id='records'></div>\n  <div class='page' id='record-detail'></div>\n  <div class='page' id='edit-record'></div>\n  <div class='page' id='edit-wod'></div>\n  <div class='page' id='review-wod'></div>\n  <div class='in page slideupSelector' id='goals'></div>\n  <div class='page' id='edit-goal'></div>\n  <div class='page' id='edit-profile'></div>\n  <div class='page' id='edit-profile-gym'></div>\n  <div class='in page slideupSelector' id='profile'></div>\n  <div class='page' id='overlay-goal-complete'></div>\n  <div class='page' id='goal-detail'></div>\n</div>");
+      $o.push("  <div class='page' id='home'></div>\n  <div class='page' id='calendar'></div>\n  <div class='page' id='add-wod'></div>\n  <div class='page' id='browse-wods'></div>\n  <div class='page' id='records'></div>\n  <div class='page' id='record-detail'></div>\n  <div class='page' id='edit-record'></div>\n  <div class='page' id='edit-wod'></div>\n  <div class='page' id='review-wod'></div>\n  <div class='in page slideupSelector' id='goals'></div>\n  <div class='page' id='edit-goal'></div>\n  <div class='page' id='edit-profile'></div>\n  <div class='page' id='edit-profile-gym'></div>\n  <div class='in page slideupSelector' id='profile'></div>\n  <div class='page' id='overlay-goal-complete'></div>\n  <div class='page' id='goal-detail'></div>\n  <div class='page' id='about'></div>\n</div>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
