@@ -9214,9 +9214,9 @@ $.validator.prototype.elements = function() {
 
     Superfit.prototype.gaSuccess = function() {
       alert("Google Analytics initialized");
-      this.gaPlugin.trackPage(this.trackPageSuccess, this.trackPageError, "index.html");
       this.updateUserVariables();
-      return User.bind('create update', this.updateUserVariables);
+      User.bind('create update', this.updateUserVariables);
+      return this.gaPlugin.trackPage(this.trackPageSuccess, this.trackPageError, "index.html");
     };
 
     Superfit.prototype.gaError = function(msg) {
@@ -9252,10 +9252,10 @@ $.validator.prototype.elements = function() {
 
       if (user = User.first()) {
         alert("Setting user variables");
-        this.gaPlugin.setVariable(this.setVariableSuccess, this.setVariableError, "Email", user.email, 1);
-        this.gaPlugin.setVariable(this.setVariableSuccess, this.setVariableError, "Newsletter", user.newsletter, 2);
-        this.gaPlugin.setVariable(this.setVariableSuccess, this.setVariableError, "Gym", user.gym, 3);
-        return this.gaPlugin.setVariable(this.setVariableSuccess, this.setVariableError, "Gender", user.gender, 4);
+        this.gaPlugin.setVariable(this.setVariableSuccess, this.setVariableError, 1, user.email);
+        this.gaPlugin.setVariable(this.setVariableSuccess, this.setVariableError, 2, user.newsletter);
+        this.gaPlugin.setVariable(this.setVariableSuccess, this.setVariableError, 3, user.gender);
+        return this.gaPlugin.setVariable(this.setVariableSuccess, this.setVariableError, 4, user.gym);
       }
     };
 
@@ -9900,7 +9900,7 @@ $.validator.prototype.elements = function() {
       return _ref;
     }
 
-    WodEntry.configure('WodEntry', 'id', 'wod_id', 'name', 'score', 'min', 'sec', 'reps', 'weight', 'method', 'type', 'details', 'created_date', 'date', 'warm_up');
+    WodEntry.configure('WodEntry', 'id', 'wod_id', 'name', 'score', 'min', 'sec', 'reps', 'weight', 'method', 'type', 'details', 'created_date', 'date', 'warm_up', 'photo');
 
     WodEntry.extend(Spine.Model.Local);
 
@@ -10840,7 +10840,11 @@ $.validator.prototype.elements = function() {
     EditWod.prototype.elements = {
       'form': 'form',
       '.sets': 'sets',
-      '.customwod-tabs': 'tabs'
+      '.customwod-tabs': 'tabs',
+      '.custom-wod-photo': 'customWodPhoto',
+      '.custom-wod-img': 'customWodImage',
+      '.initial-capture': 'initialCapture',
+      '.post-capture': 'postCapture'
     };
 
     EditWod.prototype.events = {
@@ -10872,12 +10876,12 @@ $.validator.prototype.elements = function() {
     }
 
     EditWod.prototype.takePhoto = function(e) {
-      var captureError, captureSuccess, options, self;
+      var captureError, captureSuccess, options,
+        _this = this;
 
       if (!window.device.platform) {
         return;
       }
-      self = this;
       captureSuccess = function(filePath) {
         return window.resolveLocalFileSystemURI(filePath, (function(file) {
           var filename;
@@ -10885,8 +10889,9 @@ $.validator.prototype.elements = function() {
           filename = Date.now() + ".jpg";
           return window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, (function(fs) {
             return file.copyTo(fs.root, filename, (function(newFile) {
-              self.$(".custom-wod-photo").val(newFile.fullPath);
-              return self.$(".custom-wod-img").attr("src", newFile.fullPath);
+              _this.customWodPhoto.val(newFile.fullPath);
+              _this.customWodImage.attr("src", newFile.fullPath);
+              return _this.updatePhoto(newFile.fullPath);
             }), captureError);
           }), captureError);
         }), captureError);
@@ -10950,6 +10955,16 @@ $.validator.prototype.elements = function() {
       });
     };
 
+    EditWod.prototype.updatePhoto = function(photo) {
+      if (photo) {
+        this.initialCapture.hide();
+        return this.postCapture.show();
+      } else {
+        this.postCapture.hide();
+        return this.initialCapture.show();
+      }
+    };
+
     EditWod.prototype.updateNewWod = function(wod) {
       this.wod = wod;
       this.templateName = wod && wod.type === 'Strength' ? 'enter_strength_score' : 'enter_wod_score';
@@ -10958,8 +10973,9 @@ $.validator.prototype.elements = function() {
         user: User.first()
       });
       if (this.wod && this.wod.type === 'Strength') {
-        return this.addSets();
+        this.addSets();
       }
+      return this.updatePhoto(null);
     };
 
     EditWod.prototype.updateEditEntry = function(entry) {
@@ -10973,8 +10989,9 @@ $.validator.prototype.elements = function() {
         user: User.first()
       });
       if (this.wod && this.wod.type === 'Strength') {
-        return this.addSets(entry);
+        this.addSets(entry);
       }
+      return this.updatePhoto(entry.photo);
     };
 
     EditWod.prototype.toInt = function(numOrArray) {
@@ -11015,7 +11032,8 @@ $.validator.prototype.elements = function() {
         details: data.details,
         created_date: new Date().valueOf(),
         date: new Date(Superfit.currentDate).valueOf(),
-        warm_up: data.warm_up
+        warm_up: data.warm_up,
+        photo: data.photo
       };
       if (data.entry_id) {
         entry = WodEntry.find(data.entry_id);
@@ -11855,10 +11873,12 @@ $.validator.prototype.elements = function() {
       $c = window.HAML.cleanValue;
       $o = [];
       $o.push("<div class='content-main'>\n  <div class='secondary'>\n    <div class='title'>\n      <h3>History</h3>\n    </div>\n    <ul class='history'>\n      <li class='chart-container'>\n        <div class='chart'></div>\n      </li>");
-  _ref = this.pastEntries;
-  for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-    history = _ref[_i];
-    $o.push("      <li>\n        <a href='#' data-id='" + ($e($c(history.id))) + "'></a>\n        <div class='label'>\n          <p>" + ($e($c(moment(history.date).format('MMM D, YYYY')))) + "</p>\n          <p>" + ($e($c(history.scoreString()))) + "</p>\n        </div>\n      </li>");
+  if (this.pastEntries) {
+    _ref = this.pastEntries;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      history = _ref[_i];
+      $o.push("      <li>\n        <a href='#' data-id='" + ($e($c(history.id))) + "'></a>\n        <div class='label'>\n          <p>" + ($e($c(moment(history.date).format('MMM D, YYYY')))) + "</p>\n          <p>" + ($e($c(history.scoreString()))) + "</p>\n        </div>\n      </li>");
+    }
       }
       $o.push("    </ul>\n  </div>\n</div>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");
@@ -11916,7 +11936,7 @@ $.validator.prototype.elements = function() {
     return (function() {
       var $o;
       $o = [];
-      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div class='pulldown sprite-sf'>\n      Navigation Pulldown\n    </div>\n    <h1>About</h1>\n  </div>\n</div>\n<div class='about'>\n  <h3>About Superfit</h3>\n  <p>Superfit was designed to provide the everyday athlete with a better tool for tracking progress and workout activity.</p>\n  <p>\n    <a href='http://www.superfitapp.com' target='_blank'>Learn more about Superfit.</a>\n  </p>\n  <hr>\n  <p>Not affiliated with CrossFit, Inc.</p>\n</div>");
+      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div class='pulldown sprite-sf'>\n      Navigation Pulldown\n    </div>\n    <h1>About</h1>\n  </div>\n</div>\n<div class='about'>\n  <h3>About Superfit</h3>\n  <p>Superfit was designed to provide the everyday athlete with a better tool for tracking progress and workout activity.</p>\n  <p>\n    <a href='http://www.superfitapp.com' target='_blank'>Learn more about Superfit.</a>\n  </p>\n  <p>Not affiliated with CrossFit, Inc.</p>\n</div>");
       return $o.join("\n").replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
@@ -12099,7 +12119,7 @@ $.validator.prototype.elements = function() {
   this.JST || (this.JST = {});
   this.JST["superfit/views/enter_wod_score"] = (function(context) {
     return (function() {
-      var $c, $e, $o, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7;
+      var $c, $e, $o, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
       $e = window.HAML.escape;
       $c = window.HAML.cleanValue;
       $o = [];
@@ -12136,14 +12156,14 @@ $.validator.prototype.elements = function() {
     if (!this.wod) {
       $o.push("          <div class='type'>\n            <p>How is the workout scored</p>\n            <select class='required' name='method'>\n              <option value='for_time' selected='" + ($e($c(!this.entry || ((_ref = this.entry) != null ? _ref.method : void 0) === 'for_time'))) + "'>Time</option>\n              <option value='rounds' selected='" + ($e($c(((_ref1 = this.entry) != null ? _ref1.method : void 0) === 'rounds'))) + "'>Rounds</option>\n              <option value='weight' selected='" + ($e($c(((_ref2 = this.entry) != null ? _ref2.method : void 0) === 'weight'))) + "'>Weight (lbs)</option>\n              <option value='max_reps' selected='" + ($e($c(((_ref3 = this.entry) != null ? _ref3.method : void 0) === 'max_reps'))) + "'>Reps</option>\n              <option value='pass_fail' selected='" + ($e($c(((_ref4 = this.entry) != null ? _ref4.method : void 0) === 'pass_fail'))) + "'>Pass / Fail</option>\n            </select>\n          </div>");
     }
-    $o.push("          <p>Enter the workout details</p>\n          <div class='customwod-tabs photo'>\n            <ul class='tab-nav'>\n              <li>\n                <a class='photo-capture tab-btn' href='#'>Photo Capture</a>\n              </li>\n              <li>\n                <a class='tab-btn text-entry' href='#'>Type It In</a>\n              </li>\n            </ul>\n            <div id='photo-capture'>\n              <a class='take-photo' href='#'>\n                <div class='initial-capture'>\n                  <span class='icon-camera-alt'></span>\n                  <br>\n                  <span>Take a Photo</span>\n                  <input class='custom-wod-photo' name='photo' type='hidden'>\n                  <img class='custom-wod-img'>\n                </div>\n                <div class='post-capture'></div>\n              </a>\n            </div>\n            <div id='text-entry'>\n              <textarea name='details' placeholder='What did you do? Burpees? Thrusters? ' cols='30' rows='5'></textarea>\n            </div>\n          </div>\n        </div>\n      </div>");
+    $o.push("          <p>Enter the workout details</p>\n          <div class='customwod-tabs photo'>\n            <ul class='tab-nav'>\n              <li>\n                <a class='photo-capture tab-btn' href='#'>Photo Capture</a>\n              </li>\n              <li>\n                <a class='tab-btn text-entry' href='#'>Type It In</a>\n              </li>\n            </ul>\n            <div id='photo-capture'>\n              <a class='take-photo' href='#'>\n                <div class='initial-capture'>\n                  <span class='icon-camera-alt'></span>\n                  <br>\n                  <span>Take a Photo</span>\n                </div>\n                <div class='post-capture'>\n                  <input class='custom-wod-photo' name='photo' type='hidden' value='" + ($e($c((_ref5 = this.entry) != null ? _ref5.photo : void 0))) + "'>\n                  <img class='custom-wod-img' src='" + ($e($c((_ref6 = this.entry) != null ? _ref6.photo : void 0))) + "'>\n                </div>\n              </a>\n            </div>\n            <div id='text-entry'>\n              <textarea name='details' placeholder='What did you do? Burpees? Thrusters? ' cols='30' rows='5'></textarea>\n            </div>\n          </div>\n        </div>\n      </div>");
       }
       $o.push("      <div class='content-main'>\n        <div class='content-block'>\n          <div class='enter-score'>");
   $o.push("            " + $c(JST['superfit/views/_score']({
     entry: this.entry
       })));
-      $o.push("            <div>\n              <input class='left' id='rx-type' type='radio' name='type' value='RX' checked='" + ($e($c(this.entry ? ((_ref5 = this.entry) != null ? _ref5.type : void 0) === 'rx' : 'checked'))) + "'>\n                <label class='radio' for='rx-type'>RX</label>\n              <input class='right' id='scaled-type' type='radio' name='type' value='scaled' checked='" + ($e($c(((_ref6 = this.entry) != null ? _ref6.type : void 0) === 'scaled'))) + "'>\n                <label class='radio' for='scaled-type'>Scaled</label>\n              <textarea name='details' placeholder='Enter Workout Notes' cols='30' rows='5'>");
-      $o.push("              " + $e($c((_ref7 = this.entry) != null ? _ref7.details : void 0)));
+      $o.push("            <div>\n              <input class='left' id='rx-type' type='radio' name='type' value='RX' checked='" + ($e($c(this.entry ? ((_ref7 = this.entry) != null ? _ref7.type : void 0) === 'rx' : 'checked'))) + "'>\n                <label class='radio' for='rx-type'>RX</label>\n              <input class='right' id='scaled-type' type='radio' name='type' value='scaled' checked='" + ($e($c(((_ref8 = this.entry) != null ? _ref8.type : void 0) === 'scaled'))) + "'>\n                <label class='radio' for='scaled-type'>Scaled</label>\n              <textarea name='details' placeholder='Enter Workout Notes' cols='30' rows='5'>");
+      $o.push("              " + $e($c((_ref9 = this.entry) != null ? _ref9.details : void 0)));
       $o.push("              </textarea>\n            </div>\n          </div>\n          <input class='bluer bottom button' type='submit'>\n        </div>\n      </div>\n    </form>\n  </fieldset>\n</div>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "").replace(/[\s\n]*\u0091/mg, '').replace(/\u0092[\s\n]*/mg, '');
     }).call(window.HAML.context(context));
@@ -12341,7 +12361,7 @@ $.validator.prototype.elements = function() {
     return (function() {
       var $o;
       $o = [];
-      $o.push("<div id='navigation'>\n  <div class='navigation'>\n    <div>\n      <a class='dissolve' href='#home'>\n        <p class='dashboard icon sprite-sf'></p>\n        Dashboard\n      </a>\n    </div>\n    <div>\n      <a class='dissolve' href='#goals'>\n        <p class='goals icon sprite-sf'></p>\n        Goals\n      </a>\n    </div>\n    <div>\n      <a class='dissolve' href='#records'>\n        <p class='icon records sprite-sf'></p>\n        Records\n      </a>\n    </div>\n    <div>\n      <a class='dissolve' href='#edit-profile'>\n        <p class='icon me sprite-sf'></p>\n        Profile\n      </a>\n    </div>\n    <div>\n      <a class='dissolve' href='#about'>\n        <p class='about icon sprite-sf'></p>\n        About\n      </a>\n    </div>\n  </div>\n</div>");
+      $o.push("<div id='navigation'>\n  <div class='navigation'>\n    <div>\n      <a class='dissolve' href='#home'>\n        <p class='dashboard icon sprite-sf'></p>\n        Dashboard\n      </a>\n    </div>\n    <div>\n      <a class='dissolve' href='#goals'>\n        <p class='goals icon sprite-sf'></p>\n        Goals\n      </a>\n    </div>\n    <div>\n      <a class='dissolve' href='#records'>\n        <p class='icon records sprite-sf'></p>\n        Records\n      </a>\n    </div>\n    <div>\n      <a class='dissolve' href='#edit-profile'>\n        <p class='icon me sprite-sf'></p>\n        Profile\n      </a>\n    </div>\n    <div>\n      <a class='dissolve' href='#about'>\n        <p class='aboutSf icon sprite-sf'></p>\n        About\n      </a>\n    </div>\n  </div>\n</div>");
       return $o.join("\n").replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
