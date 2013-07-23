@@ -10855,7 +10855,8 @@ $.validator.prototype.elements = function() {
       'spinstop input[type=number]': 'notNegative',
       'tap .take-photo': 'takePhoto',
       'tap .warm-up': 'togglestyle',
-      'tap .tab-nav .tab-btn': 'togglePhoto'
+      'tap .tab-nav .tab-btn': 'togglePhoto',
+      'tap .delete-photo': 'deletePhoto'
     };
 
     function EditWod() {
@@ -10953,6 +10954,13 @@ $.validator.prototype.elements = function() {
         },
         submitHandler: this.submit
       });
+    };
+
+    EditWod.prototype.deletePhoto = function(e) {
+      e.preventDefault();
+      this.customWodPhoto.val('');
+      this.customWodImage.attr("src", '');
+      return this.updatePhoto('');
     };
 
     EditWod.prototype.updatePhoto = function(photo) {
@@ -11678,14 +11686,7 @@ $.validator.prototype.elements = function() {
         showHistory: true
       });
       this.completedGoal = null;
-      history = this.wod.history();
-      if (this.wod.method === 'pass_fail') {
-        return this.chart.hide();
-      } else if (history && history.length > 1) {
-        return Superfit.Chart.wodChart(this.chart, history, this.wod.scoring_method);
-      } else {
-        return this.chartContainer.replaceWith(Superfit.NO_CHART_DATA);
-      }
+      return -(this.wod ? (history = this.wod.history(), this.wod.method === 'pass_fail' ? this.chart.hide() : history && history.length > 1 ? Superfit.Chart.wodChart(this.chart, history, this.wod.scoring_method) : this.chartContainer.replaceWith(Superfit.NO_CHART_DATA)) : void 0);
     };
 
     ReviewWod.prototype.deleteWod = function() {
@@ -12156,13 +12157,13 @@ $.validator.prototype.elements = function() {
     if (!this.wod) {
       $o.push("          <div class='type'>\n            <p>How is the workout scored</p>\n            <select class='required' name='method'>\n              <option value='for_time' selected='" + ($e($c(!this.entry || ((_ref = this.entry) != null ? _ref.method : void 0) === 'for_time'))) + "'>Time</option>\n              <option value='rounds' selected='" + ($e($c(((_ref1 = this.entry) != null ? _ref1.method : void 0) === 'rounds'))) + "'>Rounds</option>\n              <option value='weight' selected='" + ($e($c(((_ref2 = this.entry) != null ? _ref2.method : void 0) === 'weight'))) + "'>Weight (lbs)</option>\n              <option value='max_reps' selected='" + ($e($c(((_ref3 = this.entry) != null ? _ref3.method : void 0) === 'max_reps'))) + "'>Reps</option>\n              <option value='pass_fail' selected='" + ($e($c(((_ref4 = this.entry) != null ? _ref4.method : void 0) === 'pass_fail'))) + "'>Pass / Fail</option>\n            </select>\n          </div>");
     }
-    $o.push("          <p>Enter the workout details</p>\n          <div class='customwod-tabs photo'>\n            <ul class='tab-nav'>\n              <li>\n                <a class='photo-capture tab-btn' href='#'>Photo Capture</a>\n              </li>\n              <li>\n                <a class='tab-btn text-entry' href='#'>Type It In</a>\n              </li>\n            </ul>\n            <div id='photo-capture'>\n              <a class='take-photo' href='#'>\n                <div class='initial-capture'>\n                  <span class='icon-camera-alt'></span>\n                  <br>\n                  <span>Take a Photo</span>\n                </div>\n                <div class='post-capture'>\n                  <input class='custom-wod-photo' name='photo' type='hidden' value='" + ($e($c((_ref5 = this.entry) != null ? _ref5.photo : void 0))) + "'>\n                  <img class='custom-wod-img' src='" + ($e($c((_ref6 = this.entry) != null ? _ref6.photo : void 0))) + "'>\n                </div>\n              </a>\n            </div>\n            <div id='text-entry'>\n              <textarea name='details' placeholder='What did you do? Burpees? Thrusters? ' cols='30' rows='5'></textarea>\n            </div>\n          </div>\n        </div>\n      </div>");
+    $o.push("          <p>Enter the workout details</p>\n          <div class='customwod-tabs photo'>\n            <ul class='tab-nav'>\n              <li>\n                <a class='photo-capture tab-btn' href='#'>Photo Capture</a>\n              </li>\n              <li>\n                <a class='tab-btn text-entry' href='#'>Type It In</a>\n              </li>\n            </ul>\n            <div id='photo-capture'>\n              <a class='take-photo' href='#'>\n                <div class='initial-capture'>\n                  <span class='icon-camera-alt'></span>\n                  <br>\n                  <span>Take a Photo</span>\n                </div>\n                <div class='post-capture'>\n                  <a class='delete-photo' href='#'><i class=\"remove-set icon-remove-sign\"></i> Delete Photo</a>\n                  <input class='custom-wod-photo' name='photo' type='hidden' value='" + ($e($c((_ref5 = this.entry) != null ? _ref5.photo : void 0))) + "'>\n                  <img class='custom-wod-img' src='" + ($e($c((_ref6 = this.entry) != null ? _ref6.photo : void 0))) + "'>\n                </div>\n              </a>\n            </div>\n            <div id='text-entry'>\n              <textarea name='details' placeholder='What did you do? Burpees? Thrusters? ' cols='30' rows='5'></textarea>\n            </div>\n          </div>\n        </div>\n      </div>");
       }
       $o.push("      <div class='content-main'>\n        <div class='content-block'>\n          <div class='enter-score'>");
   $o.push("            " + $c(JST['superfit/views/_score']({
     entry: this.entry
       })));
-      $o.push("            <div>\n              <input class='left' id='rx-type' type='radio' name='type' value='RX' checked='" + ($e($c(this.entry ? ((_ref7 = this.entry) != null ? _ref7.type : void 0) === 'rx' : 'checked'))) + "'>\n                <label class='radio' for='rx-type'>RX</label>\n              <input class='right' id='scaled-type' type='radio' name='type' value='scaled' checked='" + ($e($c(((_ref8 = this.entry) != null ? _ref8.type : void 0) === 'scaled'))) + "'>\n                <label class='radio' for='scaled-type'>Scaled</label>\n              <textarea name='details' placeholder='Enter Workout Notes' cols='30' rows='5'>");
+      $o.push("            <div>\n              <input class='left' id='rx-type' type='radio' name='type' value='RX' checked='" + ($e($c(this.entry ? ((_ref7 = this.entry) != null ? _ref7.type : void 0) === 'RX' : 'checked'))) + "'>\n                <label class='radio' for='rx-type'>RX</label>\n              <input class='right' id='scaled-type' type='radio' name='type' value='scaled' checked='" + ($e($c(((_ref8 = this.entry) != null ? _ref8.type : void 0) === 'scaled'))) + "'>\n                <label class='radio' for='scaled-type'>Scaled</label>\n              <textarea name='details' placeholder='Enter Workout Notes' cols='30' rows='5'>");
       $o.push("              " + $e($c((_ref9 = this.entry) != null ? _ref9.details : void 0)));
       $o.push("              </textarea>\n            </div>\n          </div>\n          <input class='bluer bottom button' type='submit'>\n        </div>\n      </div>\n    </form>\n  </fieldset>\n</div>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "").replace(/[\s\n]*\u0091/mg, '').replace(/\u0092[\s\n]*/mg, '');
