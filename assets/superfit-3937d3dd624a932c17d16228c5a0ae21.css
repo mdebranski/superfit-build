@@ -6979,6 +6979,12 @@ body {
 #jqt > * .customwod-tabs .take-photo .initial-capture {
   height: 90px;
 }
+/* line 929, ../../app/assets/stylesheets/superfit.scss */
+#jqt > * .review-score.custom-wod-img {
+  width: 260px;
+  height: 390px;
+  overflow: hidden;
+}
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
   /* line 932, ../../app/assets/stylesheets/superfit.scss */
   #jqt > * .sprite-sf {

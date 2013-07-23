@@ -11912,7 +11912,7 @@ $.validator.prototype.elements = function() {
     }
 
     ReviewWod.prototype.updateReviewWod = function(entry) {
-      var history, personalRecord;
+      var history, personalRecord, _ref;
 
       if (entry.wod_id) {
         this.wod = Wod.find(entry.wod_id);
@@ -11926,7 +11926,7 @@ $.validator.prototype.elements = function() {
           });
         }
       }
-      personalRecord = (this.wod.personal_record != null) && this.entry.id === this.wod.personal_record.entry_id;
+      personalRecord = (((_ref = this.wod) != null ? _ref.personal_record : void 0) != null) && this.entry.id === this.wod.personal_record.entry_id;
       this.render({
         wod: this.wod,
         entry: this.entry,
