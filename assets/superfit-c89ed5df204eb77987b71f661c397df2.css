@@ -6979,12 +6979,6 @@ body {
 #jqt > * .customwod-tabs .take-photo .initial-capture {
   height: 90px;
 }
-/* line 929, ../../app/assets/stylesheets/superfit.scss */
-#jqt > * .review-score.custom-wod-img {
-  width: 260px;
-  height: 390px;
-  overflow: hidden;
-}
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
   /* line 932, ../../app/assets/stylesheets/superfit.scss */
   #jqt > * .sprite-sf {
@@ -7010,6 +7004,12 @@ body {
   #jqt > * .goalsnodata {
     background: transparent url("../assets/img-goals-nodata_2x-04473a642e179406e344151ac4be4b15.png") no-repeat 40px 20px;
   }
+}
+/* line 942, ../../app/assets/stylesheets/superfit.scss */
+#jqt > * .review-score.custom-wod-img {
+  width: 250px;
+  height: 370px;
+  overflow: hidden;
 }
 
 /* line 946, ../../app/assets/stylesheets/superfit.scss */
