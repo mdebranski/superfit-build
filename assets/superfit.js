@@ -9797,6 +9797,7 @@ $.validator.prototype.elements = function() {
           this.trigger('complete');
           this.complete_date = moment().valueOf();
         }
+        this.last_update = moment().valueOf();
         return this.save();
       } else {
         return console.log("NOT A MATCH", entry);

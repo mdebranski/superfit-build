@@ -7006,8 +7006,8 @@ body {
   }
 }
 /* line 942, ../../app/assets/stylesheets/superfit.scss */
-#jqt > * .review-score.custom-wod-img {
-  width: 250px;
+#jqt > * .review-score .custom-wod-img {
+  width: 240px;
   height: 370px;
   overflow: hidden;
 }
