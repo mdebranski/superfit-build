@@ -4771,6 +4771,255 @@ API.txt for details.
 
 })(jQuery);
 /*
+ * jquery.flot.tooltip
+ *
+ * description: easy-to-use tooltips for Flot charts
+ * version: 0.6.1
+ * author: Krzysztof Urbas @krzysu [myviews.pl]
+ * website: https://github.com/krzysu/flot.tooltip
+ *
+ * build on 2013-07-10
+ * released under MIT License, 2012
+*/
+
+(function(t){var i={tooltip:!1,tooltipOpts:{content:"%s | X: %x | Y: %y",xDateFormat:null,yDateFormat:null,shifts:{x:10,y:20},defaultTheme:!0,onHover:function(){}}},o=function(t){this.tipPosition={x:0,y:0},this.init(t)};o.prototype.init=function(i){var o=this;i.hooks.bindEvents.push(function(i,e){if(o.plotOptions=i.getOptions(),o.plotOptions.tooltip!==!1&&void 0!==o.plotOptions.tooltip){o.tooltipOptions=o.plotOptions.tooltipOpts;var s=o.getDomElement();t(i.getPlaceholder()).bind("plothover",function(t,i,e){if(e){var n;n=o.stringFormat(o.tooltipOptions.content,e),s.html(n),o.updateTooltipPosition({x:i.pageX,y:i.pageY}),s.css({left:o.tipPosition.x+o.tooltipOptions.shifts.x,top:o.tipPosition.y+o.tooltipOptions.shifts.y}).show(),"function"==typeof o.tooltipOptions.onHover&&o.tooltipOptions.onHover(e,s)}else s.hide().html("")}),e.mousemove(function(t){var i={};i.x=t.pageX,i.y=t.pageY,o.updateTooltipPosition(i)})}})},o.prototype.getDomElement=function(){var i;return t("#flotTip").length>0?i=t("#flotTip"):(i=t("<div />").attr("id","flotTip"),i.appendTo("body").hide().css({position:"absolute"}),this.tooltipOptions.defaultTheme&&i.css({background:"#fff","z-index":"100",padding:"0.4em 0.6em","border-radius":"0.5em","font-size":"0.8em",border:"1px solid #111",display:"inline-block","white-space":"nowrap"})),i},o.prototype.updateTooltipPosition=function(i){var o=t("#flotTip").outerWidth()+this.tooltipOptions.shifts.x,e=t("#flotTip").outerHeight()+this.tooltipOptions.shifts.y;i.x-t(window).scrollLeft()>t(window).innerWidth()-o&&(i.x-=o),i.y-t(window).scrollTop()>t(window).innerHeight()-e&&(i.y-=e),this.tipPosition.x=i.x,this.tipPosition.y=i.y},o.prototype.stringFormat=function(t,i){var o=/%p\.{0,1}(\d{0,})/,e=/%s/,s=/%x\.{0,1}(?:\d{0,})/,n=/%y\.{0,1}(?:\d{0,})/;return"function"==typeof t&&(t=t(i.series.label,i.series.data[i.dataIndex][0],i.series.data[i.dataIndex][1])),i.series.percent!==void 0&&(t=this.adjustValPrecision(o,t,i.series.percent)),i.series.label!==void 0&&(t=t.replace(e,i.series.label)),this.isTimeMode("xaxis",i)&&this.isXDateFormat(i)&&(t=t.replace(s,this.timestampToDate(i.series.data[i.dataIndex][0],this.tooltipOptions.xDateFormat))),this.isTimeMode("yaxis",i)&&this.isYDateFormat(i)&&(t=t.replace(n,this.timestampToDate(i.series.data[i.dataIndex][1],this.tooltipOptions.yDateFormat))),"number"==typeof i.series.data[i.dataIndex][0]&&(t=this.adjustValPrecision(s,t,i.series.data[i.dataIndex][0])),"number"==typeof i.series.data[i.dataIndex][1]&&(t=this.adjustValPrecision(n,t,i.series.data[i.dataIndex][1])),i.series.xaxis.tickFormatter!==void 0&&(t=t.replace(s,i.series.xaxis.tickFormatter(i.series.data[i.dataIndex][0],i.series.xaxis))),i.series.yaxis.tickFormatter!==void 0&&(t=t.replace(n,i.series.yaxis.tickFormatter(i.series.data[i.dataIndex][1],i.series.yaxis))),t},o.prototype.isTimeMode=function(t,i){return i.series[t].options.mode!==void 0&&"time"===i.series[t].options.mode},o.prototype.isXDateFormat=function(){return this.tooltipOptions.xDateFormat!==void 0&&null!==this.tooltipOptions.xDateFormat},o.prototype.isYDateFormat=function(){return this.tooltipOptions.yDateFormat!==void 0&&null!==this.tooltipOptions.yDateFormat},o.prototype.timestampToDate=function(i,o){var e=new Date(i);return t.plot.formatDate(e,o)},o.prototype.adjustValPrecision=function(t,i,o){var e,s=i.match(t);return null!==s&&""!==RegExp.$1&&(e=RegExp.$1,o=o.toFixed(e),i=i.replace(t,o)),i};var e=function(t){new o(t)};t.plot.plugins.push({init:e,options:i,name:"tooltip",version:"0.6.1"})})(jQuery);
+
+/*
+ * jquery.flot.tooltip
+ *
+ * desc:	create tooltip with values of hovered point on the graph,
+ support many series, time mode, stacking
+ you can set custom tip content (also with use of HTML tags) and precision of values
+ * version:	0.5
+ * author: 	Krzysztof Urbas @krzysu [myviews.pl]
+ * modify:  SKELETON9@9#, https://github.com/skeleton9/flot.tooltip
+ * website:	https://github.com/krzysu/flot.tooltip
+ *
+ * released under MIT License, 2012
+ */
+
+(function ($) {
+    var options = {
+        tooltip: false, //boolean
+        tooltipOpts: {
+            content: "%s | X: %x | Y: %y.2", //%s -> series label, %x -> X value, %y -> Y value, %x.2 -> precision of X value, %p.2 -> percentage of pie or stacked with precision
+            dateFormat: "%y-%0m-%0d",
+            shifts: {
+                x: 10,
+                y: 20
+            },
+            defaultTheme: true,
+            labelRegex: null      //use regex to process label
+        }
+    };
+
+    var init = function(plot) {
+        var adjustLabel = null;
+        var tipPosition = {x: 0, y: 0};
+        var opts = plot.getOptions();
+        var processed = false;
+        var stackSums = {};
+
+        var updateTooltipPosition = function(pos) {
+            tipPosition.x = pos.x;
+            tipPosition.y = pos.y;
+        };
+
+        var onMouseMove = function(e) {
+
+            var pos = {x: 0, y: 0};
+            pos.x = e.pageX;
+            pos.y = e.pageY;
+
+            updateTooltipPosition(pos);
+        };
+
+        var timestampToDate = function(tmst) {
+
+            var theDate = new Date(tmst);
+
+            return $.plot.formatDate(theDate, opts.tooltipOpts.dateFormat);
+        };
+
+        plot.hooks.processOptions.push(function(plot, options)
+        {
+            if(options.tooltipOpts.labelRegex)
+            {
+                adjustLabel = options.tooltipOpts.labelRegex;
+            }
+            if(options.series.stack) // support percentage for stacked chart, add by skeleton9
+            {
+                plot.hooks.processRawData.push(processRawData);
+            }
+        });
+
+        plot.hooks.bindEvents.push(function (plot, eventHolder) {
+
+            var to = opts.tooltipOpts;
+            var placeholder = plot.getPlaceholder();
+            var $tip;
+
+            if (opts.tooltip === false) return;
+
+            if( $('#flotTip').length > 0 ){
+                $tip = $('#flotTip');
+            }
+            else {
+                $tip = $('<div />').attr('id', 'flotTip');
+                $tip.appendTo('body').hide().css({position: 'absolute'});
+
+                if(to.defaultTheme) {
+                    $tip.css({
+                        'background': '#fff',
+                        'z-index': '10000',
+                        'padding': '0.4em 0.6em',
+                        'border-radius': '0.5em',
+                        'font-size': '0.8em',
+                        'border': '1px solid #111'
+                    });
+                }
+            }
+
+            $(placeholder).bind("plotclick", function (event, pos, item) {
+                if (item) {
+                    var tipText;
+
+                    if(opts.xaxis.mode === "time" || opts.xaxes[0].mode === "time") {
+                        tipText = stringFormat(to.content, item, timestampToDate);
+                    }
+                    else {
+                        tipText = stringFormat(to.content, item);
+                    }
+
+                    $tip.html( tipText ).css({left: tipPosition.x + to.shifts.x, top: tipPosition.y + to.shifts.y}).show();
+                }
+                else {
+                    $tip.hide().html('');
+                }
+            });
+
+            eventHolder.mousemove(onMouseMove);
+        });
+
+        var stringFormat = function(content, item, fnct) {
+            if (item.series.tooltipOpts && item.series.tooltipOpts.content){
+                content = item.series.tooltipOpts.content;
+            }
+            var seriesPattern = /%s/;
+            var xPattern = /%x\.{0,1}(\d{0,})/;
+            var yPattern = /%y\.{0,1}(\d{0,})/;
+            var pPattern = /%p\.{0,1}(\d{0,})/; //add by skeleton9 to support percentage in pie/stacked
+
+            //series match
+            if( typeof(item.series.label) !== 'undefined' ) {
+                var label = item.series.label;
+                if(adjustLabel)
+                {
+                    label = label.match(adjustLabel)[0]
+                }
+                content = content.replace(seriesPattern, label);
+            }
+            // xVal match
+            if( typeof(fnct) === 'function' ) {
+                content = content.replace(xPattern, fnct(item.series.data[item.dataIndex][0]) );
+            }
+            else {
+                content = adjustValPrecision(xPattern, content, item.series.data[item.dataIndex][0]);
+            }
+            // yVal match
+            content = adjustValPrecision(yPattern, content, item.series.data[item.dataIndex][1]);
+
+            //add by skeleton9 to support percentage in pie
+            if(item.series.percent)
+            {
+                content = adjustValPrecision(pPattern, content, item.series.percent);
+            }
+            else if(item.series.percents) //support for stacked percentage
+            {
+                content = adjustValPrecision(pPattern, content, item.series.percents[item.dataIndex])
+            }
+
+            return content;
+        };
+
+        var adjustValPrecision = function(pattern, content, value) {
+
+            var precision;
+            if( content.match(pattern) !== 'null' ) {
+                if(RegExp.$1 !== '') {
+                    precision = RegExp.$1;
+                    value = value.toFixed(precision)
+                }
+                content = content.replace(pattern, value);
+            }
+
+            return content;
+        };
+
+        //set percentage for stacked chart
+        function processRawData(plot, series, data, datapoints)
+        {
+            if (!processed)
+            {
+                processed = true;
+                stackSums = getStackSums(plot.getData());
+            }
+            var num = data.length;
+            series.percents = [];
+            for(var j=0;j<num;j++)
+            {
+                var sum = stackSums[data[j][0]+""];
+                if(sum>0)
+                {
+                    series.percents.push(data[j][1]*100/sum);
+                } else {
+                    series.percents.push(0);
+                }
+            }
+        }
+
+        //calculate summary
+        function getStackSums(_data) {
+            var data_len = _data.length;
+            var sums = {};
+            if (data_len > 0) {
+                //caculate summary
+                for (var i = 0; i < data_len; i++) {
+                    if (_data[i].stackpercent || _data[i].stack) {
+                        var key_idx = 0;
+                        var value_idx = 1;
+                        if (_data[i].bars && _data[i].bars.horizontal && _data[i].bars.horizontal === true) {
+                            key_idx = 1;
+                            value_idx = 0;
+                        }
+                        var num = _data[i].data.length;
+                        for (var j = 0; j < num; j++) {
+                            var value = 0;
+                            if (_data[i].data[j][1] != null) {
+                                value = _data[i].data[j][value_idx];
+                            }
+                            if (sums[_data[i].data[j][key_idx] + ""]) {
+                                sums[_data[i].data[j][key_idx] + ""] += value;
+                            } else {
+                                sums[_data[i].data[j][key_idx] + ""] = value;
+                            }
+
+                        }
+                    }
+                }
+            }
+            return sums;
+        }
+    }
+
+    $.plot.plugins.push({
+        init: init,
+        options: options,
+        name: 'tooltip',
+        version: '0.5'
+    });
+})(jQuery);
+/*
  * Make It Retina v1.1 - jQuery Plugin
  * http://www.steviostudio.it
  *
@@ -9537,7 +9786,7 @@ $.validator.prototype.elements = function() {
         start = false;
       }
       if (this.isMatch(entry)) {
-        if (start) {
+        if (!this.start_entry_id) {
           this.start_entry_id = entry.id;
           this.start_score = this.calcScore(entry);
         }
@@ -9778,7 +10027,7 @@ $.validator.prototype.elements = function() {
     };
 
     Wod.prototype.isRecord = function(entry) {
-      var entry_seconds, max_1, max_3, max_5, record, record_seconds, _ref1, _ref2, _ref3;
+      var entry_seconds, max_1, max_3, max_5, record, record_seconds, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6;
 
       if (!(entry.wod_id = this.id)) {
         throw "Can't check record unless entry is for this wod";
@@ -9805,7 +10054,7 @@ $.validator.prototype.elements = function() {
             max_1 = entry.repMax(1);
             max_3 = entry.repMax(3);
             max_5 = entry.repMax(5);
-            return (max_1 && (!this.personal_record || max_1 > ((_ref1 = this.personal_record) != null ? _ref1.max_1 : void 0))) || (max_3 && (!this.personal_record || max_3 > ((_ref2 = this.personal_record) != null ? _ref2.max_3 : void 0))) || (max_5 && (!this.personal_record || max_5 > ((_ref3 = this.personal_record) != null ? _ref3.max_5 : void 0)));
+            return (max_1 && (!((_ref1 = this.personal_record) != null ? _ref1.max_1 : void 0) || max_1 > ((_ref2 = this.personal_record) != null ? _ref2.max_1 : void 0))) || (max_3 && (!((_ref3 = this.personal_record) != null ? _ref3.max_3 : void 0) || max_3 > ((_ref4 = this.personal_record) != null ? _ref4.max_3 : void 0))) || (max_5 && (!((_ref5 = this.personal_record) != null ? _ref5.max_5 : void 0) || max_5 > ((_ref6 = this.personal_record) != null ? _ref6.max_5 : void 0)));
         }
       } else {
         return true;
@@ -10382,6 +10631,14 @@ $.validator.prototype.elements = function() {
         clickable: true,
         color: 'rgba(0, 0, 0, 0.2)',
         labelMargin: 20
+      },
+      tooltip: false,
+      tooltipOpts: {
+        content: "%x | %y",
+        shifts: {
+          x: -5,
+          y: 1
+        }
       }
     };
 
@@ -10549,10 +10806,9 @@ $.validator.prototype.elements = function() {
         goal = Goal.create(data);
         last = _.last(WodEntry.byWodId(goal.wod_id));
         if (last && goal.isMatch(last)) {
-          goal.newEntry(last, true);
+          goal.newEntry(last);
         } else {
           goal.start_score = 0;
-          goal.history = [[moment().valueOf(), 0]];
           goal.save();
         }
       }
@@ -11164,6 +11420,7 @@ $.validator.prototype.elements = function() {
       this.render({
         wod: this.wod,
         goal: this.goal,
+        startEntry: this.goal.start_entry(),
         pastEntries: this.pastEntries,
         showHistory: true
       });
@@ -11655,7 +11912,7 @@ $.validator.prototype.elements = function() {
     }
 
     ReviewWod.prototype.updateReviewWod = function(entry) {
-      var history;
+      var history, personalRecord;
 
       if (entry.wod_id) {
         this.wod = Wod.find(entry.wod_id);
@@ -11669,12 +11926,14 @@ $.validator.prototype.elements = function() {
           });
         }
       }
+      personalRecord = (this.wod.personal_record != null) && this.entry.id === this.wod.personal_record.entry_id;
       this.render({
         wod: this.wod,
         entry: this.entry,
         pastEntries: this.pastEntries,
         completedGoal: this.completedGoal,
-        showHistory: this.wod !== null
+        showHistory: this.wod !== null,
+        personalRecord: personalRecord
       });
       this.completedGoal = null;
       return -(this.wod ? (history = this.wod.history(), this.wod.method === 'pass_fail' ? this.chart.hide() : history && history.length > 1 ? Superfit.Chart.wodChart(this.chart, history, this.wod.scoring_method) : this.chartContainer.replaceWith(Superfit.NO_CHART_DATA)) : void 0);
@@ -11928,7 +12187,7 @@ $.validator.prototype.elements = function() {
     return (function() {
       var $o;
       $o = [];
-      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div class='pulldown sprite-sf'>\n      Navigation Pulldown\n    </div>\n    <h1>About</h1>\n  </div>\n</div>\n<div class='about'>\n  <h3>About Superfit</h3>\n  <p>Superfit was designed to provide the everyday athlete with a better tool for tracking progress and workout activity.</p>\n  <p>\n    <a href='http://www.superfitapp.com' target='_blank'>Learn more about Superfit.</a>\n  </p>\n  <p>Not affiliated with CrossFit, Inc.</p>\n</div>");
+      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div class='pulldown sprite-sf'>\n      Navigation Pulldown\n    </div>\n    <h1>About</h1>\n  </div>\n</div>\n<div class='about'>\n  <h3>About Superfit  (v1.1)</h3>\n  <p>Superfit was designed to provide the everyday athlete with a better tool for tracking progress and workout activity.</p>\n  <p>\n    <a href='mailto:support@superfitapp.com' target='_blank'>Need Help? Email: support@superfitapp.com</a>\n  </p>\n  <p>\n    <a href='http://www.superfitapp.com' target='_blank'>Learn more about Superfit.</a>\n  </p>\n  <p>\n    Not affiliated with CrossFit, Inc.\n  </p>\n</div>");
       return $o.join("\n").replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
@@ -11978,11 +12237,11 @@ $.validator.prototype.elements = function() {
   } else {
     $o.push("    <h1>Create Goal</h1>");
       }
-      $o.push("  </div>\n</div>\n<p class='goal-notify'>Start by selecting a Movement, Workout or Benchmark you want to measure.</p>\n<div class='search-block'>\n  <form>\n    <input class='search-text' type='text' name='search-text' placeholder='Search All'>\n  </form>\n</div>\n<div class='content-main'>\n  <h3 class='no-matches'>No WODs found for this search.</h3>\n  <ul class='wods-search'></ul>\n  <ul class='wods-browse'>");
+      $o.push("  </div>\n</div>\n<div class='scroll'>\n  <p class='goal-notify'>Start by selecting a Movement, Workout or Benchmark you want to measure.</p>\n  <div class='search-block'>\n    <form>\n      <input class='search-text' type='text' name='search-text' placeholder='Search All'>\n    </form>\n  </div>\n  <div class='content-main'>\n    <h3 class='no-matches'>No WODs found for this search.</h3>\n    <ul class='wods-search'></ul>\n    <ul class='wods-browse'>");
   if (!this.wods_type) {
-    $o.push("    <li data-type='benchmark'>\n      <a class='browse' href='#edit-goal'>\n        <div class='label'>\n          <div class='benchmark icon sprite-sf'></div>\n          <p>Benchmark</p>\n        </div>\n        <p class='arrow awesome icon-chevron-right'></p>\n      </a>\n    </li>\n    <li data-type='strength'>\n      <a class='browse' href='#edit-goal'>\n        <div class='label'>\n          <div class='icon sprite-sf strength'></div>\n          <p>Strength</p>\n        </div>\n        <p class='arrow awesome icon-chevron-right'></p>\n      </a>\n    </li>\n    <li data-type='other'>\n      <a class='browse' href='#edit-goal'>\n        <div class='label'>\n          <div class='icon other sprite-sf'></div>\n          <p>Other</p>\n        </div>\n        <p class='arrow awesome icon-chevron-right'></p>\n      </a>\n    </li>");
+    $o.push("      <li data-type='benchmark'>\n        <a class='browse' href='#edit-goal'>\n          <div class='label'>\n            <div class='benchmark icon sprite-sf'></div>\n            <p>Benchmark</p>\n          </div>\n          <p class='arrow awesome icon-chevron-right'></p>\n        </a>\n      </li>\n      <li data-type='strength'>\n        <a class='browse' href='#edit-goal'>\n          <div class='label'>\n            <div class='icon sprite-sf strength'></div>\n            <p>Strength</p>\n          </div>\n          <p class='arrow awesome icon-chevron-right'></p>\n        </a>\n      </li>\n      <li data-type='other'>\n        <a class='browse' href='#edit-goal'>\n          <div class='label'>\n            <div class='icon other sprite-sf'></div>\n            <p>Other</p>\n          </div>\n          <p class='arrow awesome icon-chevron-right'></p>\n        </a>\n      </li>");
       }
-      $o.push("  </ul>\n</div>");
+      $o.push("    </ul>\n  </div>\n</div>");
       return $o.join("\n").replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
@@ -11995,38 +12254,38 @@ $.validator.prototype.elements = function() {
       $e = window.HAML.escape;
       $c = window.HAML.cleanValue;
       $o = [];
-      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div>\n      <a class='awesome goback icon-chevron-left' href='#'></a>\n    </div>\n    <h1>" + this.wod.name + " Goal</h1>\n  </div>\n</div>");
+      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div>\n      <a class='awesome goback icon-chevron-left' href='#'></a>\n    </div>\n    <h1>" + this.wod.name + " Goal</h1>\n  </div>\n</div>\n<div class='scroll'>");
   if (this.wod.type !== 'Strength') {
-    $o.push("<div class='content-main'>\n  <div class='content-block'>\n    <div class='yellow-block'>\n      <div class='score'>" + ($e($c(this.wod.name))) + "</div>\n      <p class='score-details'>" + ($e($c())));
+    $o.push("  <div class='content-main'>\n    <div class='content-block'>\n      <div class='yellow-block'>\n        <div class='score'>" + ($e($c(this.wod.name))) + "</div>\n        <p class='score-details'>" + ($e($c())));
     if (this.user.gender === 'male' || (this.user.gender === 'female' && !this.wod.workout_female)) {
-      $o.push("        " + $c(Utils.simpleFormat(this.wod.workout_male)));
+      $o.push("          " + $c(Utils.simpleFormat(this.wod.workout_male)));
     }
     if (this.user.gender === 'female') {
-      $o.push("        " + $c(Utils.simpleFormat(this.wod.workout_female)));
+      $o.push("          " + $c(Utils.simpleFormat(this.wod.workout_female)));
     }
-    $o.push("      </p>\n      <hr>\n      <p class='score-notes'>");
-    $o.push("        " + $e($c(this.wod.scoringMethod())));
-    $o.push("        <br>");
-    $o.push("        " + $e($c(this.wod.scoring_notes)));
-    $o.push("      </p>\n    </div>\n  </div>\n</div>");
+    $o.push("        </p>\n        <hr>\n        <p class='score-notes'>");
+    $o.push("          " + $e($c(this.wod.scoringMethod())));
+    $o.push("          <br>");
+    $o.push("          " + $e($c(this.wod.scoring_notes)));
+    $o.push("        </p>\n      </div>\n    </div>\n  </div>");
       }
-      $o.push("<div class='content-main'>\n  <div class='content-block'>\n    <form>");
+      $o.push("  <div class='content-main'>\n    <div class='content-block'>\n      <form>");
   if (this.wod) {
-    $o.push("      <input type='hidden' name='wod_id' value='" + ($e($c(this.wod.id))) + "'>");
+    $o.push("        <input type='hidden' name='wod_id' value='" + ($e($c(this.wod.id))) + "'>");
       }
   if (this.goal) {
-    $o.push("      <input type='hidden' name='goal_id' value='" + ($e($c(this.goal.id))) + "'>");
+    $o.push("        <input type='hidden' name='goal_id' value='" + ($e($c(this.goal.id))) + "'>");
       }
-      $o.push("      <div class='enter-score'>\n        <div class='score-container'>");
-  $o.push("          " + $c(JST['superfit/views/_score']({
+      $o.push("        <div class='enter-score'>\n          <div class='score-container'>");
+  $o.push("            " + $c(JST['superfit/views/_score']({
     entry: this.goal,
     repMax: this.repMax
       })));
-      $o.push("        </div>");
+      $o.push("          </div>");
   if (this.wod.typeSlug() !== 'strength') {
-    $o.push("        <div class='score-type'>\n          <input id='rx-type' type='radio' name='type' value='rx' checked='" + ($e($c(this.goal ? ((_ref = this.goal) != null ? _ref.type : void 0) === 'rx' : 'checked'))) + "'>\n            <label class='radio' for='rx-type'>RX</label>\n          <input id='scaled-type' type='radio' name='type' value='scaled' checked='" + ($e($c(((_ref1 = this.goal) != null ? _ref1.type : void 0) === 'scaled'))) + "'>\n            <label class='radio' for='scaled-type'>Scaled</label>\n        </div>");
+    $o.push("          <div class='score-type'>\n            <input id='rx-type' type='radio' name='type' value='rx' checked='" + ($e($c(this.goal ? ((_ref = this.goal) != null ? _ref.type : void 0) === 'rx' : 'checked'))) + "'>\n              <label class='radio' for='rx-type'>RX</label>\n            <input id='scaled-type' type='radio' name='type' value='scaled' checked='" + ($e($c(((_ref1 = this.goal) != null ? _ref1.type : void 0) === 'scaled'))) + "'>\n              <label class='radio' for='scaled-type'>Scaled</label>\n          </div>");
       }
-      $o.push("      </div>\n      <input class='bluer bottom button fade' type='submit'>\n    </form>\n  </div>\n</div>");
+      $o.push("        </div>\n        <input class='bluer bottom button fade' type='submit'>\n      </form>\n    </div>\n  </div>\n</div>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
@@ -12096,13 +12355,13 @@ $.validator.prototype.elements = function() {
       $e = window.HAML.escape;
       $c = window.HAML.cleanValue;
       $o = [];
-      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div>\n      <a class='awesome goback icon-chevron-left' href='#add-wod'></a>\n    </div>\n    <h1>" + ($e($c(this.wod.name))) + "</h1>\n  </div>\n</div>\n<div class='content-main'>\n  <div class='content-block'>\n    <form>\n      <input type='hidden' name='wod_id' value='" + ($e($c(this.wod.id))) + "'>");
+      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div>\n      <a class='awesome goback icon-chevron-left' href='#add-wod'></a>\n    </div>\n    <h1>" + ($e($c(this.wod.name))) + "</h1>\n  </div>\n</div>\n<div class='scroll'>\n  <div class='content-main'>\n    <div class='content-block'>\n      <form>\n        <input type='hidden' name='wod_id' value='" + ($e($c(this.wod.id))) + "'>");
   if (this.entry) {
-    $o.push("      <input type='hidden' name='entry_id' value='" + ($e($c(this.entry.id))) + "'>");
+    $o.push("        <input type='hidden' name='entry_id' value='" + ($e($c(this.entry.id))) + "'>");
       }
-      $o.push("      <div class='sets'></div>\n      <textarea name='details' placeholder='Enter Workout Notes' cols='30' rows='5'>");
-      $o.push("      " + $e($c((_ref = this.entry) != null ? _ref.details : void 0)));
-      $o.push("      </textarea>\n      <a class='add-set bottom button lighter' href='#'>Add Another Set</a>\n      <input class='bluer bottom button' type='submit'>\n    </form>\n  </div>\n</div>");
+      $o.push("        <div class='sets'></div>\n        <textarea name='details' placeholder='Enter Workout Notes' cols='30' rows='5'>");
+      $o.push("        " + $e($c((_ref = this.entry) != null ? _ref.details : void 0)));
+      $o.push("        </textarea>\n        <a class='add-set bottom button lighter' href='#'>Add Another Set</a>\n        <input class='bluer bottom button' type='submit'>\n      </form>\n    </div>\n  </div>\n</div>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "").replace(/[\s\n]*\u0091/mg, '').replace(/\u0092[\s\n]*/mg, '');
     }).call(window.HAML.context(context));
   });;
@@ -12178,7 +12437,7 @@ $.validator.prototype.elements = function() {
     return (function() {
       var $o;
       $o = [];
-      $o.push("<div class='page' id='get-started-step2'>\n  <div class='orientation'>\n    <div class='main'>\n      <div class='step2'></div>\n      <h1>Work = Progress</h1>\n      <p>Goals and PRs are integral to measuring progress. Superfit maintains those in the background with the workouts you enter via the dashboard.</p>\n    </div>\n    <div class='orientation-footer'>\n      <a class='bottom button slide' href='#get-started-step3'>Next : Set-Up is Simple</a>\n    </div>\n  </div>\n</div>");
+      $o.push("<div class='page' id='get-started-step2'>\n  <div class='orientation'>\n    <div class='main'>\n      <h1>Work = Progress</h1>\n      <p>Goals and PRs are integral to measuring progress. Superfit maintains those in the background with the workouts you enter via the dashboard. Further, we provide visual tracking for a quick high level view of your progress.</p>\n      <br>\n      <div class='step2'></div>\n    </div>\n    <div class='orientation-footer'>\n      <a class='bottom button slide' href='#get-started-step3'>Next : Set-Up is Simple</a>\n    </div>\n  </div>\n</div>");
       return $o.join("\n").replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
@@ -12202,7 +12461,13 @@ $.validator.prototype.elements = function() {
       $e = window.HAML.escape;
       $c = window.HAML.cleanValue;
       $o = [];
-      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div>\n      <a class='awesome goback icon-chevron-left' href='#'></a>\n    </div>\n    <h1>" + ($e($c(this.goal.name()))) + "</h1>\n  </div>\n</div>\n<div class='scroll'>\n  <div class='content-main'>\n    <div class='content-block'>\n      <div class='yellow-block'>\n        <div class='review-score'>\n          <div class='score'>" + ($e($c("" + (this.goal.percentComplete()) + "% complete"))) + "\n            <span class='score-level'>" + ($e($c(this.goal.type))) + "</span>\n            <p class='score-details'>" + ($e($c(this.goal.scoreString(true)))) + "</p>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>");
+      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div>\n      <a class='awesome goback icon-chevron-left' href='#'></a>\n    </div>\n    <h1>" + ($e($c(this.goal.name()))) + "</h1>\n  </div>\n</div>\n<div class='scroll'>\n  <div class='content-main'>\n    <div class='content-block'>\n      <div class='yellow-block'>\n        <div class='review-score'>\n          <div class='goal-score score'>" + ($e($c("" + (this.goal.percentComplete()) + "% complete"))) + "\n            <span class='score-level'>" + ($e($c(this.goal.type))) + "</span>\n            <p class='score-details'>" + ($e($c(this.goal.scoreString(true)))) + "</p>\n          </div>");
+  if (this.startEntry) {
+    $o.push("          <p class='score-details'>\n            <br>\n            Your goal starting score is " + (this.startEntry.scoreString()) + "\n          </p>");
+  } else {
+    $o.push("          <p class='score-details'>\n            <br>\n            You don't currently have an entry for this movement or workout in the app - your first entry will be your starting score and from there your goal will begin to measure progress.\n          </p>");
+      }
+      $o.push("        </div>\n      </div>\n      <a class='bottom button dissolve' href='#home'>Jump to Dashboard</a>\n    </div>\n  </div>");
   if (this.showHistory) {
     $o.push("  " + $c(JST['superfit/views/_history']({
       wod: this.wod,
@@ -12219,7 +12484,7 @@ $.validator.prototype.elements = function() {
   } else {
     $o.push("        <li>\n          <div class='history label'>\n            <p>Last Updated</p>\n            <p class='record'>\n              <time class='timeago' datetime='" + ($e($c(moment(this.goal.last_update).format()))) + "'></time>\n            </p>\n          </div>\n        </li>");
       }
-      $o.push("      </ul>\n    </div>\n  </div>\n  <div class='footer'>\n    <a class='bottom button dissolve' href='#goals'>Return to Goals</a>\n    <a class='bottom button delete pop red' href='#goals' data-id='" + ($e($c(this.goal.id))) + "'>Delete Goal</a>\n  </div>\n</div>");
+      $o.push("      </ul>\n    </div>\n  </div>\n  <div class='footer'>\n    <a class='bottom button delete pop red' href='#goals' data-id='" + ($e($c(this.goal.id))) + "'>Delete Goal</a>\n  </div>\n</div>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
@@ -12488,17 +12753,26 @@ $.validator.prototype.elements = function() {
       $e = window.HAML.escape;
       $c = window.HAML.cleanValue;
       $o = [];
-      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div>\n      <a class='awesome goback icon-chevron-left' href='#'></a>\n    </div>\n    <h1>" + ($e($c(this.entry.wodName()))) + "</h1>\n  </div>\n</div>");
+      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div>\n      <a class='awesome goback icon-chevron-left' href='#'></a>\n    </div>\n    <h1>" + ($e($c(this.entry.wodName()))) + "</h1>\n  </div>\n</div>\n<div class='scroll'>");
   if (this.completedGoal) {
-    $o.push("<p class='goal-notify'>\n  Goal Completed:  " + (this.completedGoal.name()) + "!\n</p>");
+    $o.push("  <p class='goal-notify'>\n    Goal Completed:  " + (this.completedGoal.name()) + "!\n  </p>");
       }
-      $o.push("<div class='content-main'>\n  <div class='content-block'>\n    <div class='yellow-block'>\n      <div class='review-score'>\n        <div class='score'>" + ($e($c(this.entry.scoreString()))) + "\n          <span class='score-level'>" + ($e($c(this.entry.type))) + "</span>\n        </div>\n        <div class='score-tags'>\n          <span class='pr'>Personal Record</span>\n        </div>\n        <p class='score-details'>" + ($e($c(this.entry.details))) + "</p>\n      </div>\n    </div>\n    <a class='bottom button lighter slideleft' data-id='" + ($e($c(this.entry.id))) + "' href='#edit-wod'>Edit Workout</a>\n    <a class='bottom button fade' href='#home'>Jump To Dashboard</a>\n    <a class='delete pop red' data-id='" + ($e($c(this.entry.id))) + "' href='#home'><i class=\"remove-set icon-remove-sign\"></i> Delete This Workout</a>\n  </div>\n</div>\n<div class='footer'></div>");
+      $o.push("  <div class='content-main'>\n    <div class='content-block'>\n      <div class='yellow-block'>\n        <div class='review-score'>\n          <div class='score'>" + ($e($c(this.entry.scoreString()))) + "\n            <span class='score-level'>" + ($e($c(this.entry.type))) + "</span>\n          </div>");
+  if (this.personalRecord) {
+    $o.push("          <div class='score-tags'>\n            <span class='pr'>Personal Record</span>\n          </div>");
+      }
+      $o.push("          <p class='score-details'>" + ($e($c(this.entry.details))) + "</p>");
+  if (this.entry.photo) {
+    $o.push("          <img class='custom-wod-img' src='" + ($e($c(this.entry.photo))) + "'>");
+      }
+      $o.push("        </div>\n      </div>\n      <a class='bottom button lighter slideleft' data-id='" + ($e($c(this.entry.id))) + "' href='#edit-wod'>Edit Workout</a>\n      <a class='bottom button fade' href='#home'>Jump To Dashboard</a>\n      <a class='delete pop red' data-id='" + ($e($c(this.entry.id))) + "' href='#home'><i class=\"remove-set icon-remove-sign\"></i> Delete This Workout</a>\n    </div>\n  </div>\n  <div class='footer'></div>");
   if (this.showHistory) {
-    $o.push("" + $c(JST['superfit/views/_history']({
+    $o.push("  " + $c(JST['superfit/views/_history']({
       wod: this.wod,
       pastEntries: this.pastEntries
     })));
       }
+      $o.push("</div>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
