@@ -6935,22 +6935,21 @@ body {
 }
 /* line 907, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs #photo-capture .post-capture {
-  height: 450px;
-  margin: 10px;
+  margin: 5px;
   text-align: center;
 }
-/* line 911, ../../app/assets/stylesheets/superfit.scss */
+/* line 910, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs #photo-capture .post-capture .delete-photo {
   color: #c0392b;
   margin: 9px 0;
   font-size: 11px;
 }
-/* line 914, ../../app/assets/stylesheets/superfit.scss */
+/* line 913, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs .icon-camera-alt {
   font-size: 54px;
   opacity: .75;
 }
-/* line 915, ../../app/assets/stylesheets/superfit.scss */
+/* line 914, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs .take-photo {
   line-height: 27px;
   font-size: 14px;
@@ -6967,36 +6966,38 @@ body {
   border: 1px solid #e7e7e7;
   border-top: 0;
 }
-/* line 927, ../../app/assets/stylesheets/superfit.scss */
+/* line 926, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs .take-photo .custom-wod-img {
   width: 280px;
+  height: 420px;
+  overflow: hidden;
 }
-/* line 928, ../../app/assets/stylesheets/superfit.scss */
+/* line 927, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs .take-photo .initial-capture {
   height: 90px;
 }
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-  /* line 934, ../../app/assets/stylesheets/superfit.scss */
+  /* line 933, ../../app/assets/stylesheets/superfit.scss */
   #jqt > * .sprite-sf {
     background: transparent url("../assets/sprite-superfit_2x-92d9c2e95bfd68d3d3a9e4dc2a8fb335.png") no-repeat 0 0;
   }
-  /* line 935, ../../app/assets/stylesheets/superfit.scss */
+  /* line 934, ../../app/assets/stylesheets/superfit.scss */
   #jqt > * .page-header {
     background: transparent url("../assets/tile-pg-header_2x-9439397ce006d6d8971cd2be7e895456.png") repeat-x 0 0;
   }
-  /* line 936, ../../app/assets/stylesheets/superfit.scss */
+  /* line 935, ../../app/assets/stylesheets/superfit.scss */
   #jqt > * .orientation .step1 {
     background: transparent url("../assets/intro-step1_2x-b21aa29d64f3a85a0c3f2efc33950e48.png") no-repeat center center;
   }
-  /* line 937, ../../app/assets/stylesheets/superfit.scss */
+  /* line 936, ../../app/assets/stylesheets/superfit.scss */
   #jqt > * .orientation .step2 {
     background: transparent url("../assets/intro-step2_2x-20df74f44abc00d13e24d31d1422bd27.png") no-repeat center center;
   }
-  /* line 940, ../../app/assets/stylesheets/superfit.scss */
+  /* line 939, ../../app/assets/stylesheets/superfit.scss */
   #jqt > * .wodnodata {
     background: transparent url("../assets/img-workout-nodata_2x-1e21a50d3f37ba2dbf24fa7b0d72ee9d.png") no-repeat 40px 20px;
   }
-  /* line 941, ../../app/assets/stylesheets/superfit.scss */
+  /* line 940, ../../app/assets/stylesheets/superfit.scss */
   #jqt > * .goalsnodata {
     background: transparent url("../assets/img-goals-nodata_2x-04473a642e179406e344151ac4be4b15.png") no-repeat 40px 20px;
   }
