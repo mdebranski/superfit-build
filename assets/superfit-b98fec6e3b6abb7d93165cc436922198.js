@@ -9111,6 +9111,9 @@ $.validator.prototype.elements = function() {
     };
 
     function Superfit() {
+      this.setVariableError = __bind(this.setVariableError, this);
+      this.setVariableSuccess = __bind(this.setVariableSuccess, this);
+      this.updateUserVariables = __bind(this.updateUserVariables, this);
       this.trackPageError = __bind(this.trackPageError, this);
       this.trackPageSuccess = __bind(this.trackPageSuccess, this);
       this.onPageTransition = __bind(this.onPageTransition, this);
@@ -9193,21 +9196,27 @@ $.validator.prototype.elements = function() {
           return jQT.goTo('#get-started-step1', jQT.settings.defaultTransition);
         }
       });
-      $(document).on('deviceready', this.loadAnalytics);
+      document.addEventListener("deviceready", this.loadAnalytics, false);
     }
 
     Superfit.prototype.loadAnalytics = function() {
       var _ref;
 
+      alert("Device ready - loading analytics...");
       this.gaPlugin = (_ref = window.plugins) != null ? _ref.gaPlugin : void 0;
       if (this.gaPlugin != null) {
+        alert("Initing GA Plugin");
         return this.gaPlugin.init(this.gaSuccess, this.gaError, "UA-40739445-2", 10);
+      } else {
+        return alert("NO GA PLUGIN FOUND");
       }
     };
 
     Superfit.prototype.gaSuccess = function() {
       alert("Google Analytics initialized");
-      return this.gaPlugin.trackPage(this.trackPageSuccess, this.trackPageError, "index.html");
+      this.gaPlugin.trackPage(this.trackPageSuccess, this.trackPageError, "index.html");
+      this.updateUserVariables();
+      return User.bind('create update', this.updateUserVariables);
     };
 
     Superfit.prototype.gaError = function(msg) {
@@ -9236,6 +9245,24 @@ $.validator.prototype.elements = function() {
     Superfit.prototype.trackPageError = function(msg) {
       this.log("Track page error: " + msg);
       return alert("Error tracking page: " + msg);
+    };
+
+    Superfit.prototype.updateUserVariables = function() {
+      var user;
+
+      if (user = User.first()) {
+        alert("Setting user variables");
+        this.gaPlugin.setVariable(this.setVariableSuccess, this.setVariableError, "Email", user.email, 1);
+        this.gaPlugin.setVariable(this.setVariableSuccess, this.setVariableError, "Newsletter", user.newsletter, 2);
+        this.gaPlugin.setVariable(this.setVariableSuccess, this.setVariableError, "Gym", user.gym, 3);
+        return this.gaPlugin.setVariable(this.setVariableSuccess, this.setVariableError, "Gender", user.gender, 4);
+      }
+    };
+
+    Superfit.prototype.setVariableSuccess = function() {};
+
+    Superfit.prototype.setVariableError = function(msg) {
+      return alert("Error setting variable: " + msg);
     };
 
     return Superfit;
@@ -11889,7 +11916,7 @@ $.validator.prototype.elements = function() {
     return (function() {
       var $o;
       $o = [];
-      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div class='pulldown sprite-sf'>\n      Navigation Pulldown\n    </div>\n    <h1>About</h1>\n  </div>\n</div>\n<div class='about'>\n  <h3>About Superfit</h3>\n  <p>Superfit was designed to provide the everyday athlete with a better tool for tracking progress and workout activity.</p>\n  <p>\n    <a href='http://www.superfitapp.com' target='_blank'>Learn more about Superfit.</a>\n  </p>\n  <p>Not affiliated with CrossFit, Inc.</p>\n</div>");
+      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div class='pulldown sprite-sf'>\n      Navigation Pulldown\n    </div>\n    <h1>About</h1>\n  </div>\n</div>\n<div class='about'>\n  <h3>About Superfit</h3>\n  <p>Superfit was designed to provide the everyday athlete with a better tool for tracking progress and workout activity.</p>\n  <p>\n    <a href='http://www.superfitapp.com' target='_blank'>Learn more about Superfit.</a>\n  </p>\n  <hr>\n  <p>Not affiliated with CrossFit, Inc.</p>\n</div>");
       return $o.join("\n").replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
