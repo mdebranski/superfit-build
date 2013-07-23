@@ -9202,26 +9202,20 @@ $.validator.prototype.elements = function() {
     Superfit.prototype.loadAnalytics = function() {
       var _ref;
 
-      alert("Device ready - loading analytics...");
-      this.gaPlugin = (_ref = window.plugins) != null ? _ref.gaPlugin : void 0;
-      if (this.gaPlugin != null) {
-        alert("Initing GA Plugin");
+      if (this.gaPlugin = (_ref = window.plugins) != null ? _ref.gaPlugin : void 0) {
         return this.gaPlugin.init(this.gaSuccess, this.gaError, "UA-40739445-2", 10);
-      } else {
-        return alert("NO GA PLUGIN FOUND");
       }
     };
 
     Superfit.prototype.gaSuccess = function() {
-      alert("Google Analytics initialized");
       this.updateUserVariables();
       User.bind('create update', this.updateUserVariables);
       return this.gaPlugin.trackPage(this.trackPageSuccess, this.trackPageError, "index.html");
     };
 
     Superfit.prototype.gaError = function(msg) {
-      this.log("Google Analytics failed to load: " + msg);
-      return alert("Google Analytics failed to load: " + msg);
+      this.log("Analytics failed to load: " + msg);
+      return alert("Analytics failed to load: " + msg);
     };
 
     Superfit.prototype.onPageTransition = function(e, data) {
@@ -9231,15 +9225,13 @@ $.validator.prototype.elements = function() {
         pageId = $(e.target).attr('id');
         this.log("Tracking page: " + pageId);
         if (this.gaPlugin != null) {
-          alert("Tracking page: " + pageId);
           return this.gaPlugin.trackPage(this.trackPageSuccess, this.trackPageError, pageId);
         }
       }
     };
 
     Superfit.prototype.trackPageSuccess = function() {
-      this.log("Track page success");
-      return alert("Page tracked successfully");
+      return this.log("Track page success");
     };
 
     Superfit.prototype.trackPageError = function(msg) {
@@ -9251,7 +9243,6 @@ $.validator.prototype.elements = function() {
       var user;
 
       if (user = User.first()) {
-        alert("Setting user variables");
         this.gaPlugin.setVariable(this.setVariableSuccess, this.setVariableError, 1, user.email);
         this.gaPlugin.setVariable(this.setVariableSuccess, this.setVariableError, 2, user.newsletter);
         this.gaPlugin.setVariable(this.setVariableSuccess, this.setVariableError, 3, user.gender);
