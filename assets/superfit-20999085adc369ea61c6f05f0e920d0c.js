@@ -10192,6 +10192,8 @@ $.validator.prototype.elements = function() {
     };
 
     WodEntry.scoreString = function(score_obj, method, summary) {
+      var _ref1;
+
       if (summary == null) {
         summary = false;
       }
@@ -10210,7 +10212,7 @@ $.validator.prototype.elements = function() {
         case 'max_reps':
           return "" + score_obj.score + " reps";
         case 'pass_fail':
-          return score_obj.score.toUpperCase();
+          return (_ref1 = score_obj.score) != null ? _ref1.toUpperCase() : void 0;
         case 'weight_reps':
           if (score_obj.score) {
             return "" + score_obj.score + "lb x " + score_obj.reps + " reps";
@@ -11272,18 +11274,19 @@ $.validator.prototype.elements = function() {
     };
 
     EditWod.prototype.submit = function() {
-      var attributes, data, entry;
+      var attributes, data, entry, method;
 
       data = this.form.serializeObject();
+      method = this.wod ? this.wod.scoring_method : data.method;
       attributes = {
         wod_id: this.wod && this.wod.id,
         name: data.name,
-        score: this.toInt(data.score),
+        score: method === 'pass_fail' ? data.score : this.toInt(data.score),
         min: this.toInt(data.min),
         sec: this.toInt(data.sec),
         reps: this.ensureArray(this.toInt(data.reps)),
         weight: this.ensureArray(this.toInt(data.weight)),
-        method: this.wod ? this.wod.scoring_method : data.method,
+        method: method,
         type: data.type,
         details: data.details,
         created_date: new Date().valueOf(),
