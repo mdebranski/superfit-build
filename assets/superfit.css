@@ -6976,43 +6976,37 @@ body {
   overflow: hidden;
 }
 /* line 926, ../../app/assets/stylesheets/superfit.scss */
-#jqt > * .customwod-tabs .take-photo .review-wod.custom-wod-img {
-  width: 260px;
-  height: 390px;
-  overflow: hidden;
-}
-/* line 927, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs .take-photo .initial-capture {
   height: 90px;
 }
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-  /* line 933, ../../app/assets/stylesheets/superfit.scss */
+  /* line 932, ../../app/assets/stylesheets/superfit.scss */
   #jqt > * .sprite-sf {
     background: transparent url("../assets/sprite-superfit_2x.png") no-repeat 0 0;
   }
-  /* line 934, ../../app/assets/stylesheets/superfit.scss */
+  /* line 933, ../../app/assets/stylesheets/superfit.scss */
   #jqt > * .page-header {
     background: transparent url("../assets/tile-pg-header_2x.png") repeat-x 0 0;
   }
-  /* line 935, ../../app/assets/stylesheets/superfit.scss */
+  /* line 934, ../../app/assets/stylesheets/superfit.scss */
   #jqt > * .orientation .step1 {
     background: transparent url("../assets/intro-step1_2x.png") no-repeat center center;
   }
-  /* line 936, ../../app/assets/stylesheets/superfit.scss */
+  /* line 935, ../../app/assets/stylesheets/superfit.scss */
   #jqt > * .orientation .step2 {
     background: transparent url("../assets/intro-step2_2x.png") no-repeat center center;
   }
-  /* line 939, ../../app/assets/stylesheets/superfit.scss */
+  /* line 938, ../../app/assets/stylesheets/superfit.scss */
   #jqt > * .wodnodata {
     background: transparent url("../assets/img-workout-nodata_2x.png") no-repeat 40px 20px;
   }
-  /* line 940, ../../app/assets/stylesheets/superfit.scss */
+  /* line 939, ../../app/assets/stylesheets/superfit.scss */
   #jqt > * .goalsnodata {
     background: transparent url("../assets/img-goals-nodata_2x.png") no-repeat 40px 20px;
   }
 }
 
-/* line 947, ../../app/assets/stylesheets/superfit.scss */
+/* line 946, ../../app/assets/stylesheets/superfit.scss */
 #flotTip {
   padding: 3px 5px;
   background-color: #5cc9ef !important;
