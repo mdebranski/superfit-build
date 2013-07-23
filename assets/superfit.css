@@ -6936,6 +6936,7 @@ body {
 /* line 907, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs #photo-capture .post-capture {
   height: 480px;
+  margin: 20px;
 }
 /* line 909, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs .icon-camera-alt {
@@ -6949,7 +6950,6 @@ body {
   background: #f1f1f1;
   width: 100%;
   display: block;
-  height: 90px;
   text-align: center;
   padding-top: 18px;
   -webkit-border-radius: 0px 0px 2px 2px;
@@ -6960,9 +6960,13 @@ body {
   border: 1px solid #e7e7e7;
   border-top: 0;
 }
-/* line 923, ../../app/assets/stylesheets/superfit.scss */
+/* line 922, ../../app/assets/stylesheets/superfit.scss */
 #jqt > * .customwod-tabs .take-photo .custom-wod-img {
   width: 280px;
+}
+/* line 923, ../../app/assets/stylesheets/superfit.scss */
+#jqt > * .customwod-tabs .take-photo .initial-capture {
+  height: 90px;
 }
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
   /* line 929, ../../app/assets/stylesheets/superfit.scss */
