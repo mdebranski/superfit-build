@@ -9333,7 +9333,7 @@ $.validator.prototype.elements = function() {
 	
 } )( jQuery, window );
 (function() {
-  var Superfit,
+  var Superfit, dr, p, r,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -9459,6 +9459,7 @@ $.validator.prototype.elements = function() {
           return jQT.goTo('#get-started-step1', jQT.settings.defaultTransition);
         }
       });
+      alert("Registering listeners...");
       document.addEventListener("deviceready", this.loadAnalytics, false);
       document.addEventListener("pause", this.onPause, false);
       document.addEventListener("resume", this.onResume, false);
@@ -9620,6 +9621,24 @@ $.validator.prototype.elements = function() {
       preloadImages: []
     });
   });
+
+  dr = function() {
+    return alert("DR");
+  };
+
+  document.addEventListener("deviceready", dr, false);
+
+  p = function() {
+    return alert("pause");
+  };
+
+  document.addEventListener("pause", p, false);
+
+  r = function() {
+    return alert("resume");
+  };
+
+  document.addEventListener("resume", r, false);
 
 }).call(this);
 (function() {
