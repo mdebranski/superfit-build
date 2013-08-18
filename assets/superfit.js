@@ -9476,7 +9476,7 @@ $.validator.prototype.elements = function() {
     Superfit.prototype.onPause = function() {
       var active, error, savedState, state;
 
-      this.log("Pausing...");
+      alert("Pausing...");
       try {
         SavedState.destroyAll();
         if (active = Superfit.activeController) {
@@ -9485,7 +9485,7 @@ $.validator.prototype.elements = function() {
             controller: active.className(),
             state: state
           });
-          return this.log("Saved state: " + (JSON.stringify(savedState)));
+          return alert("Saved state: " + (JSON.stringify(savedState)));
         }
       } catch (_error) {
         error = _error;
@@ -9497,11 +9497,11 @@ $.validator.prototype.elements = function() {
     Superfit.prototype.onResume = function() {
       var controller, error, savedState;
 
-      this.log("Resuming...");
+      alert("Resuming...");
       try {
         SavedState.fetch();
         if (savedState = SavedState.first()) {
-          this.log("Resuming for controller: '" + savedState.controller + "'; State: " + (JSON.stringify(savedState.state)));
+          alert("Resuming for controller: '" + savedState.controller + "'; State: " + (JSON.stringify(savedState.state)));
           controller = Superfit.controllers[savedState.controller];
           if (controller.resume != null) {
             controller.resume(savedState.state);
