@@ -9333,7 +9333,7 @@ $.validator.prototype.elements = function() {
 	
 } )( jQuery, window );
 (function() {
-  var Superfit,
+  var Superfit, r,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -9626,6 +9626,14 @@ $.validator.prototype.elements = function() {
       preloadImages: []
     });
   });
+
+  r = function() {
+    return _.defer(function() {
+      return "RESUMED";
+    });
+  };
+
+  document.addEventListener("resume", r, false);
 
 }).call(this);
 (function() {
