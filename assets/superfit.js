@@ -8640,6 +8640,16 @@ $.widget( "ui.spinner", {
       className: function() {
         return this.__proto__.constructor.name;
       },
+      registerStateEvents: function() {
+        var _this = this;
+
+        Superfit.controllers[this.className()] = this;
+        return this.el.on("pageAnimationEnd", function(e, data) {
+          if (data.direction === 'in') {
+            return Superfit.activeController = _this;
+          }
+        });
+      },
       defaultTemplateName: function() {
         return _.str.underscored(this.className());
       },
@@ -9335,6 +9345,8 @@ $.validator.prototype.elements = function() {
 
     Superfit.NO_CHART_DATA = "<li class='no-data'>Not enough data to display chart</li>";
 
+    Superfit.controllers = {};
+
     Superfit.prototype.elements = {
       '.page#get-started-step3': 'start',
       '.page#home': 'home',
@@ -9368,6 +9380,8 @@ $.validator.prototype.elements = function() {
       this.onPageTransition = __bind(this.onPageTransition, this);
       this.gaError = __bind(this.gaError, this);
       this.gaSuccess = __bind(this.gaSuccess, this);
+      this.onResume = __bind(this.onResume, this);
+      this.onPause = __bind(this.onPause, this);
       this.loadAnalytics = __bind(this.loadAnalytics, this);
       var user,
         _this = this;
@@ -9446,6 +9460,8 @@ $.validator.prototype.elements = function() {
         }
       });
       document.addEventListener("deviceready", this.loadAnalytics, false);
+      document.addEventListener("pause", this.onPause, false);
+      document.addEventListener("resume", this.onResume, false);
     }
 
     Superfit.prototype.loadAnalytics = function() {
@@ -9456,6 +9472,48 @@ $.validator.prototype.elements = function() {
       }
     };
 
+    Superfit.prototype.onPause = function() {
+      var active, error, savedState, state;
+
+      alert("Pausing...");
+      try {
+        if (active = Superfit.activeController) {
+          SavedState.destroyAll();
+          state = active.state != null ? active.state() : {};
+          savedState = SavedState.create({
+            controller: active.className(),
+            state: state
+          });
+          return alert("Saved state: " + (JSON.stringify(savedState)));
+        }
+      } catch (_error) {
+        error = _error;
+        this.log(error);
+        return alert("Error pausing: " + error);
+      }
+    };
+
+    Superfit.prototype.onResume = function() {
+      var controller, error, savedState;
+
+      alert("Resuming...");
+      try {
+        SavedState.fetch();
+        if (savedState = SavedState.first()) {
+          alert("Resuming for controller: '" + savedState.controller + "'; State: " + (JSON.stringify(savedState.state)));
+          controller = Superfit.controllers[savedState.controller];
+          if (controller.resume != null) {
+            controller.resume(savedState.state);
+          }
+          return jQT.goTo(controller.el);
+        }
+      } catch (_error) {
+        error = _error;
+        this.log(error);
+        return alert("Error resuming: " + error);
+      }
+    };
+
     Superfit.prototype.gaSuccess = function() {
       this.updateUserVariables();
       User.bind('create update', this.updateUserVariables);
@@ -9463,14 +9521,14 @@ $.validator.prototype.elements = function() {
     };
 
     Superfit.prototype.gaError = function(msg) {
-      this.log("Analytics failed to load: " + msg);
-      return alert("Analytics failed to load: " + msg);
+      return this.log("Analytics failed to load: " + msg);
     };
 
     Superfit.prototype.onPageTransition = function(e, data) {
       var pageId;
 
       if (data.direction === 'in') {
+        Superfit.activeController = null;
         pageId = $(e.target).attr('id');
         this.log("Tracking page: " + pageId);
         if (this.gaPlugin != null) {
@@ -9484,8 +9542,7 @@ $.validator.prototype.elements = function() {
     };
 
     Superfit.prototype.trackPageError = function(msg) {
-      this.log("Track page error: " + msg);
-      return alert("Error tracking page: " + msg);
+      return this.log("Track page error: " + msg);
     };
 
     Superfit.prototype.updateUserVariables = function() {
@@ -9502,7 +9559,7 @@ $.validator.prototype.elements = function() {
     Superfit.prototype.setVariableSuccess = function() {};
 
     Superfit.prototype.setVariableError = function(msg) {
-      return alert("Error setting variable: " + msg);
+      return this.log("Error setting variable: " + msg);
     };
 
     return Superfit;
@@ -9551,7 +9608,7 @@ $.validator.prototype.elements = function() {
         });
       }
     });
-    new Superfit({
+    window.superfit = new Superfit({
       el: $('body')
     });
     return window.jQT = new $.jQTouch({
@@ -9891,6 +9948,32 @@ $.validator.prototype.elements = function() {
 
 }).call(this);
 (function() {
+  var SavedState, _ref,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  SavedState = (function(_super) {
+    __extends(SavedState, _super);
+
+    function SavedState() {
+      _ref = SavedState.__super__.constructor.apply(this, arguments);
+      return _ref;
+    }
+
+    SavedState.configure('SavedState', 'controller', 'state');
+
+    SavedState.extend(Spine.Model.Local);
+
+    SavedState.extend(Spine.Events);
+
+    return SavedState;
+
+  })(Spine.Model);
+
+  window.SavedState = SavedState;
+
+}).call(this);
+(function() {
   var User, _ref,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -10103,16 +10186,18 @@ $.validator.prototype.elements = function() {
               record.max_5 = max_5;
             }
         }
-        record = _.extend(record, {
-          entry_id: entry.id
-        });
-        if (this.personal_record != null) {
-          this.personal_record = _.extend(this.personal_record, record);
-        } else {
-          this.personal_record = record;
+        if (!$.isEmptyObject(record)) {
+          record = _.extend(record, {
+            entry_id: entry.id
+          });
+          if (this.personal_record != null) {
+            this.personal_record = _.extend(this.personal_record, record);
+          } else {
+            this.personal_record = record;
+          }
+          console.log("Record after", this.personal_record);
+          this.save();
         }
-        console.log("Record after", this.personal_record);
-        this.save();
       } else {
         this.updateAttributes({
           personal_record: null
@@ -10359,6 +10444,7 @@ $.validator.prototype.elements = function() {
 
     function AddWod() {
       AddWod.__super__.constructor.apply(this, arguments);
+      this.registerStateEvents();
       this.render();
     }
 
@@ -10403,6 +10489,7 @@ $.validator.prototype.elements = function() {
 
     function BrowseWods() {
       this.updateWods = __bind(this.updateWods, this);      BrowseWods.__super__.constructor.apply(this, arguments);
+      this.registerStateEvents();
       Wod.bind('browse', this.updateWods);
       this.render();
     }
@@ -10424,6 +10511,16 @@ $.validator.prototype.elements = function() {
         _results.push(this.wodsBrowse.append(item.render()));
       }
       return _results;
+    };
+
+    BrowseWods.prototype.state = function() {
+      return {
+        type: this.type
+      };
+    };
+
+    BrowseWods.prototype.resume = function(state) {
+      return this.updateWods(state.type);
     };
 
     BrowseWods.prototype.search = function(e) {
@@ -10680,6 +10777,7 @@ $.validator.prototype.elements = function() {
 
     function EditGoal() {
       this.submit = __bind(this.submit, this);
+      this.clear = __bind(this.clear, this);
       this.newGoal = __bind(this.newGoal, this);
       var _this = this;
 
@@ -10687,31 +10785,29 @@ $.validator.prototype.elements = function() {
       Goal.bind('new', this.newGoal);
       this.render();
       this.el.bind("pageAnimationStart", function(e, data) {
-        var _ref;
-
         if (data.direction === 'in') {
-          _this.goal_id = null;
-          _this.wod = null;
-          _this.wods = null;
-          _this.wods_type = null;
-        }
-        if (data.direction === 'in' && (_this.goal_id = (_ref = _this.el.data('referrer')) != null ? _ref.data('id') : void 0)) {
+          _this.clear();
           return _this.render();
         }
       });
     }
 
     EditGoal.prototype.newGoal = function(wod) {
+      this.clear();
       if (wod) {
         this.wod = wod;
         return this.render();
       } else {
-        this.goal_id = null;
-        this.wod = null;
-        this.wods = null;
-        this.wods_type = null;
         return this.render();
       }
+    };
+
+    EditGoal.prototype.clear = function() {
+      this.log("CLEAR");
+      this.goal_id = null;
+      this.wod = null;
+      this.wods = null;
+      return this.wods_type = null;
     };
 
     EditGoal.prototype.browseWods = function(e) {
@@ -10740,6 +10836,9 @@ $.validator.prototype.elements = function() {
     EditGoal.prototype.render = function() {
       var goal, wod;
 
+      this.log("GOAL ID: " + this.goal_id);
+      this.log("GOAL ID: " + this.wod);
+      this.log("GOAL ID: " + this.wods);
       if (this.goal_id) {
         this.templateName = 'edit_goal';
         goal = Goal.find(this.goal_id);
@@ -10802,6 +10901,7 @@ $.validator.prototype.elements = function() {
       data.reps = parseInt(data.reps);
       data.start_date = moment().valueOf();
       data.last_update = moment().valueOf();
+      this.clear();
       if (data.goal_id) {
         goal = Goal.find(data.goal_id);
         goal.updateAttributes(data);
@@ -11115,6 +11215,7 @@ $.validator.prototype.elements = function() {
       var _this = this;
 
       EditWod.__super__.constructor.apply(this, arguments);
+      this.registerStateEvents();
       Wod.bind('new', this.updateNewWod);
       this.el.bind("pageAnimationStart", function(e, data) {
         var entry, id, _ref;
