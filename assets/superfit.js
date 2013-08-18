@@ -9333,7 +9333,7 @@ $.validator.prototype.elements = function() {
 	
 } )( jQuery, window );
 (function() {
-  var Superfit, dr, p, r,
+  var Superfit,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -9459,7 +9459,7 @@ $.validator.prototype.elements = function() {
           return jQT.goTo('#get-started-step1', jQT.settings.defaultTransition);
         }
       });
-      alert("Registering listeners...");
+      this.log("Registering listeners...");
       document.addEventListener("deviceready", this.loadAnalytics, false);
       document.addEventListener("pause", this.onPause, false);
       document.addEventListener("resume", this.onResume, false);
@@ -9476,16 +9476,16 @@ $.validator.prototype.elements = function() {
     Superfit.prototype.onPause = function() {
       var active, error, savedState, state;
 
-      alert("Pausing...");
+      this.log("Pausing...");
       try {
+        SavedState.destroyAll();
         if (active = Superfit.activeController) {
-          SavedState.destroyAll();
           state = active.state != null ? active.state() : {};
           savedState = SavedState.create({
             controller: active.className(),
             state: state
           });
-          return alert("Saved state: " + (JSON.stringify(savedState)));
+          return this.log("Saved state: " + (JSON.stringify(savedState)));
         }
       } catch (_error) {
         error = _error;
@@ -9497,11 +9497,11 @@ $.validator.prototype.elements = function() {
     Superfit.prototype.onResume = function() {
       var controller, error, savedState;
 
-      alert("Resuming...");
+      this.log("Resuming...");
       try {
         SavedState.fetch();
         if (savedState = SavedState.first()) {
-          alert("Resuming for controller: '" + savedState.controller + "'; State: " + (JSON.stringify(savedState.state)));
+          this.log("Resuming for controller: '" + savedState.controller + "'; State: " + (JSON.stringify(savedState.state)));
           controller = Superfit.controllers[savedState.controller];
           if (controller.resume != null) {
             controller.resume(savedState.state);
@@ -9621,24 +9621,6 @@ $.validator.prototype.elements = function() {
       preloadImages: []
     });
   });
-
-  dr = function() {
-    return alert("DR");
-  };
-
-  document.addEventListener("deviceready", dr, false);
-
-  p = function() {
-    return alert("pause");
-  };
-
-  document.addEventListener("pause", p, false);
-
-  r = function() {
-    return alert("resume");
-  };
-
-  document.addEventListener("resume", r, false);
 
 }).call(this);
 (function() {
