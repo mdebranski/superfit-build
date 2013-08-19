@@ -60,7 +60,6 @@
 
 	<!-- Plugins -->
 	<gap:plugin name="com.adobe.plugins.gaplugin" version="2.1.1" />
-	<plugin name="Battery" value="CDVBattery" />
 
 	<!-- Access -->
 	<access origin="*" />
