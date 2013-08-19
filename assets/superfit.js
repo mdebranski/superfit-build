@@ -9637,10 +9637,18 @@ $.validator.prototype.elements = function() {
   };
 
   addResume = function() {
+    _.defer(function() {
+      return alert("DEVICEREADY");
+    });
     return document.addEventListener("resume", window.onResume, false);
   };
 
-  document.addEventListener('deviceready', addResume, false);
+  window.onLoad = function() {
+    _.defer(function() {
+      return alert("ONLOAD");
+    });
+    return document.addEventListener('deviceready', addResume, false);
+  };
 
 }).call(this);
 (function() {
