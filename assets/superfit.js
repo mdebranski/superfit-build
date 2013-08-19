@@ -9333,7 +9333,7 @@ $.validator.prototype.elements = function() {
 	
 } )( jQuery, window );
 (function() {
-  var Superfit, r,
+  var Superfit, addResume,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -9627,13 +9627,18 @@ $.validator.prototype.elements = function() {
     });
   });
 
-  r = function() {
-    return _.defer(function() {
-      return "RESUMED";
-    });
+  addResume = function() {
+    var r;
+
+    r = function() {
+      return _.defer(function() {
+        return "RESUMED";
+      });
+    };
+    return document.addEventListener("resume", r, false);
   };
 
-  document.addEventListener("resume", r, false);
+  document.addEventListener('deviceready', addResume, false);
 
 }).call(this);
 (function() {
