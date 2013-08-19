@@ -9627,15 +9627,17 @@ $.validator.prototype.elements = function() {
     });
   });
 
-  addResume = function() {
-    var r;
+  window.onResume = function() {
+    _.defer(function() {
+      return alert("RESUMED");
+    });
+    return $('.toolbar').css({
+      'background-color': 'blue'
+    });
+  };
 
-    r = function() {
-      return _.defer(function() {
-        return "RESUMED";
-      });
-    };
-    return document.addEventListener("resume", r, false);
+  addResume = function() {
+    return document.addEventListener("resume", window.onResume, false);
   };
 
   document.addEventListener('deviceready', addResume, false);
