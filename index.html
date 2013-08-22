@@ -9,26 +9,23 @@
     <link href="./assets/superfit.css" media="screen" rel="stylesheet" type="text/css" />
     <script src="./phonegap.js" type="text/javascript"></script>
     <script src="./assets/superfit.js" type="text/javascript"></script>
-      <script type="text/javascript" charset="utf-8">
+    <script type="text/javascript" charset="utf-8">
+      function onLoad() {
+          document.addEventListener("deviceready", onDeviceReady, false);
+      }
 
-    // Wait for device API libraries to load
-    //
-    function onLoad() {
-        document.addEventListener("deviceready", onDeviceReady, false);
-    }
+      function onDeviceReady() {
+          document.addEventListener("pause", onPause, false);
+          document.addEventListener("resume", onResume, false);
+      }
 
-    // device APIs are available
-    //
-    function onDeviceReady() {
-        document.addEventListener("pause", onPause, false);
-    }
+      function onPause() {
+        alert("pause");
+      }
 
-    // Handle the pause event
-    //
-    function onPause() {
-    alert("I am an alert box!");
-    }
-
+      function onResume() {
+        alert("resume");
+      }
     </script>
   </head>
   <body onload="onLoad()">
