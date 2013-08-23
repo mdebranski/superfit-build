@@ -15,8 +15,9 @@
       }
 
       function onDeviceReady() {
-          document.addEventListener("pause", onPause, false);
-          document.addEventListener("resume", onResume, false);
+      
+          document.addEventListener("resume", onResume, false)
+          document.addEventListener("pause", onPause, false);;
       }
 
       function onPause() {
@@ -28,6 +29,8 @@
 	         alert("resume");
         }, 0);
       }
+      
+      
     </script>
   </head>
   <body onload="onLoad()">
