@@ -9461,8 +9461,6 @@ $.validator.prototype.elements = function() {
       });
       this.log("Registering listeners...");
       document.addEventListener("deviceready", this.loadAnalytics, false);
-      document.addEventListener("pause", this.onPause, false);
-      document.addEventListener("resume", this.onResume, false);
     }
 
     Superfit.prototype.loadAnalytics = function() {
@@ -12560,7 +12558,7 @@ $.validator.prototype.elements = function() {
     return (function() {
       var $o;
       $o = [];
-      $o.push("<div class='page' id='get-started-step1'>\n  <div class='orientation'>\n    <div class='main'>\n      <div class='step1'></div>\n      <h1>All about the work</h1>\n      <p>Log workouts and see the days activity from the dashboard. Want to see what you did last week? Pop open the calendar. Tap through to a day.</p>\n    </div>\n    <div class='orientation-footer'>\n      <a class='bottom button red slide' href='#get-started-step2'>Next : See Your Progress</a>\n    </div>\n  </div>\n</div>");
+      $o.push("<div class='page' id='get-started-step1'>\n  <div class='orientation'>\n    <div class='main'>\n      <div class='step1'></div>\n      <h1>All about the work</h1>\n      <p>Log workouts and see the days activity from the dashboard. Want to see what you did last week? Pop open the calendar. Tap through to a day.</p>\n    </div>\n    <div class='orientation-footer'>\n      <a class='bottom button slide' href='#get-started-step2'>Next : See Your Progress</a>\n    </div>\n  </div>\n</div>");
       return $o.join("\n").replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
