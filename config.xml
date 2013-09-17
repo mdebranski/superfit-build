@@ -16,7 +16,7 @@
     <preference name="webviewbounce"                value="true" />
     <preference name="prerendered-icon"             value="true" />
     <preference name="detect-data-types"            value="false" /><!-- automatically turn things like phone numbers / email addresses into links -->
-    <preference name="exit-on-suspend"              value="true" />
+    <preference name="exit-on-suspend"              value="false" />
     <preference name="show-splash-screen-spinner"   value="false" />
     <preference name="auto-hide-splash-screen"      value="true" />
 
