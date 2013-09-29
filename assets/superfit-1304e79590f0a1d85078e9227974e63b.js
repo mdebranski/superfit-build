@@ -12319,7 +12319,7 @@ $.validator.prototype.elements = function() {
     return (function() {
       var $o;
       $o = [];
-      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div class='pulldown sprite-sf'>\n      Navigation Pulldown\n    </div>\n    <h1>About</h1>\n  </div>\n</div>\n<div class='about'>\n  <h3>About Superfit  (v1.1)</h3>\n  <p>Superfit was designed to provide the everyday athlete with a better tool for tracking progress and workout activity.</p>\n  <p>\n    <a href='mailto:support@superfitapp.com' target='_blank'>Need Help? Email: support@superfitapp.com</a>\n  </p>\n  <p>\n    Learn more about Superfit at http://www.superfitapp.com\n  </p>\n  <p>\n    Not affiliated with CrossFit, Inc.\n  </p>\n</div>");
+      $o.push("<div class='page-header'>\n  <div class='toolbar'>\n    <div class='pulldown sprite-sf'>\n      Navigation Pulldown\n    </div>\n    <h1>About</h1>\n  </div>\n</div>\n<div class='about'>\n  <h3>About SuperFit  (v1.1)</h3>\n  <p>SuperFit was designed to provide the everyday athlete with a better tool for tracking progress and workout activity.</p>\n  <p>\n    <a href='mailto:support@superFitapp.com' target='_blank'>Need Help? Email: support@superFitapp.com</a>\n  </p>\n  <p>\n    Learn more about SuperFit at http://www.superFitapp.com\n  </p>\n  <p>\n    Not affiliated with CrossFit, Inc.\n  </p>\n</div>");
       return $o.join("\n").replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(window.HAML.context(context));
   });;
